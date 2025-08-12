@@ -7,7 +7,7 @@ import React from "react";
 
 const Trailer = () => {
   const params = useParams();
-  const key = params.ytTrailerId;
+  let key = params.ytTrailerId;
 
   return (
     <iframe

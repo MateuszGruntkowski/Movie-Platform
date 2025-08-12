@@ -9,7 +9,7 @@ import {
   faChevronLeft,
   faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 // Komponenty custom arrows
 const PrevArrow = ({ onClick }) => (
@@ -25,6 +25,8 @@ const NextArrow = ({ onClick }) => (
 );
 
 const Hero = ({ movies }) => {
+  const navigate = useNavigate();
+
   const settings = {
     dots: true,
     infinite: true,
@@ -79,7 +81,10 @@ const Hero = ({ movies }) => {
                   <div className="movie-title">
                     <h4>{movie.title}</h4>
                   </div>
-                  <div className="movie-buttons-container">
+                  <div
+                    className="movie-buttons-container"
+                    style={{ gap: "1rem" }}
+                  >
                     {movie.trailerLink && (
                       <Link
                         to={`/Trailer/${movie.trailerLink.substring(
@@ -94,6 +99,12 @@ const Hero = ({ movies }) => {
                         </div>
                       </Link>
                     )}
+                    <button
+                      className="review-button"
+                      onClick={() => navigate(`/Reviews/${movie.imdbId}`)}
+                    >
+                      Reviews
+                    </button>
                   </div>
                 </div>
               </div>
