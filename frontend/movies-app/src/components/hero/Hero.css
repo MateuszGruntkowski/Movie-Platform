@@ -1,48 +1,292 @@
 .movie-carousel-container {
-  width: 100vw;
-  background-color: black;
-}
-
-.movie-poster {
-  height: 300px;
-  border: 1px solid gold;
-  border-radius: 10px;
-  overflow: hidden;
-}
-
-.movie-poster > img {
   width: 100%;
+  background-color: black;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+.slick-slider {
   height: 100%;
 }
 
-.movie-card-container {
-  height: 550px;
-  background-color: black;
+.slick-list {
+  height: 100%;
+}
+
+.slick-track {
+  height: 100%;
+}
+
+.slick-slide {
+  height: 100vh;
+}
+
+.slick-slide > div {
+  height: 100%;
 }
 
 .movie-card {
   background-repeat: no-repeat;
   width: 100%;
-  height: 100%;
+  height: 100vh;
   background-size: cover;
-  background-image: linear-gradient(
-      to bottom,
-      rgba(0, 0, 0, 0),
-      rgba(0, 0, 0, 1)
-    ),
-    var(--img);
+  background-position: center;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .movie-detail {
   position: absolute;
-  top: 200px;
+  bottom: 25%;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
-  justify-content: space-evenly;
+  align-items: center;
+  gap: 2rem;
+  z-index: 3;
+  max-width: 90%;
+}
+
+.movie-poster {
+  height: 450px;
+  width: 300px;
+  border: 3px solid gold;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+}
+
+.movie-poster > img {
   width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.movie-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
 }
 
 .movie-title {
   color: white;
+  text-align: center;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.movie-title h4 {
+  font-size: 2.5rem;
+  margin: 0;
+  font-weight: bold;
+}
+
+.movie-buttons-container {
   display: flex;
+  justify-content: center;
   align-items: center;
+}
+
+.play-button-icon-container {
+  padding: 15px;
+  background: rgba(255, 215, 0, 0.1);
+  border: 2px solid gold;
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.play-button-icon-container:hover {
+  background: rgba(255, 215, 0, 0.3);
+  transform: scale(1.1);
+}
+
+.play-button-icon {
+  color: gold;
+  font-size: 2.5rem;
+  transition: all 0.3s ease;
+}
+
+.play-button-icon:hover {
+  color: white;
+  transform: scale(1.1);
+}
+
+.custom-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  background: rgba(0, 0, 0, 0.5);
+  color: gold;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  font-size: 1.5rem;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.custom-arrow:hover {
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  border-color: gold;
+  transform: translateY(-50%) scale(1.1);
+}
+
+.custom-prev-arrow {
+  left: 30px;
+}
+
+.custom-next-arrow {
+  right: 30px;
+}
+
+.slick-dots {
+  bottom: 50px;
+  z-index: 10;
+}
+
+.slick-dots li {
+  margin: 0 8px;
+}
+
+.slick-dots li button {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  border: 2px solid gold;
+}
+
+.slick-dots li button:before {
+  display: none;
+}
+
+.slick-dots li.slick-active button {
+  background: gold;
+  transform: scale(1.2);
+}
+
+.slick-dots li button:hover {
+  background: rgba(255, 215, 0, 0.7);
+  transform: scale(1.1);
+}
+
+.slick-prev,
+.slick-next {
+  display: none !important;
+}
+
+@media only screen and (max-width: 768px) {
+  .movie-detail {
+    flex-direction: column;
+    bottom: 15%;
+    gap: 1.5rem;
+  }
+
+  .movie-poster {
+    height: 250px;
+    width: 170px;
+  }
+
+  .movie-title h4 {
+    font-size: 2rem;
+  }
+
+  .play-button-icon-container {
+    width: 70px;
+    height: 70px;
+    padding: 12px;
+  }
+
+  .play-button-icon {
+    font-size: 2rem;
+  }
+
+  .custom-arrow {
+    width: 50px;
+    height: 50px;
+    font-size: 1.2rem;
+  }
+
+  .custom-prev-arrow {
+    left: 15px;
+  }
+
+  .custom-next-arrow {
+    right: 15px;
+  }
+
+  .slick-dots {
+    bottom: 30px;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .movie-poster {
+    height: 200px;
+    width: 140px;
+  }
+
+  .movie-title h4 {
+    font-size: 1.5rem;
+  }
+
+  .play-button-icon-container {
+    width: 60px;
+    height: 60px;
+  }
+
+  .play-button-icon {
+    font-size: 1.8rem;
+  }
+}
+
+@media only screen and (min-width: 2000px) {
+  .movie-detail {
+    bottom: 40%;
+  }
+  .movie-card {
+    height: 120vh;
+  }
+
+  .movie-poster {
+    height: 600px;
+    width: 400px;
+  }
+
+  .movie-title h4 {
+    font-size: 3rem;
+  }
+
+  .play-button-icon-container {
+    width: 100px;
+    height: 100px;
+    padding: 20px;
+  }
+
+  .play-button-icon {
+    font-size: 3rem;
+  }
+
+  .custom-arrow {
+    width: 80px;
+    height: 80px;
+    font-size: 2rem;
+  }
 }
