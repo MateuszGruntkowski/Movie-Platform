@@ -7,6 +7,7 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.List;
 
@@ -27,5 +28,6 @@ public class Movie {
     private List<String> backdrops;
 
     @DocumentReference
-    private List<Review> reviewIds;
+    @Field("reviewIds")
+    private List<Review> reviews;
 }

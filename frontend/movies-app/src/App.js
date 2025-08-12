@@ -27,8 +27,10 @@ function App() {
     try {
       const response = await api.get(`/v1/movies/${movieId}`);
       const singleMovie = response.data;
+      console.log("Single movie data:", singleMovie);
       setMovie(singleMovie);
       setReviews(singleMovie.reviews || []);
+      console.log("Reviews for movie:", singleMovie.reviews);
     } catch (error) {
       console.error("Error fetching movie data:", error);
     }
