@@ -1,23 +1,49 @@
 import { Form, Button } from "react-bootstrap";
-
+import { Link, useParams } from "react-router-dom";
 import React from "react";
 
-const ReviewForm = ({ handleSubmit, labelText, defaultValue, revText }) => {
+const ReviewForm = ({
+  handleSubmit,
+  labelText,
+  defaultValue,
+  revText,
+  isLoggedIn,
+}) => {
+  const params = useParams();
+  let movieId = params.movieId;
+
   return (
-    <Form>
-      <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
-        <Form.Label>{labelText}</Form.Label>
-        <Form.Control
-          ref={revText}
-          as="textarea"
-          rows={3}
-          defaultValue={defaultValue}
-        />
-      </Form.Group>
-      <Button variant="outline-info" onClick={handleSubmit}>
-        Submit
-      </Button>
-    </Form>
+    <div className="review-form-container">
+      {isLoggedIn ? (
+        <>
+          <div className="form-group">
+            <label className="form-label">{labelText}</label>
+            <textarea
+              ref={revText}
+              rows={4}
+              defaultValue={defaultValue}
+              placeholder="Share your opinion about this movie..."
+              className="review-textarea"
+            />
+          </div>
+          <button onClick={handleSubmit} className="submit-btn">
+            Add review
+          </button>
+        </>
+      ) : (
+        <div className="login-prompt">
+          <p>Please log in to write a review.</p>
+          <Button
+            variant="outline-info"
+            as={Link}
+            to="/login"
+            state={{ from: `/Reviews/${movieId}` }}
+          >
+            Login
+          </Button>
+        </div>
+      )}
+    </div>
   );
 };
 

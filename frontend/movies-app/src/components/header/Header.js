@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faVideoSlash } from "@fortawesome/free-solid-svg-icons";
 import Button from "react-bootstrap/Button";
@@ -6,8 +6,14 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 
-const header = () => {
+const header = ({ isLoggedIn, setIsLoggedIn }) => {
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setIsLoggedIn(false);
+  };
+
   return (
     <Navbar bg="dark" variant="dark" expand="lg">
       <Container fluid>
@@ -29,12 +35,36 @@ const header = () => {
               Watch list
             </NavLink>
           </Nav>
-          <Button variant="outline-info" className="me-2">
-            Login
-          </Button>
-          <Button variant="outline-info" className="me-2">
-            Register
-          </Button>
+
+          {isLoggedIn ? (
+            <Button
+              variant="outline-info"
+              className="me-2"
+              onClick={handleLogout}
+            >
+              Logout
+            </Button>
+          ) : (
+            <>
+              <Button
+                as={Link}
+                to="/login"
+                variant="outline-info"
+                className="me-2"
+                state={{ from: "/" }}
+              >
+                Login
+              </Button>
+              <Button
+                as={Link}
+                to="/register"
+                variant="outline-info"
+                className="me-2"
+              >
+                Register
+              </Button>
+            </>
+          )}
         </Navbar.Collapse>
       </Container>
     </Navbar>

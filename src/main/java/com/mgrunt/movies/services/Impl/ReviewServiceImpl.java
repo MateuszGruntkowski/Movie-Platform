@@ -27,7 +27,7 @@ public class ReviewServiceImpl implements ReviewService {
 
         mongoTemplate.update(Movie.class)
                 .matching(Criteria.where("imdbId").is(imdbId))
-                .apply(new Update().push("reviewIds").value(review))
+                .apply(new Update().push("reviewIds").value(review.getId()))
                 .first();
         return review;
     }
