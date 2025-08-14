@@ -27,6 +27,7 @@ const Reviews = ({ getMovieData, movie, reviews, setReviews, isLoggedIn }) => {
       });
 
       const updatedReviews = [...reviews, response.data];
+      console.log("Updated reviews:", updatedReviews);
       console.log("Review added:", response.data);
       rev.value = "";
       setReviews(updatedReviews);
@@ -88,7 +89,7 @@ const Reviews = ({ getMovieData, movie, reviews, setReviews, isLoggedIn }) => {
                   </div>
                   <div className="review-meta">
                     <div className="review-author">
-                      {review.author || "Anonim"}
+                      {review.authorUsername || "Anonim"}
                     </div>
                     <div className="review-date">
                       {review.createdAt ||

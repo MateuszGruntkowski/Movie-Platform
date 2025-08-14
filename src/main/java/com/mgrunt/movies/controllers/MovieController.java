@@ -1,6 +1,7 @@
 package com.mgrunt.movies.controllers;
 
 import com.mgrunt.movies.domain.documents.Movie;
+import com.mgrunt.movies.domain.dtos.MovieDto;
 import com.mgrunt.movies.services.MovieService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,7 +26,7 @@ public class MovieController {
     }
 
     @GetMapping(path = "/{imdbId}")
-    public ResponseEntity<Movie> getMovie(@PathVariable String imdbId) {
+    public ResponseEntity<MovieDto> getMovie(@PathVariable String imdbId) {
         return new ResponseEntity<>(movieService.getSingleMovie(imdbId),HttpStatus.OK);
     }
 }
