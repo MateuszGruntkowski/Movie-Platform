@@ -21,10 +21,6 @@ public class Review {
     private LocalDateTime createdAt = LocalDateTime.now();
     private ObjectId authorId;
 
-    public Review(String body) {
-        this.body = body;
-    }
-
     public Review(String body, ObjectId authorId) {
         this.body = body;
         this.authorId = authorId;

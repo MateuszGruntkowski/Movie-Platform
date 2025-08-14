@@ -10,6 +10,7 @@ import {
   faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
 import { Link, useNavigate } from "react-router-dom";
+import { Button } from "react-bootstrap";
 
 // Komponenty custom arrows
 const PrevArrow = ({ onClick }) => (
@@ -107,6 +108,7 @@ const Hero = ({ movies }) => {
                     </button>
                   </div>
                 </div>
+                <Button variant="secondary">Add to Watch list</Button>
               </div>
             </div>
           </div>
