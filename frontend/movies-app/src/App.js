@@ -20,6 +20,7 @@ function App() {
     try {
       const response = await api.get("v1/movies");
       setMovies(response.data);
+      console.log("Movies fetched:", response.data);
     } catch (error) {
       console.error("Error fetching movies:", error);
     }

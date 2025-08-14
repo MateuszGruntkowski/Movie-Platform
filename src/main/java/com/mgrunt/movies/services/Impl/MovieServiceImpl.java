@@ -24,8 +24,12 @@ public class MovieServiceImpl implements MovieService {
     private final UserRepository userRepository;
 
     @Override
-    public List<Movie> getAllMovies() {
-        return movieRepository.findAll();
+    public List<MovieDto> getAllMovies() {
+        List<Movie> movies = movieRepository.findAll();
+
+        // return without reviews
+        return movies.stream().map(movieMapper::toDto)
+                .toList();
     }
 
     @Override

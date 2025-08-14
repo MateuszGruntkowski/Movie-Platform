@@ -83,9 +83,7 @@ const Reviews = ({ getMovieData, movie, reviews, setReviews, isLoggedIn }) => {
               <div key={review.id || index} className="review-item">
                 <div className="review-header">
                   <div className="review-avatar">
-                    {review.author
-                      ? review.author.charAt(0).toUpperCase()
-                      : "A"}
+                    {review.authorUsername.charAt(0).toUpperCase()}
                   </div>
                   <div className="review-meta">
                     <div className="review-author">
