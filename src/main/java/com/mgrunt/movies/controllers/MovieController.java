@@ -1,6 +1,5 @@
 package com.mgrunt.movies.controllers;
 
-import com.mgrunt.movies.domain.documents.Movie;
 import com.mgrunt.movies.domain.dtos.MovieDto;
 import com.mgrunt.movies.services.MovieService;
 import lombok.RequiredArgsConstructor;

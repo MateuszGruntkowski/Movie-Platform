@@ -1,18 +1,19 @@
 package com.mgrunt.movies.services.Impl;
-
-import com.mgrunt.movies.domain.documents.Movie;
-import com.mgrunt.movies.domain.documents.User;
 import com.mgrunt.movies.domain.dtos.MovieDto;
 import com.mgrunt.movies.domain.dtos.ReviewDto;
+import com.mgrunt.movies.domain.entities.Movie;
+import com.mgrunt.movies.domain.entities.User;
 import com.mgrunt.movies.mappers.MovieMapper;
 import com.mgrunt.movies.mappers.ReviewMapper;
 import com.mgrunt.movies.repositories.MovieRepository;
 import com.mgrunt.movies.repositories.UserRepository;
 import com.mgrunt.movies.services.MovieService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -28,29 +29,29 @@ public class MovieServiceImpl implements MovieService {
         List<Movie> movies = movieRepository.findAll();
 
         // return without reviews
-        return movies.stream().map(movieMapper::toDto)
+        return movies.stream().map(movieMapper::toDtoWithoutReviews)
                 .toList();
     }
 
     @Override
     public MovieDto getSingleMovie(String imdbId) {
 
-        Movie movie = movieRepository.findMovieByImdbId(imdbId)
+        Movie movie = movieRepository.findByImdbIdWithReviewsAndAuthors(imdbId)
                 .orElseThrow(() -> new RuntimeException("Movie not found with id: " + imdbId));
 
-        MovieDto movieDto = movieMapper.toDto(movie);
+        return movieMapper.toDto(movie);
 
-        List<ReviewDto> reviewDtos = movie.getReviews().stream()
-                .map(review -> {
-                    ReviewDto reviewDto = reviewMapper.toDto(review);
-                    User author = userRepository.findById(review.getAuthorId())
-                            .orElseThrow(() -> new RuntimeException("User not found with id: " + review.getAuthorId()));
-                    reviewDto.setAuthorUsername(author.getUsername());
-                    return reviewDto;
-                }).toList();
+    }
 
-        movieDto.setReviews(reviewDtos);
-        return movieDto;
+    @Transactional
+    @Override
+    public void addMovieToWatchlist(UUID userId, String imdbId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        Movie movie = movieRepository.findByImdbId(imdbId)
+                .orElseThrow(() -> new RuntimeException("Movie not found"));
 
+        user.getMoviesToWatch().add(movie);
+        userRepository.save(user);
     }
 }

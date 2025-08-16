@@ -5,12 +5,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class MovieDto {
-    private String id;
+    private UUID id;
     private String imdbId;
     private String title;
     private String releaseDate;

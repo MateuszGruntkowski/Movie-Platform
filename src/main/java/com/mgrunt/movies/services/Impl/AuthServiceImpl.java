@@ -1,7 +1,6 @@
 package com.mgrunt.movies.services.Impl;
-
 import com.mgrunt.movies.Security.CustomUserDetails;
-import com.mgrunt.movies.domain.documents.User;
+import com.mgrunt.movies.domain.entities.User;
 import com.mgrunt.movies.repositories.UserRepository;
 import com.mgrunt.movies.services.AuthService;
 import lombok.RequiredArgsConstructor;

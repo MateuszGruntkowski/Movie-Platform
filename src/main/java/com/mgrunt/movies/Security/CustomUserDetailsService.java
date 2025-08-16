@@ -1,6 +1,6 @@
 package com.mgrunt.movies.Security;
 
-import com.mgrunt.movies.domain.documents.User;
+import com.mgrunt.movies.domain.entities.User;
 import com.mgrunt.movies.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;

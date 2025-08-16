@@ -1,10 +1,12 @@
 package com.mgrunt.movies.services.Impl;
 
-import com.mgrunt.movies.domain.documents.Movie;
-import com.mgrunt.movies.domain.documents.Review;
-import com.mgrunt.movies.domain.documents.User;
+import com.mgrunt.movies.Security.CustomUserDetails;
 import com.mgrunt.movies.domain.dtos.ReviewDto;
+import com.mgrunt.movies.domain.entities.Movie;
+import com.mgrunt.movies.domain.entities.Review;
+import com.mgrunt.movies.domain.entities.User;
 import com.mgrunt.movies.mappers.ReviewMapper;
+import com.mgrunt.movies.repositories.MovieRepository;
 import com.mgrunt.movies.repositories.ReviewRepository;
 import com.mgrunt.movies.repositories.UserRepository;
 import com.mgrunt.movies.services.ReviewService;
@@ -13,50 +15,63 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class ReviewServiceImpl implements ReviewService {
 
     private final ReviewRepository reviewRepository;
+    private final MovieRepository movieRepository;
     private final UserRepository userRepository;
     private final ReviewMapper reviewMapper;
 
-    @Autowired
-    private MongoTemplate mongoTemplate;
+//    @Autowired
+//    private MongoTemplate mongoTemplate;
 
     @Override
-    public ReviewDto createReview(String imdbId, String reviewBody, Principal principal) {
+    public ReviewDto createReview(String imdbId, String reviewBody, Authentication authentication) {
 
-        if (imdbId == null || imdbId.isEmpty()) {
-            throw new IllegalArgumentException("IMDB ID cannot be null or empty");
+        if (reviewBody == null || reviewBody.trim().isEmpty()) {
+            throw new IllegalArgumentException("Review body cannot be empty");
         }
 
-        if (reviewBody == null || reviewBody.isEmpty()) {
-            throw new IllegalArgumentException("Review body cannot be null or empty");
-        }
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        UUID userId = userDetails.getId();
 
-        User currentUser = userRepository.findByUsername(principal.getName())
+        User currentUser = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        Review review = reviewRepository.insert(new Review(reviewBody, currentUser.getId()));
+        Movie movie = movieRepository.findByImdbId(imdbId)
+                .orElseThrow(() -> new RuntimeException("Movie not found"));
 
-        mongoTemplate.update(Movie.class)
-                .matching(Criteria.where("imdbId").is(imdbId))
-                .apply(new Update().push("reviewIds").value(review.getId()))
-                .first();
+        if (reviewRepository.existsByAuthorIdAndMovieId(userId, movie.getId())) {
+            throw new RuntimeException("User already reviewed this movie");
+        }
 
-        mongoTemplate.update(User.class)
-                .matching(Criteria.where("username").is(currentUser.getUsername()))
-                .apply(new Update().push("reviewIds").value(review.getId()))
-                .first();
+        Review review = Review.builder()
+                .body(reviewBody)
+                .author(currentUser)
+                .movie(movie)
+                .build();
+        Review savedReview = reviewRepository.save(review);
 
-        ReviewDto reviewDto = reviewMapper.toDto(review);
-        reviewDto.setAuthorUsername(currentUser.getUsername());
+//        Review review = reviewRepository1.insert(new Review(reviewBody, currentUser.getId()));
 
-        return reviewDto;
+//        mongoTemplate.update(Movie.class)
+//                .matching(Criteria.where("imdbId").is(imdbId))
+//                .apply(new Update().push("reviewIds").value(review.getId()))
+//                .first();
+//
+//        mongoTemplate.update(User.class)
+//                .matching(Criteria.where("username").is(currentUser.getUsername()))
+//                .apply(new Update().push("reviewIds").value(review.getId()))
+//                .first();
+
+        return reviewMapper.toDto(savedReview);
     }
 }
