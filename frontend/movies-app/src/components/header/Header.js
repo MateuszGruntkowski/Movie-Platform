@@ -7,12 +7,15 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import { NavLink } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { useUser } from "../context/UserContext";
 
-const header = ({ isLoggedIn, setIsLoggedIn }) => {
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    setIsLoggedIn(false);
-  };
+const header = () => {
+  const { user, logout } = useUser();
+
+  // const handleLogout = () => {
+  //   localStorage.removeItem("token");
+  //   setIsLoggedIn(false);
+  // };
 
   return (
     <Navbar bg="dark" variant="dark" expand="lg">
@@ -36,12 +39,8 @@ const header = ({ isLoggedIn, setIsLoggedIn }) => {
             </NavLink>
           </Nav>
 
-          {isLoggedIn ? (
-            <Button
-              variant="outline-info"
-              className="me-2"
-              onClick={handleLogout}
-            >
+          {user ? (
+            <Button variant="outline-info" className="me-2" onClick={logout}>
               Logout
             </Button>
           ) : (

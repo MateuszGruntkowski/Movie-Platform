@@ -5,14 +5,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Set;
+
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
 @Builder
-public class AuthResponse {
-    private String username;
-    private String token;
-
-    @Builder.Default
-    private long expiresIn = 86400;
+@Data
+public class UserWatchListResponse {
+    private Set<MovieDto> moviesToWatch;
+    private Set<MovieDto> moviesWatched;
 }

@@ -1,36 +1,43 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
+import { useUser } from "../context/UserContext";
 import "./Login.css";
 
 const Login = ({ setIsLoggedIn }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const { login } = useUser();
   const navigate = useNavigate();
-
   const location = useLocation();
-  console.log("location.state:", location.state);
 
   const handleLogin = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:8080/api/v1/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
-      });
-
-      if (!response.ok) throw new Error("Login failed");
-
-      const data = await response.json();
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("expiresIn", data.expiresIn);
-      setIsLoggedIn(true);
+      await login(username, password);
       navigate(location.state?.from || "/");
     } catch (error) {
-      alert(error.message);
+      alert("Login failed: " + error.message);
     }
+
+    // try {
+    //   const response = await fetch("http://localhost:8080/api/v1/auth/login", {
+    //     method: "POST",
+    //     headers: { "Content-Type": "application/json" },
+    //     body: JSON.stringify({ username, password }),
+    //   });
+
+    //   if (!response.ok) throw new Error("Login failed");
+
+    //   const data = await response.json();
+    //   localStorage.setItem("token", data.token);
+    //   localStorage.setItem("expiresIn", data.expiresIn);
+    //   setIsLoggedIn(true);
+    //   navigate(location.state?.from || "/");
+    // } catch (error) {
+    //   alert(error.message);
+    // }
   };
 
   return (

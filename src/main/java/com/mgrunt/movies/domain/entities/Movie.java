@@ -1,9 +1,8 @@
 package com.mgrunt.movies.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.*;
 
@@ -11,7 +10,8 @@ import java.util.*;
 @Table(name = "movies")
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 public class Movie {
 
     @Id
@@ -47,5 +47,37 @@ public class Movie {
     private List<Review> reviews = new ArrayList<>();
 
     @ManyToMany(mappedBy = "moviesToWatch")
+    @JsonIgnore
     private Set<User> usersWatching = new HashSet<>();
+
+    @ManyToMany(mappedBy = "moviesWatched")
+    @JsonIgnore
+    private Set<User> usersWatched = new HashSet<>();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Movie movie = (Movie) o;
+        return Objects.equals(id, movie.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        return "Movie{" +
+                "id=" + id +
+                ", imdbId='" + imdbId + '\'' +
+                ", title='" + title + '\'' +
+                ", releaseDate='" + releaseDate + '\'' +
+                ", trailerLink='" + trailerLink + '\'' +
+                ", poster='" + poster + '\'' +
+                ", genres=" + genres +
+                ", backdrops=" + backdrops +
+                '}';
+    }
 }

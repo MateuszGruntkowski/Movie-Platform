@@ -49,9 +49,9 @@ public class ReviewServiceImpl implements ReviewService {
         Movie movie = movieRepository.findByImdbId(imdbId)
                 .orElseThrow(() -> new RuntimeException("Movie not found"));
 
-        if (reviewRepository.existsByAuthorIdAndMovieId(userId, movie.getId())) {
-            throw new RuntimeException("User already reviewed this movie");
-        }
+//        if (reviewRepository.existsByAuthorIdAndMovieId(userId, movie.getId())) {
+//            throw new RuntimeException("User already reviewed this movie");
+//        }
 
         Review review = Review.builder()
                 .body(reviewBody)

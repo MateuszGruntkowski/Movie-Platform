@@ -7,7 +7,7 @@ import "./Reviews.css";
 
 import React from "react";
 
-const Reviews = ({ getMovieData, movie, reviews, setReviews, isLoggedIn }) => {
+const Reviews = ({ getMovieData, movie, reviews, setReviews }) => {
   const revText = useRef();
   let params = useParams();
   const movieId = params.movieId;
@@ -70,7 +70,6 @@ const Reviews = ({ getMovieData, movie, reviews, setReviews, isLoggedIn }) => {
             handleSubmit={addReview}
             revText={revText}
             labelText="Write your review:"
-            isLoggedIn={isLoggedIn}
           />
 
           {/* Reviews List */}

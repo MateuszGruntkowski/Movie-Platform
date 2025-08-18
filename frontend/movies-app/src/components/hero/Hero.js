@@ -11,6 +11,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "react-bootstrap";
+import api from "../../api/axiosConfig";
 
 // Komponenty custom arrows
 const PrevArrow = ({ onClick }) => (
@@ -24,6 +25,20 @@ const NextArrow = ({ onClick }) => (
     <FontAwesomeIcon icon={faChevronRight} />
   </div>
 );
+
+const handleAddToWatchlist = async (e, movieId) => {
+  e.preventDefault();
+
+  try {
+    const response = await api.patch("/v1/users/watchlist", {
+      movieId: movieId,
+    });
+
+    console.log("Movie added to watchlist:", response.data);
+  } catch (err) {
+    console.error("Error adding watchlist:", err);
+  }
+};
 
 const Hero = ({ movies }) => {
   const navigate = useNavigate();
@@ -108,7 +123,12 @@ const Hero = ({ movies }) => {
                     </button>
                   </div>
                 </div>
-                <Button variant="secondary">Add to Watch list</Button>
+                <Button
+                  variant="secondary"
+                  onClick={(e) => handleAddToWatchlist(e, movie.id)}
+                >
+                  Add to Watch list
+                </Button>
               </div>
             </div>
           </div>

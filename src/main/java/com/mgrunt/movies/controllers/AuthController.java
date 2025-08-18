@@ -5,6 +5,7 @@ import com.mgrunt.movies.domain.dtos.AuthResponse;
 import com.mgrunt.movies.domain.dtos.LoginRequest;
 import com.mgrunt.movies.domain.dtos.RegisterRequest;
 import com.mgrunt.movies.services.AuthService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -28,19 +29,24 @@ public class AuthController {
                  loginRequest.getPassword());
 
          String token = jwtUtil.generateToken(userDetails);
-         AuthResponse authResponse = AuthResponse.builder().token(token).build();
+         AuthResponse authResponse = AuthResponse.builder()
+                 .username(userDetails.getUsername())
+                 .token(token).build();
 
          return ResponseEntity.ok(authResponse);
      }
 
      @PostMapping(path = "/register")
-         public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest registerRequest) {
+         public ResponseEntity<AuthResponse> register(
+                 @Valid @RequestBody RegisterRequest registerRequest) {
              UserDetails userDetails = authService.register(
                      registerRequest.getUsername(),
                      registerRequest.getPassword());
 
              String token = jwtUtil.generateToken(userDetails);
-             AuthResponse authResponse = AuthResponse.builder().token(token).build();
+             AuthResponse authResponse = AuthResponse.builder()
+                     .username(userDetails.getUsername())
+                     .token(token).build();
 
              return ResponseEntity.ok(authResponse);
          }
