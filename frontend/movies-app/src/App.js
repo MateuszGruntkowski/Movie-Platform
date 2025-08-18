@@ -8,8 +8,8 @@ import Header from "./components/header/Header";
 import Trailer from "./components/trailer/Trailer";
 import Reviews from "./components/reviews/Reviews";
 import NotFound from "./components/notFound/NotFound";
-import Login from "./components/login/Login";
-import Register from "./components/register/Register";
+import Login from "./components/auth/login/Login";
+import Register from "./components/auth/register/Register";
 import WatchList from "./components/watchList/WatchList";
 
 function App() {
@@ -44,14 +44,6 @@ function App() {
     getMovies();
   }, []);
 
-  // const [isLoggedIn, setIsLoggedIn] = useState(false);
-  // useEffect(() => {
-  //   const token = localStorage.getItem("token");
-  //   if (token) {
-  //     setIsLoggedIn(true);
-  //   }
-  // }, []);
-
   return (
     <div className="App">
       <Header />
@@ -67,14 +59,10 @@ function App() {
                 reviews={reviews}
                 setReviews={setReviews}
                 movie={movie}
-                isLoggedIn={isLoggedIn}
               />
             }
           />
-          <Route
-            path="/login"
-            element={<Login setIsLoggedIn={setIsLoggedIn} />}
-          />
+          <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/watchlist" element={<WatchList />} />
           <Route path="*" element={<NotFound />} />

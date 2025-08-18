@@ -15,14 +15,14 @@ body {
 }
 
 body {
-  background-color: black;
+  background: #1a1a1a;
 }
 
 .App {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background-color: black;
+  background: #1a1a1a;
   color: white;
   margin: 0;
   padding: 0;

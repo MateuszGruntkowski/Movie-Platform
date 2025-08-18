@@ -1,0 +1,63 @@
+// MovieCard.js
+import React from "react";
+import { CheckCircle, Clock, X } from "lucide-react";
+
+const MovieCard = ({
+  movie,
+  listType,
+  onMarkAsWatched,
+  onMarkAsToWatch,
+  onRemove,
+}) => (
+  <div className="wl-movie-card">
+    <div className="wl-movie-poster">
+      <img src={movie.poster} alt={movie.title} />
+      <div className="wl-movie-overlay">
+        <div className="wl-movie-actions">
+          {listType === "moviesToWatch" ? (
+            <button
+              className="wl-action-btn wl-watch-btn"
+              onClick={() => onMarkAsWatched(movie.id)}
+              title="Mark as watched"
+            >
+              <CheckCircle size={20} />
+            </button>
+          ) : (
+            <button
+              className="wl-action-btn wl-unwatch-btn"
+              onClick={() => onMarkAsToWatch(movie.id)}
+              title="Move to watchlist"
+            >
+              <Clock size={20} />
+            </button>
+          )}
+          <button
+            className="wl-action-btn wl-remove-btn"
+            onClick={() => onRemove(movie.id)}
+            title="Remove from list"
+          >
+            <X size={20} />
+          </button>
+        </div>
+      </div>
+    </div>
+    <div className="wl-movie-info">
+      <h3 className="wl-movie-title">{movie.title}</h3>
+      <p className="wl-movie-year">
+        {new Date(movie.releaseDate).getFullYear()}
+      </p>
+      <div className="wl-movie-genres">
+        {movie.genres.slice(0, 3).map((genre, index) => (
+          <span key={index} className="wl-genre-tag">
+            {genre}
+          </span>
+        ))}
+        {movie.genres.length > 3 && (
+          <span className="wl-genre-more">+{movie.genres.length - 3} more</span>
+        )}
+      </div>
+    </div>
+  </div>
+);
+
+export default MovieCard;

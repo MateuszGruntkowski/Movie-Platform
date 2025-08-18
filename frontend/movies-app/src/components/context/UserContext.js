@@ -9,7 +9,6 @@ export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // 🔹 Sprawdź usera przy starcie (jeśli jest token)
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -33,27 +32,77 @@ export const UserProvider = ({ children }) => {
     fetchUser();
   }, []);
 
-  // 🔹 Logowanie
   const login = async (username, password) => {
     const res = await api.post("/v1/auth/login", { username, password });
     localStorage.setItem("token", res.data.token);
     localStorage.setItem("expiresIn", res.data.expiresIn);
 
-    // od razu pobierz profil
     const me = await api.get("/v1/users/me");
     console.log("Logged in user:", me.data);
     setUser(me.data);
   };
 
-  // 🔹 Wylogowanie
   const logout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("expiresIn");
     setUser(null);
   };
 
+  const addWatched = (movieId) => {
+    setUser((prev) =>
+      prev
+        ? { ...prev, moviesWatchedIds: [...prev.moviesWatchedIds, movieId] }
+        : prev
+    );
+  };
+
+  const removeWatched = (movieId) => {
+    setUser((prev) =>
+      prev
+        ? {
+            ...prev,
+            moviesWatchedIds: prev.moviesWatchedIds.filter(
+              (id) => id !== movieId
+            ),
+          }
+        : prev
+    );
+  };
+
+  const addToWatch = (movieId) => {
+    setUser((prev) =>
+      prev
+        ? { ...prev, moviesToWatchIds: [...prev.moviesToWatchIds, movieId] }
+        : prev
+    );
+  };
+
+  const removeToWatch = (movieId) => {
+    setUser((prev) =>
+      prev
+        ? {
+            ...prev,
+            moviesToWatchIds: prev.moviesToWatchIds.filter(
+              (id) => id !== movieId
+            ),
+          }
+        : prev
+    );
+  };
+
   return (
-    <UserContext.Provider value={{ user, login, logout, loading }}>
+    <UserContext.Provider
+      value={{
+        user,
+        login,
+        logout,
+        loading,
+        addToWatch,
+        removeToWatch,
+        addWatched,
+        removeWatched,
+      }}
+    >
       {children}
     </UserContext.Provider>
   );

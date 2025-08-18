@@ -2,7 +2,8 @@ import { useEffect, useRef } from "react";
 import api from "../../api/axiosConfig";
 import { useParams } from "react-router-dom";
 import { Container, Row, Col } from "react-bootstrap";
-import ReviewForm from "../reviewForm/ReviewForm";
+import ReviewForm from "./ReviewForm";
+import MovieCard from "./MovieCard";
 import "./Reviews.css";
 
 import React from "react";
@@ -46,21 +47,7 @@ const Reviews = ({ getMovieData, movie, reviews, setReviews }) => {
       <div className="reviews-content">
         {/* Movie Poster */}
         <div className="movie-section">
-          <div className="movie-poster-container">
-            <img
-              src={
-                movie?.poster ||
-                "https://via.placeholder.com/300x450/2A2D3A/FFD700?text=Brak+Plakatu"
-              }
-              alt={movie?.title || "Movie poster"}
-              className="movie-poster"
-            />
-            {movie && (
-              <div className="movie-info">
-                <h3 className="movie-title">{movie.title}</h3>
-              </div>
-            )}
-          </div>
+          <MovieCard movie={movie} />
         </div>
 
         {/* Reviews Section */}

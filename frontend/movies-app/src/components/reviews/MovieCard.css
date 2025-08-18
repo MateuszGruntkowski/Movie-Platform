@@ -1,0 +1,88 @@
+.movie-poster-container {
+  /* background: linear-gradient(145deg, #1a1d23, #23272f); */
+  background: #2a2a2a;
+  /* border: 1px solid #343a46; */
+  border-radius: 16px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s ease;
+}
+
+.movie-poster {
+  width: 100%;
+  max-width: 300px;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  transition: transform 0.3s ease;
+  /* border: none; */
+}
+
+.movie-poster:hover {
+  transform: scale(1.02);
+}
+
+.movie-info {
+  margin-top: 20px;
+}
+
+.movie-title {
+  color: #ffffff;
+  font-size: 1.4rem;
+  margin: 0;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.movie-year {
+  color: #999;
+  font-size: 0.9rem;
+  margin: 8px 0 12px 0;
+  font-weight: 400;
+}
+
+.movie-genres {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.genre-tag {
+  background: linear-gradient(135deg, #ffd700, #e6c200);
+  color: #000;
+  padding: 5px 10px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+}
+
+.genre-more {
+  background: #555;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+}
+
+/* Responsive adjustments for movie info */
+@media (max-width: 768px) {
+  .movie-genres {
+    justify-content: center;
+  }
+
+  .movie-year {
+    text-align: center;
+  }
+}
+
+/* Update existing movie-title to match */
+.movie-title {
+  color: #ffffff;
+  font-size: 1.4rem;
+  margin: 0 0 8px 0;
+  font-weight: 600;
+  line-height: 1.3;
+}

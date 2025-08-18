@@ -1,5 +1,6 @@
-import React from "react";
+import React, { use, useState } from "react";
 import Slider from "react-slick";
+import { CheckCircle, Clock } from "lucide-react";
 import "./Hero.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -12,8 +13,8 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import api from "../../api/axiosConfig";
+import { useUser } from "../context/UserContext";
 
-// Komponenty custom arrows
 const PrevArrow = ({ onClick }) => (
   <div className="custom-arrow custom-prev-arrow" onClick={onClick}>
     <FontAwesomeIcon icon={faChevronLeft} />
@@ -26,22 +27,97 @@ const NextArrow = ({ onClick }) => (
   </div>
 );
 
-const handleAddToWatchlist = async (e, movieId) => {
-  e.preventDefault();
-
-  try {
-    const response = await api.patch("/v1/users/watchlist", {
-      movieId: movieId,
-    });
-
-    console.log("Movie added to watchlist:", response.data);
-  } catch (err) {
-    console.error("Error adding watchlist:", err);
-  }
-};
-
 const Hero = ({ movies }) => {
+  // const { user } = useUser();
+  const { user, addWatched, removeWatched, addToWatch, removeToWatch } =
+    useUser();
+
+  const isWatched = (movieId) =>
+    user?.moviesWatchedIds?.includes(movieId) ?? false;
+
+  const isToWatch = (movieId) =>
+    user?.moviesToWatchIds?.includes(movieId) ?? false;
+
   const navigate = useNavigate();
+  const [popupMessage, setPopupMessage] = useState("");
+  const [popupType, setPopupType] = useState(""); // 'watched', 'toWatch'
+  const [showPopup, setShowPopup] = useState(false);
+
+  const showTemporaryPopup = (message, type) => {
+    setPopupMessage(message);
+    setPopupType(type);
+    setShowPopup(true);
+    setTimeout(() => {
+      setShowPopup(false);
+    }, 3000);
+  };
+
+  // const handleMarkAsWatched = async (movieId) => {
+  //   if (!user) {
+  //     showTemporaryPopup("Zaloguj się, aby dodać do listy!", "login");
+  //     return;
+  //   }
+
+  //   try {
+  //     await api.patch(`/v1/users/watchlist/watched/${movieId}`);
+  //     showTemporaryPopup("Marked as watched!", "watched");
+  //   } catch (error) {
+  //     console.error("Error marking as watched:", error);
+  //   }
+  // };
+
+  // const handleMarkAsToWatch = async (movieId) => {
+  //   if (!user) {
+  //     showTemporaryPopup("Zaloguj się, aby dodać do listy!", "login");
+  //     return;
+  //   }
+
+  //   try {
+  //     await api.patch(`/v1/users/watchlist/toWatch/${movieId}`);
+  //     showTemporaryPopup("Marked as to watch!", "toWatch");
+  //   } catch (error) {
+  //     console.error("Error marking as to watch:", error);
+  //   }
+  // };
+
+  const handleToggleWatched = async (movieId) => {
+    if (!user) {
+      showTemporaryPopup("Zaloguj się, aby dodać do listy!", "login");
+      return;
+    }
+
+    const alreadyWatched = isWatched(movieId);
+
+    try {
+      if (alreadyWatched) {
+        await api.delete(`/v1/users/watchlist/watched/${movieId}`);
+        removeWatched(movieId);
+        showTemporaryPopup("Removed from watched!", "watched");
+      } else {
+        await api.patch(`/v1/users/watchlist/watched/${movieId}`);
+        addWatched(movieId);
+        showTemporaryPopup("Marked as watched!", "watched");
+      }
+    } catch (error) {
+      console.error("Error toggling watched:", error);
+    }
+
+    const alreadyToWatch = isToWatch(movieId);
+
+    try {
+      if (alreadyToWatch) {
+        await api.delete(`/v1/users/watchlist/toWatch/${movieId}`);
+        removeToWatch(movieId);
+        showTemporaryPopup("Removed from to watch!", "toWatch");
+      } else {
+        await api.patch(`/v1/users/watchlist/toWatch/${movieId}`);
+        addToWatch(movieId);
+        showTemporaryPopup("Marked as to watch!", "toWatch");
+      }
+    } catch (error) {
+      console.error("Error toggling watched:", error);
+    }
+  };
 
   const settings = {
     dots: true,
@@ -65,6 +141,11 @@ const Hero = ({ movies }) => {
 
   return (
     <div className="movie-carousel-container">
+      {/* Popup */}
+      {showPopup && (
+        <div className={`popup-notification ${popupType}`}>{popupMessage}</div>
+      )}
+
       <Slider {...settings}>
         {movies.map((movie, index) => (
           <div key={movie.imdbId || movie.title || index}>
@@ -122,13 +203,39 @@ const Hero = ({ movies }) => {
                       Reviews
                     </button>
                   </div>
+
+                  <div className="watchlist-buttons-container">
+                    <button
+                      className={`watchlist-button watched-button ${
+                        isWatched(movie.id) ? "active" : ""
+                      }`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        // handleMarkAsWatched(movie.id);
+                        handleToggleWatched(movie.id);
+                      }}
+                      title="Mark as watched"
+                    >
+                      <CheckCircle size={20} />
+                      <span>Watched</span>
+                    </button>
+
+                    <button
+                      className={`watchlist-button to-watch-button ${
+                        isToWatch(movie.id) ? "active" : ""
+                      }`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        // handleMarkAsToWatch(movie.id);
+                        handleToggleWatched(movie.id);
+                      }}
+                      title="Mark as to watch"
+                    >
+                      <Clock size={20} />
+                      <span>To Watch</span>
+                    </button>
+                  </div>
                 </div>
-                <Button
-                  variant="secondary"
-                  onClick={(e) => handleAddToWatchlist(e, movie.id)}
-                >
-                  Add to Watch list
-                </Button>
               </div>
             </div>
           </div>
