@@ -19,7 +19,6 @@ export const UserProvider = ({ children }) => {
     const fetchUser = async () => {
       try {
         const res = await api.get("/v1/users/me");
-        console.log("Fetched user:", res.data);
         setUser(res.data);
       } catch (err) {
         console.error("Błąd pobierania usera:", err);
@@ -38,7 +37,6 @@ export const UserProvider = ({ children }) => {
     localStorage.setItem("expiresIn", res.data.expiresIn);
 
     const me = await api.get("/v1/users/me");
-    console.log("Logged in user:", me.data);
     setUser(me.data);
   };
 
@@ -48,125 +46,69 @@ export const UserProvider = ({ children }) => {
     setUser(null);
   };
 
-  // Uniwersalna funkcja do zarządzania watchlistą
-  const updateWatchlistState = (movieId, listType, action) => {
-    const listKey =
-      listType === "watched" ? "moviesWatchedIds" : "moviesToWatchIds";
-
-    setUser((prev) => {
-      if (!prev) return prev;
-
-      const currentList = prev[listKey] || [];
-
-      if (action === "add") {
-        return {
-          ...prev,
-          [listKey]: currentList.includes(movieId)
-            ? currentList
-            : [...currentList, movieId],
-        };
-      } else if (action === "remove") {
-        return {
-          ...prev,
-          [listKey]: currentList.filter((id) => id !== movieId),
-        };
-      }
-
-      return prev;
-    });
-  };
-
-  // Uniwersalna funkcja do przełączania statusu filmu
-  const toggleMovieStatus = async (movieId, listType, showPopup) => {
+  // Jedna główna funkcja do zarządzania watchlistą
+  const updateWatchlist = async (movieId, action, showPopup) => {
     if (!user) {
       showPopup?.("Zaloguj się, aby dodać do listy!", "login");
       return false;
     }
 
-    const listKey =
-      listType === "watched" ? "moviesWatchedIds" : "moviesToWatchIds";
-    const isInList = user[listKey]?.includes(movieId) ?? false;
-
-    const endpoint = listType === "watched" ? "watched" : "toWatch";
-    const otherListType = listType === "watched" ? "toWatch" : "watched";
-    const otherListKey =
-      listType === "watched" ? "moviesToWatchIds" : "moviesWatchedIds";
-    const otherEndpoint = listType === "watched" ? "toWatch" : "watched";
-    const isInOtherList = user[otherListKey]?.includes(movieId) ?? false;
-
     try {
-      if (isInList) {
-        // Usuwamy z obecnej listy
-        await api.delete(`/v1/users/watchlist/${endpoint}/${movieId}`);
-        updateWatchlistState(movieId, listType, "remove");
-        showPopup?.(`Removed from ${listType}!`, listType);
-      } else {
-        // Dodajemy do nowej listy
-        await api.patch(`/v1/users/watchlist/${endpoint}/${movieId}`);
-        updateWatchlistState(movieId, listType, "add");
+      let endpoint;
+      let message;
 
-        // Jeśli film był w drugiej liście, usuwamy go stamtąd
-        if (isInOtherList) {
-          try {
-            await api.delete(`/v1/users/watchlist/${otherEndpoint}/${movieId}`);
-            updateWatchlistState(movieId, otherListType, "remove");
-          } catch (error) {
-            console.error(`Error removing from ${otherListType}:`, error);
-          }
-        }
-
-        showPopup?.(`Added to ${listType}!`, listType);
+      switch (action) {
+        case "add-watched":
+          endpoint = `watched/${movieId}`;
+          message = "Added to watched!";
+          break;
+        case "add-toWatch":
+          endpoint = `toWatch/${movieId}`;
+          message = "Added to watch list!";
+          break;
+        case "remove-watched":
+          endpoint = `watched/${movieId}`;
+          message = "Removed from watched!";
+          break;
+        case "remove-toWatch":
+          endpoint = `toWatch/${movieId}`;
+          message = "Removed from watch list!";
+          break;
+        default:
+          return false;
       }
+
+      if (action.startsWith("remove")) {
+        await api.delete(`/v1/users/watchlist/${endpoint}`);
+      } else {
+        await api.patch(`/v1/users/watchlist/${endpoint}`);
+      }
+
+      // Odświeżamy dane użytkownika
+      const res = await api.get("/v1/users/me");
+      setUser(res.data);
+
+      showPopup?.(message, action.includes("watched") ? "watched" : "toWatch");
       return true;
     } catch (error) {
-      console.error(`Error toggling ${listType}:`, error);
+      console.error(`Error with watchlist action ${action}:`, error);
       return false;
     }
   };
 
-  // Funkcje pomocnicze do sprawdzania statusu
+  // Proste funkcje pomocnicze
   const isWatched = (movieId) =>
     user?.moviesWatchedIds?.includes(movieId) ?? false;
   const isToWatch = (movieId) =>
     user?.moviesToWatchIds?.includes(movieId) ?? false;
 
-  // Funkcje do przenoszenia między listami (dla WatchList)
-  const moveToWatched = async (movieId) => {
-    try {
-      await api.patch(`/v1/users/watchlist/watched/${movieId}`);
-      updateWatchlistState(movieId, "toWatch", "remove");
-      updateWatchlistState(movieId, "watched", "add");
-      return true;
-    } catch (error) {
-      console.error("Error moving to watched:", error);
-      return false;
-    }
-  };
+  // Funkcja toggle dla Hero komponentu
+  const toggleMovieStatus = async (movieId, listType, showPopup) => {
+    const isCurrentlyInList =
+      listType === "watched" ? isWatched(movieId) : isToWatch(movieId);
+    const action = isCurrentlyInList ? `remove-${listType}` : `add-${listType}`;
 
-  const moveToWatch = async (movieId) => {
-    try {
-      await api.patch(`/v1/users/watchlist/toWatch/${movieId}`);
-      updateWatchlistState(movieId, "watched", "remove");
-      updateWatchlistState(movieId, "toWatch", "add");
-      return true;
-    } catch (error) {
-      console.error("Error moving to watch:", error);
-      return false;
-    }
-  };
-
-  // Funkcje do usuwania z list
-  const removeFromList = async (movieId, listType) => {
-    const endpoint = listType === "watched" ? "watched" : "toWatch";
-
-    try {
-      await api.delete(`/v1/users/watchlist/${endpoint}/${movieId}`);
-      updateWatchlistState(movieId, listType, "remove");
-      return true;
-    } catch (error) {
-      console.error(`Error removing from ${listType}:`, error);
-      return false;
-    }
+    return await updateWatchlist(movieId, action, showPopup);
   };
 
   return (
@@ -176,25 +118,10 @@ export const UserProvider = ({ children }) => {
         login,
         logout,
         loading,
-        // Status checking
         isWatched,
         isToWatch,
-        // Toggle functions
         toggleMovieStatus,
-        // Move between lists
-        moveToWatched,
-        moveToWatch,
-        // Remove from lists
-        removeFromList,
-        // Legacy functions (for backward compatibility)
-        addWatched: (movieId) =>
-          updateWatchlistState(movieId, "watched", "add"),
-        removeWatched: (movieId) =>
-          updateWatchlistState(movieId, "watched", "remove"),
-        addToWatch: (movieId) =>
-          updateWatchlistState(movieId, "toWatch", "add"),
-        removeToWatch: (movieId) =>
-          updateWatchlistState(movieId, "toWatch", "remove"),
+        updateWatchlist,
       }}
     >
       {children}

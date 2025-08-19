@@ -7,13 +7,11 @@ import { useUser } from "../context/UserContext";
 import { Navigate } from "react-router-dom";
 
 const WatchList = () => {
-  const { user, loading, moveToWatched, moveToWatch, removeFromList } =
-    useUser();
-
+  const { user, loading, updateWatchlist } = useUser();
   const [moviesToWatch, setMoviesToWatch] = useState([]);
   const [moviesWatched, setMoviesWatched] = useState([]);
 
-  const getWatchListData = async () => {
+  const fetchWatchlistData = async () => {
     try {
       const response = await api.get("/v1/users/watchlist");
       setMoviesToWatch(response.data.moviesToWatch);
@@ -24,45 +22,20 @@ const WatchList = () => {
   };
 
   useEffect(() => {
-    getWatchListData();
-  }, []);
+    if (user) {
+      fetchWatchlistData();
+    }
+  }, [user]);
 
-  // Uniwersalna funkcja do przenoszenia filmów między listami
-  const handleMoveMovie = async (movieId, fromList, toList, moveFunction) => {
-    const success = await moveFunction(movieId);
+  // Jedna funkcja do obsługi wszystkich akcji
+  const handleWatchlistAction = async (movieId, action) => {
+    const success = await updateWatchlist(movieId, action);
+
     if (success) {
-      const movie = fromList.find((m) => m.id === movieId);
-      if (movie) {
-        if (fromList === moviesToWatch) {
-          setMoviesToWatch((prev) => prev.filter((m) => m.id !== movieId));
-          setMoviesWatched((prev) => [...prev, movie]);
-        } else {
-          setMoviesWatched((prev) => prev.filter((m) => m.id !== movieId));
-          setMoviesToWatch((prev) => [...prev, movie]);
-        }
-      }
+      // Odświeżamy lokalne listy
+      await fetchWatchlistData();
     }
   };
-
-  // Uniwersalna funkcja do usuwania filmów z list
-  const handleRemoveMovie = async (movieId, listType, setterFunction) => {
-    const success = await removeFromList(movieId, listType);
-    if (success) {
-      setterFunction((prev) => prev.filter((m) => m.id !== movieId));
-    }
-  };
-
-  const markAsWatched = (movieId) =>
-    handleMoveMovie(movieId, moviesToWatch, moviesWatched, moveToWatched);
-
-  const markAsToWatch = (movieId) =>
-    handleMoveMovie(movieId, moviesWatched, moviesToWatch, moveToWatch);
-
-  const removeFromToWatch = (movieId) =>
-    handleRemoveMovie(movieId, "toWatch", setMoviesToWatch);
-
-  const removeFromWatched = (movieId) =>
-    handleRemoveMovie(movieId, "watched", setMoviesWatched);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -76,10 +49,7 @@ const WatchList = () => {
     title,
     icon,
     movies,
-    count,
     listType,
-    onMarkAs,
-    onRemove,
     emptyMessage,
     emptySubMessage
   ) => (
@@ -89,7 +59,7 @@ const WatchList = () => {
           {icon}
           {title}
         </h2>
-        <span className="wl-count">{count}</span>
+        <span className="wl-count">{movies.length}</span>
       </div>
       <div className="wl-movies-grid">
         {movies.length > 0 ? (
@@ -98,9 +68,20 @@ const WatchList = () => {
               key={movie.id}
               movie={movie}
               listType={listType}
-              onMarkAsWatched={markAsWatched}
-              onMarkAsToWatch={markAsToWatch}
-              onRemove={onRemove}
+              onMarkAsWatched={() =>
+                handleWatchlistAction(movie.id, "add-watched")
+              }
+              onMarkAsToWatch={() =>
+                handleWatchlistAction(movie.id, "add-toWatch")
+              }
+              onRemove={() =>
+                handleWatchlistAction(
+                  movie.id,
+                  listType === "moviesToWatch"
+                    ? "remove-toWatch"
+                    : "remove-watched"
+                )
+              }
             />
           ))
         ) : (
@@ -135,10 +116,7 @@ const WatchList = () => {
           "To watch",
           <Clock size={24} />,
           moviesToWatch,
-          moviesToWatch.length,
           "moviesToWatch",
-          markAsWatched,
-          removeFromToWatch,
           "No videos to watch",
           "Add movies to your list!"
         )}
@@ -147,10 +125,7 @@ const WatchList = () => {
           "Already watched",
           <Eye size={24} />,
           moviesWatched,
-          moviesWatched.length,
           "moviesWatched",
-          markAsToWatch,
-          removeFromWatched,
           "You haven't watched any films yet",
           "Mark films as watched!"
         )}

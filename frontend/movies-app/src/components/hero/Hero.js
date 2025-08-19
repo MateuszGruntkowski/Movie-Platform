@@ -29,21 +29,17 @@ const Hero = ({ movies }) => {
   const { user, isWatched, isToWatch, toggleMovieStatus } = useUser();
   const navigate = useNavigate();
 
-  const [popupMessage, setPopupMessage] = useState("");
-  const [popupType, setPopupType] = useState("");
-  const [showPopup, setShowPopup] = useState(false);
-
-  const showTemporaryPopup = (message, type) => {
-    setPopupMessage(message);
-    setPopupType(type);
-    setShowPopup(true);
-    setTimeout(() => {
-      setShowPopup(false);
-    }, 3000);
+  const handleWatchlistClick = async (movieId, listType) => {
+    await toggleMovieStatus(movieId, listType, showPopup);
   };
 
-  const handleWatchlistAction = async (movieId, listType) => {
-    await toggleMovieStatus(movieId, listType, showTemporaryPopup);
+  const [popup, setPopup] = useState({ show: false, message: "", type: "" });
+
+  const showPopup = (message, type) => {
+    setPopup({ show: true, message, type });
+    setTimeout(() => {
+      setPopup({ show: false, message: "", type: "" });
+    }, 3000);
   };
 
   const settings = {
@@ -68,8 +64,10 @@ const Hero = ({ movies }) => {
 
   return (
     <div className="movie-carousel-container">
-      {showPopup && (
-        <div className={`popup-notification ${popupType}`}>{popupMessage}</div>
+      {popup.show && (
+        <div className={`popup-notification ${popup.type}`}>
+          {popup.message}
+        </div>
       )}
 
       <Slider {...settings}>
@@ -82,11 +80,7 @@ const Hero = ({ movies }) => {
                   to bottom,
                   rgba(0,0,0,0.3),
                   rgba(0,0,0,0.8)
-                ), url(${
-                  movie.backdrops && movie.backdrops[0]
-                    ? movie.backdrops[0]
-                    : ""
-                })`,
+                ), url(${movie.backdrops?.[0] || ""})`,
               }}
             >
               <div className="movie-detail">
@@ -137,7 +131,7 @@ const Hero = ({ movies }) => {
                       }`}
                       onClick={(e) => {
                         e.stopPropagation();
-                        handleWatchlistAction(movie.id, "watched");
+                        handleWatchlistClick(movie.id, "watched");
                       }}
                       title="Mark as watched"
                     >
@@ -151,7 +145,7 @@ const Hero = ({ movies }) => {
                       }`}
                       onClick={(e) => {
                         e.stopPropagation();
-                        handleWatchlistAction(movie.id, "toWatch");
+                        handleWatchlistClick(movie.id, "toWatch");
                       }}
                       title="Mark as to watch"
                     >
