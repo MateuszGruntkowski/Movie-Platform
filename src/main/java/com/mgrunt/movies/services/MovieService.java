@@ -8,5 +8,5 @@ import java.util.UUID;
 public interface MovieService {
     List<MovieDto> getAllMovies();
     MovieDto getSingleMovie(String imdbId);
-    void addMovieToWatchlist(UUID userId, String imdbId);
+//    void addMovieToWatchlist(UUID userId, String imdbId);
 }

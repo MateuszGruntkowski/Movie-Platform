@@ -10,6 +10,7 @@ import com.mgrunt.movies.repositories.MovieRepository;
 import com.mgrunt.movies.repositories.ReviewRepository;
 import com.mgrunt.movies.repositories.UserRepository;
 import com.mgrunt.movies.services.ReviewService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -44,10 +45,10 @@ public class ReviewServiceImpl implements ReviewService {
         UUID userId = userDetails.getId();
 
         User currentUser = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
         Movie movie = movieRepository.findByImdbId(imdbId)
-                .orElseThrow(() -> new RuntimeException("Movie not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Movie not found"));
 
 //        if (reviewRepository.existsByAuthorIdAndMovieId(userId, movie.getId())) {
 //            throw new RuntimeException("User already reviewed this movie");
@@ -59,18 +60,6 @@ public class ReviewServiceImpl implements ReviewService {
                 .movie(movie)
                 .build();
         Review savedReview = reviewRepository.save(review);
-
-//        Review review = reviewRepository1.insert(new Review(reviewBody, currentUser.getId()));
-
-//        mongoTemplate.update(Movie.class)
-//                .matching(Criteria.where("imdbId").is(imdbId))
-//                .apply(new Update().push("reviewIds").value(review.getId()))
-//                .first();
-//
-//        mongoTemplate.update(User.class)
-//                .matching(Criteria.where("username").is(currentUser.getUsername()))
-//                .apply(new Update().push("reviewIds").value(review.getId()))
-//                .first();
 
         return reviewMapper.toDto(savedReview);
     }

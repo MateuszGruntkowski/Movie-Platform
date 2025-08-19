@@ -8,6 +8,7 @@ import com.mgrunt.movies.mappers.MovieMapper;
 import com.mgrunt.movies.repositories.MovieRepository;
 import com.mgrunt.movies.repositories.UserRepository;
 import com.mgrunt.movies.services.WatchlistService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -30,7 +31,7 @@ public class WatchlistServiceImpl implements WatchlistService {
         String username = authentication.getName();
 
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
         Set<MovieDto> moviesWatched = user.getMoviesWatched().stream()
                 .map(movieMapper::toDtoWithoutReviews)
@@ -52,25 +53,11 @@ public class WatchlistServiceImpl implements WatchlistService {
         String username = authentication.getName();
 
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
         user.getMoviesToWatch().removeIf(movie -> movie.getId().equals(movieId));
         userRepository.save(user);
     }
-
-//    @Override
-//    public void addToWatchlist(AddMovieRequest addMovieRequest, Authentication authentication) {
-//        String username = authentication.getName();
-//
-//        User user = userRepository.findByUsername(username)
-//                .orElseThrow(() -> new RuntimeException("User not found"));
-//
-//        Movie movie = movieRepository.findById(addMovieRequest.getMovieId())
-//                .orElseThrow(() -> new RuntimeException("Movie not found"));
-//
-//        user.getMoviesToWatch().add(movie);
-//        userRepository.save(user);
-//    }
 
     @Override
     @Transactional
@@ -78,7 +65,7 @@ public class WatchlistServiceImpl implements WatchlistService {
         String username = authentication.getName();
 
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
         user.getMoviesWatched().removeIf(movie -> movie.getId().equals(movieId));
         userRepository.save(user);
@@ -89,9 +76,9 @@ public class WatchlistServiceImpl implements WatchlistService {
     public void markAsToWatch(UUID movieId, Authentication authentication) {
         String username = authentication.getName();
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
         Movie movie = movieRepository.findById(movieId)
-                .orElseThrow(() -> new RuntimeException("Movie not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Movie not found"));
 
         user.getMoviesWatched().removeIf(m -> m.getId().equals(movieId));
         user.getMoviesToWatch().add(movie);
@@ -103,9 +90,9 @@ public class WatchlistServiceImpl implements WatchlistService {
     public void markAsWatched(UUID movieId, Authentication authentication) {
         String username = authentication.getName();
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
         Movie movie = movieRepository.findById(movieId)
-                .orElseThrow(() -> new RuntimeException("Movie not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Movie not found"));
 
         user.getMoviesToWatch().removeIf(m -> m.getId().equals(movieId));
         user.getMoviesWatched().add(movie);

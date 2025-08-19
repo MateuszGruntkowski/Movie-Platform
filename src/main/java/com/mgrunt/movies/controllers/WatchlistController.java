@@ -26,15 +26,6 @@ public class WatchlistController {
         );
     }
 
-//    @PatchMapping
-//    public ResponseEntity<Void> addToWatchlist(
-//            @RequestBody AddMovieRequest addMovieRequest,
-//            Authentication authentication) {
-//
-//        watchlistService.addToWatchlist(addMovieRequest, authentication);
-//        return ResponseEntity.ok().build();
-//    }
-
     @PatchMapping(path = "/toWatch/{movieId}")
     public ResponseEntity<Void> markAsToWatch(
             @PathVariable UUID movieId,

@@ -8,6 +8,7 @@ import com.mgrunt.movies.mappers.ReviewMapper;
 import com.mgrunt.movies.repositories.MovieRepository;
 import com.mgrunt.movies.repositories.UserRepository;
 import com.mgrunt.movies.services.MovieService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -37,21 +38,21 @@ public class MovieServiceImpl implements MovieService {
     public MovieDto getSingleMovie(String imdbId) {
 
         Movie movie = movieRepository.findByImdbIdWithReviewsAndAuthors(imdbId)
-                .orElseThrow(() -> new RuntimeException("Movie not found with id: " + imdbId));
+                .orElseThrow(() -> new EntityNotFoundException("Movie not found with id: " + imdbId));
 
         return movieMapper.toDto(movie);
 
     }
 
-    @Transactional
-    @Override
-    public void addMovieToWatchlist(UUID userId, String imdbId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        Movie movie = movieRepository.findByImdbId(imdbId)
-                .orElseThrow(() -> new RuntimeException("Movie not found"));
-
-        user.getMoviesToWatch().add(movie);
-        userRepository.save(user);
-    }
+//    @Transactional
+//    @Override
+//    public void addMovieToWatchlist(UUID userId, String imdbId) {
+//        User user = userRepository.findById(userId)
+//                .orElseThrow(() -> new RuntimeException("User not found"));
+//        Movie movie = movieRepository.findByImdbId(imdbId)
+//                .orElseThrow(() -> new RuntimeException("Movie not found"));
+//
+//        user.getMoviesToWatch().add(movie);
+//        userRepository.save(user);
+//    }
 }

@@ -11,6 +11,7 @@ import com.mgrunt.movies.mappers.UserMapper;
 import com.mgrunt.movies.repositories.MovieRepository;
 import com.mgrunt.movies.repositories.UserRepository;
 import com.mgrunt.movies.services.UserService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -21,24 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final MovieRepository movieRepository;
     private final UserMapper userMapper;
-
-//    @Override
-//    @Transactional
-//    public void addToWatchlist(AddMovieRequest addMovieRequest, Authentication authentication) {
-//
-//        String username = authentication.getName();
-//        User user = userRepository.findByUsername(username)
-//                .orElseThrow(() -> new RuntimeException("User not found"));
-//
-//        Movie movie = movieRepository.findById(addMovieRequest.getMovieId())
-//                .orElseThrow(() -> new RuntimeException("Movie not found"));
-//
-//        user.getMoviesToWatch().add(movie);
-//        userRepository.save(user);
-//
-//    }
 
     @Transactional
     @Override
@@ -46,7 +30,7 @@ public class UserServiceImpl implements UserService {
         String username = authentication.getName();
 
         User user = userRepository.findByUsernameWithDetails(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
         return userMapper.toDto(user);
     }

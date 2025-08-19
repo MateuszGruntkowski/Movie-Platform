@@ -12,8 +12,6 @@ public interface WatchlistService {
 
     void removeFromToWatch(Authentication authentication, UUID movieId);
 
-//    void addToWatchlist(AddMovieRequest addMovieRequest, Authentication authentication);
-
     void removeFromWatched(Authentication authentication, UUID movieId);
 
     void markAsToWatch(UUID movieId, Authentication authentication);

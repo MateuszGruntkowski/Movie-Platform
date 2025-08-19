@@ -5,6 +5,7 @@ import com.mgrunt.movies.repositories.UserRepository;
 import com.mgrunt.movies.services.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -27,7 +28,7 @@ public class AuthServiceImpl implements AuthService {
         if (authentication.isAuthenticated()) {
             return (UserDetails) authentication.getPrincipal();
         } else {
-            throw new RuntimeException("Authentication failed for user: " + username);
+            throw new BadCredentialsException("Authentication failed for user: " + username);
         }
     }
 
@@ -35,7 +36,7 @@ public class AuthServiceImpl implements AuthService {
     public UserDetails register(String username, String password) {
 
         if(userRepository.existsByUsername(username)){
-            throw new RuntimeException("User with this name already exists");
+            throw new IllegalArgumentException("User with this name already exists");
         }
 
         User user = User.builder()
