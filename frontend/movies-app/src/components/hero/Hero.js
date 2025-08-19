@@ -1,4 +1,4 @@
-import React, { use, useState } from "react";
+import React, { useState } from "react";
 import Slider from "react-slick";
 import { CheckCircle, Clock } from "lucide-react";
 import "./Hero.css";
@@ -11,8 +11,6 @@ import {
   faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
 import { Link, useNavigate } from "react-router-dom";
-import { Button } from "react-bootstrap";
-import api from "../../api/axiosConfig";
 import { useUser } from "../context/UserContext";
 
 const PrevArrow = ({ onClick }) => (
@@ -28,19 +26,11 @@ const NextArrow = ({ onClick }) => (
 );
 
 const Hero = ({ movies }) => {
-  // const { user } = useUser();
-  const { user, addWatched, removeWatched, addToWatch, removeToWatch } =
-    useUser();
-
-  const isWatched = (movieId) =>
-    user?.moviesWatchedIds?.includes(movieId) ?? false;
-
-  const isToWatch = (movieId) =>
-    user?.moviesToWatchIds?.includes(movieId) ?? false;
-
+  const { user, isWatched, isToWatch, toggleMovieStatus } = useUser();
   const navigate = useNavigate();
+
   const [popupMessage, setPopupMessage] = useState("");
-  const [popupType, setPopupType] = useState(""); // 'watched', 'toWatch'
+  const [popupType, setPopupType] = useState("");
   const [showPopup, setShowPopup] = useState(false);
 
   const showTemporaryPopup = (message, type) => {
@@ -52,71 +42,8 @@ const Hero = ({ movies }) => {
     }, 3000);
   };
 
-  // const handleMarkAsWatched = async (movieId) => {
-  //   if (!user) {
-  //     showTemporaryPopup("Zaloguj się, aby dodać do listy!", "login");
-  //     return;
-  //   }
-
-  //   try {
-  //     await api.patch(`/v1/users/watchlist/watched/${movieId}`);
-  //     showTemporaryPopup("Marked as watched!", "watched");
-  //   } catch (error) {
-  //     console.error("Error marking as watched:", error);
-  //   }
-  // };
-
-  // const handleMarkAsToWatch = async (movieId) => {
-  //   if (!user) {
-  //     showTemporaryPopup("Zaloguj się, aby dodać do listy!", "login");
-  //     return;
-  //   }
-
-  //   try {
-  //     await api.patch(`/v1/users/watchlist/toWatch/${movieId}`);
-  //     showTemporaryPopup("Marked as to watch!", "toWatch");
-  //   } catch (error) {
-  //     console.error("Error marking as to watch:", error);
-  //   }
-  // };
-
-  const handleToggleWatched = async (movieId) => {
-    if (!user) {
-      showTemporaryPopup("Zaloguj się, aby dodać do listy!", "login");
-      return;
-    }
-
-    const alreadyWatched = isWatched(movieId);
-
-    try {
-      if (alreadyWatched) {
-        await api.delete(`/v1/users/watchlist/watched/${movieId}`);
-        removeWatched(movieId);
-        showTemporaryPopup("Removed from watched!", "watched");
-      } else {
-        await api.patch(`/v1/users/watchlist/watched/${movieId}`);
-        addWatched(movieId);
-        showTemporaryPopup("Marked as watched!", "watched");
-      }
-    } catch (error) {
-      console.error("Error toggling watched:", error);
-    }
-
-    const alreadyToWatch = isToWatch(movieId);
-
-    try {
-      if (alreadyToWatch) {
-        await api.delete(`/v1/users/watchlist/toWatch/${movieId}`);
-        removeToWatch(movieId);
-        showTemporaryPopup("Removed from to watch!", "toWatch");
-      } else {
-        await api.patch(`/v1/users/watchlist/toWatch/${movieId}`);
-        addToWatch(movieId);
-        showTemporaryPopup("Marked as to watch!", "toWatch");
-      }
-    } catch (error) {
-      console.error("Error toggling watched:", error);
-    }
+  const handleWatchlistAction = async (movieId, listType) => {
+    await toggleMovieStatus(movieId, listType, showTemporaryPopup);
   };
 
   const settings = {
@@ -141,7 +68,6 @@ const Hero = ({ movies }) => {
 
   return (
     <div className="movie-carousel-container">
-      {/* Popup */}
       {showPopup && (
         <div className={`popup-notification ${popupType}`}>{popupMessage}</div>
       )}
@@ -211,8 +137,7 @@ const Hero = ({ movies }) => {
                       }`}
                       onClick={(e) => {
                         e.stopPropagation();
-                        // handleMarkAsWatched(movie.id);
-                        handleToggleWatched(movie.id);
+                        handleWatchlistAction(movie.id, "watched");
                       }}
                       title="Mark as watched"
                     >
@@ -226,8 +151,7 @@ const Hero = ({ movies }) => {
                       }`}
                       onClick={(e) => {
                         e.stopPropagation();
-                        // handleMarkAsToWatch(movie.id);
-                        handleToggleWatched(movie.id);
+                        handleWatchlistAction(movie.id, "toWatch");
                       }}
                       title="Mark as to watch"
                     >
