@@ -4,10 +4,12 @@ import api from "../../api/axiosConfig";
 import MovieCard from "./MovieCard";
 import "./WatchList.css";
 import { useUser } from "../context/UserContext";
+import { usePopup } from "../../hooks/usePopup";
 import { Navigate } from "react-router-dom";
 
 const WatchList = () => {
-  const { user, loading, updateWatchlist } = useUser();
+  const { user, loading, toggleMovieStatus } = useUser();
+  const { popup, showPopup } = usePopup();
   const [moviesToWatch, setMoviesToWatch] = useState([]);
   const [moviesWatched, setMoviesWatched] = useState([]);
 
@@ -27,14 +29,11 @@ const WatchList = () => {
     }
   }, [user]);
 
-  // Jedna funkcja do obsługi wszystkich akcji
-  const handleWatchlistAction = async (movieId, action) => {
-    const success = await updateWatchlist(movieId, action);
-
-    if (success) {
-      // Odświeżamy lokalne listy
-      await fetchWatchlistData();
-    }
+  // Jedna funkcja do obsługi wszystkich akcji - używa tylko toggle endpoint
+  const handleWatchlistAction = async (movieId, targetListType) => {
+    await toggleMovieStatus(movieId, targetListType, showPopup);
+    // Zawsze odświeżamy dane - nawet jeśli był błąd, żeby mieć aktualny stan
+    await fetchWatchlistData();
   };
 
   if (loading) {
@@ -68,18 +67,13 @@ const WatchList = () => {
               key={movie.id}
               movie={movie}
               listType={listType}
-              onMarkAsWatched={() =>
-                handleWatchlistAction(movie.id, "add-watched")
-              }
-              onMarkAsToWatch={() =>
-                handleWatchlistAction(movie.id, "add-toWatch")
-              }
+              // Przekazujemy odpowiedni listType do toggle
+              onMarkAsWatched={() => handleWatchlistAction(movie.id, "watched")}
+              onMarkAsToWatch={() => handleWatchlistAction(movie.id, "toWatch")}
               onRemove={() =>
                 handleWatchlistAction(
                   movie.id,
-                  listType === "moviesToWatch"
-                    ? "remove-toWatch"
-                    : "remove-watched"
+                  listType === "moviesToWatch" ? "toWatch" : "watched"
                 )
               }
             />
@@ -97,6 +91,12 @@ const WatchList = () => {
 
   return (
     <div className="wl-container">
+      {popup.show && (
+        <div className={`popup-notification ${popup.type}`}>
+          {popup.message}
+        </div>
+      )}
+
       <header className="wl-header">
         <h1>My movie list</h1>
         <div className="wl-stats">

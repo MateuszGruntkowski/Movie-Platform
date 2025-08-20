@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Slider from "react-slick";
 import { CheckCircle, Clock } from "lucide-react";
 import "./Hero.css";
@@ -12,6 +12,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { Link, useNavigate } from "react-router-dom";
 import { useUser } from "../context/UserContext";
+import { usePopup } from "../../hooks/usePopup";
 
 const PrevArrow = ({ onClick }) => (
   <div className="custom-arrow custom-prev-arrow" onClick={onClick}>
@@ -27,19 +28,11 @@ const NextArrow = ({ onClick }) => (
 
 const Hero = ({ movies }) => {
   const { user, isWatched, isToWatch, toggleMovieStatus } = useUser();
+  const { popup, showPopup } = usePopup();
   const navigate = useNavigate();
 
   const handleWatchlistClick = async (movieId, listType) => {
     await toggleMovieStatus(movieId, listType, showPopup);
-  };
-
-  const [popup, setPopup] = useState({ show: false, message: "", type: "" });
-
-  const showPopup = (message, type) => {
-    setPopup({ show: true, message, type });
-    setTimeout(() => {
-      setPopup({ show: false, message: "", type: "" });
-    }, 3000);
   };
 
   const settings = {

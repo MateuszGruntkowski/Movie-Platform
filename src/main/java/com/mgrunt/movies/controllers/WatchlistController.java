@@ -63,4 +63,14 @@ public class WatchlistController {
         watchlistService.removeFromWatched(authentication, movieId);
         return ResponseEntity.ok().build();
     }
+
+    @PutMapping("/toggle/{movieId}")
+    public ResponseEntity<Void> toggleMovie(
+            @PathVariable UUID movieId,
+            @RequestParam String listType,
+            Authentication authentication
+    ) {
+        watchlistService.toggleMovie(movieId, listType, authentication);
+        return ResponseEntity.ok().build();
+    }
 }

@@ -99,4 +99,48 @@ public class WatchlistServiceImpl implements WatchlistService {
         userRepository.save(user);
 
     }
+
+    @Override
+    @Transactional
+    public void toggleMovie(UUID movieId, String listType, Authentication authentication) {
+        String username = authentication.getName();
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        Movie movie = movieRepository.findById(movieId)
+                .orElseThrow(() -> new EntityNotFoundException("Movie not found"));
+
+        Set<Movie> moviesToWatch = user.getMoviesToWatch();
+        Set<Movie> moviesWatched = user.getMoviesWatched();
+
+        if (listType.equalsIgnoreCase("watched")) {
+            // Usuń z "do obejrzenia", jeśli jest
+            moviesToWatch.remove(movie);
+
+            // Jeśli już był w obejrzanych → usuń go (toggle off)
+            if (moviesWatched.remove(movie)) {
+                userRepository.save(user);
+                return;
+            }
+
+            // W przeciwnym razie dodaj do obejrzanych
+            moviesWatched.add(movie);
+        } else if (listType.equalsIgnoreCase("toWatch")) {
+            // Usuń z obejrzanych, jeśli jest
+            moviesWatched.remove(movie);
+
+            // Jeśli już był na liście do obejrzenia → usuń go (toggle off)
+            if (moviesToWatch.remove(movie)) {
+                userRepository.save(user);
+                return;
+            }
+
+            // W przeciwnym razie dodaj do listy do obejrzenia
+            moviesToWatch.add(movie);
+        } else {
+            throw new IllegalArgumentException("Invalid listType: " + listType);
+        }
+
+        userRepository.save(user);
+    }
 }
