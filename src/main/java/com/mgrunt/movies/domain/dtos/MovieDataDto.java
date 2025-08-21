@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -15,8 +16,8 @@ import java.util.List;
 public class MovieDataDto {
     private String imdbId;
     private String title;
-    private String releaseDate;
-    private String trailerLink;
+    private LocalDate releaseDate;
+    private String trailerUrl;
     private List<String> genres;
     private String poster;
     private List<String> backdrops;

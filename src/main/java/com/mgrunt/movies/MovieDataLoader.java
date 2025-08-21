@@ -65,8 +65,8 @@ public class MovieDataLoader {
         movie.setImdbId(dto.getImdbId());
         movie.setTitle(dto.getTitle());
         movie.setReleaseDate(dto.getReleaseDate());
-        movie.setTrailerLink(dto.getTrailerLink());
-        movie.setPoster(dto.getPoster());
+        movie.setTrailerUrl(dto.getTrailerUrl());
+        movie.setPosterPath(dto.getPoster());
         movie.setGenres(new ArrayList<>(dto.getGenres()));
         movie.setBackdrops(new ArrayList<>(dto.getBackdrops()));
 

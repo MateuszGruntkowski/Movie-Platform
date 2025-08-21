@@ -65,7 +65,7 @@ const Hero = ({ movies }) => {
 
       <Slider {...settings}>
         {movies.map((movie, index) => (
-          <div key={movie.imdbId || movie.title || index}>
+          <div key={movie.tmdbId || movie.imdbId || movie.title || index}>
             <div
               className="movie-card"
               style={{
@@ -79,7 +79,7 @@ const Hero = ({ movies }) => {
               <div className="movie-detail">
                 <div className="movie-poster">
                   <img
-                    src={movie.poster}
+                    src={movie.posterPath}
                     alt={movie.title}
                     onError={(e) => {
                       e.target.src =
@@ -95,10 +95,10 @@ const Hero = ({ movies }) => {
                     className="movie-buttons-container"
                     style={{ gap: "1rem" }}
                   >
-                    {movie.trailerLink && (
+                    {movie.trailerUrl && (
                       <Link
-                        to={`/Trailer/${movie.trailerLink.substring(
-                          movie.trailerLink.length - 11
+                        to={`/Trailer/${movie.trailerUrl.substring(
+                          movie.trailerUrl.length - 11
                         )}`}
                       >
                         <div className="play-button-icon-container">
@@ -120,11 +120,11 @@ const Hero = ({ movies }) => {
                   <div className="watchlist-buttons-container">
                     <button
                       className={`watchlist-button watched-button ${
-                        isWatched(movie.imdbId) ? "active" : ""
+                        isWatched(movie.tmdbId) ? "active" : ""
                       }`}
                       onClick={(e) => {
                         e.stopPropagation();
-                        handleWatchlistClick(movie.imdbId, "watched");
+                        handleWatchlistClick(movie.tmdbId, "watched");
                       }}
                       title="Mark as watched"
                     >
@@ -134,11 +134,11 @@ const Hero = ({ movies }) => {
 
                     <button
                       className={`watchlist-button to-watch-button ${
-                        isToWatch(movie.imdbId) ? "active" : ""
+                        isToWatch(movie.tmdbId) ? "active" : ""
                       }`}
                       onClick={(e) => {
                         e.stopPropagation();
-                        handleWatchlistClick(movie.imdbId, "toWatch");
+                        handleWatchlistClick(movie.tmdbId, "toWatch");
                       }}
                       title="Mark as to watch"
                     >

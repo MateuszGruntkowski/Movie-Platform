@@ -12,6 +12,6 @@ import java.util.Set;
 @Builder
 @Data
 public class UserWatchListResponse {
-    private Set<MovieDto> moviesToWatch;
-    private Set<MovieDto> moviesWatched;
+    private Set<MovieDetailsResponse> moviesToWatch;
+    private Set<MovieDetailsResponse> moviesWatched;
 }

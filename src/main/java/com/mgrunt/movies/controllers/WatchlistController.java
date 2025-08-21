@@ -64,13 +64,13 @@ public class WatchlistController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/toggle/{imdbId}")
+    @PutMapping("/toggle/{tmdbId}")
     public ResponseEntity<Void> toggleMovie(
-            @PathVariable String imdbId,
+            @PathVariable Long tmdbId,
             @RequestParam String listType,
             Authentication authentication
     ) {
-        watchlistService.toggleMovie(imdbId, listType, authentication);
+        watchlistService.toggleMovie(tmdbId, listType, authentication);
         return ResponseEntity.ok().build();
     }
 }

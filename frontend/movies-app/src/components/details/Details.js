@@ -66,24 +66,25 @@ const Details = ({ getMovieData, movie, reviews, setReviews, setMovie }) => {
     const rev = revText.current;
 
     try {
-      const trailerUrl = await movieDetailsService.getTrailerUrl(movie.id);
-      const backdrops = await movieDetailsService.getMovieBackdrops(
-        movie.id,
-        5
-      );
+      // const trailerUrl = await movieDetailsService.getTrailerUrl(movie.id);
+      // const backdrops = await movieDetailsService.getMovieBackdrops(
+      //   movie.id,
+      //   5
+      // );
 
-      const response = await api.post("/v1/reviews", {
+      const response = await api.post(`/v1/reviews/create/${movieId}`, {
         reviewBody: rev.value,
-        movie: {
-          tmdbId: movie.id,
-          imdbId: movie.imdb_id,
-          title: movie.title,
-          releaseDate: movie.release_date,
-          poster: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
-          backdrops: backdrops,
-          genres: movie.genres.map((g) => g.name),
-          trailerLink: trailerUrl,
-        },
+
+        // movie: {
+        //   tmdbId: movie.id,
+        //   imdbId: movie.imdb_id,
+        //   title: movie.title,
+        //   releaseDate: movie.release_date,
+        //   poster: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
+        //   backdrops: backdrops,
+        //   genres: movie.genres.map((g) => g.name),
+        //   trailerLink: trailerUrl,
+        // },
       });
 
       const updatedReviews = [...reviews, response.data];
@@ -102,6 +103,12 @@ const Details = ({ getMovieData, movie, reviews, setReviews, setMovie }) => {
 
   return (
     <div className="reviews-container">
+      {popup.show && (
+        <div className={`popup-notification ${popup.type}`}>
+          {popup.message}
+        </div>
+      )}
+
       {/* Header */}
       <div className="reviews-header">
         <h1 className="reviews-title">Reviews of the film</h1>
@@ -132,11 +139,13 @@ const Details = ({ getMovieData, movie, reviews, setReviews, setMovie }) => {
           <div className="watchlist-buttons-container">
             <button
               className={`watchlist-button watched-button ${
-                isWatched(movie.imdb_id) ? "active" : ""
+                isWatched(movie.tmdbId) ? "active" : ""
               }`}
               onClick={(e) => {
                 e.stopPropagation();
-                handleWatchlistClick(movie.imdb_id, "watched");
+                handleWatchlistClick(movie.tmdbId, "watched");
+                console.log(movie.tmdbId);
+                console.log(typeof movie.tmdbId);
               }}
               title="Mark as watched"
             >
@@ -146,11 +155,11 @@ const Details = ({ getMovieData, movie, reviews, setReviews, setMovie }) => {
 
             <button
               className={`watchlist-button to-watch-button ${
-                isToWatch(movie.imdb_id) ? "active" : ""
+                isToWatch(movie.tmdbId) ? "active" : ""
               }`}
               onClick={(e) => {
                 e.stopPropagation();
-                handleWatchlistClick(movie.imdb_id, "toWatch");
+                handleWatchlistClick(movie.tmdbId, "toWatch");
               }}
               title="Mark as to watch"
             >

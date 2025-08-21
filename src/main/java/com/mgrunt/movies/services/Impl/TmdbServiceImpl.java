@@ -228,36 +228,36 @@ public class TmdbServiceImpl implements TmdbService {
         }
     }
 
-//    public Movie createMovieFromTmdbData(Long movieId) {
-//        TmdbMovieDetailsResponse tmdbMovie = getMovieDetails(movieId);
-//
-//        Movie movie = new Movie();
-//        movie.setTmdbId(tmdbMovie.getId());
-//        movie.setImdbId(tmdbMovie.getImdbId());
-//        movie.setTitle(tmdbMovie.getTitle());
-//        movie.setOverview(tmdbMovie.getOverview());
-//        movie.setReleaseDate(tmdbMovie.getReleaseDate());
-//        movie.setPosterPath(tmdbMovie.getPosterPath());
-//        movie.getBackdrops().add(tmdbMovie.getBackdropPath());
-//        movie.setVoteAverage(tmdbMovie.getVoteAverage());
-//        movie.setVoteCount(tmdbMovie.getVoteCount());
-//        movie.setPopularity(tmdbMovie.getPopularity());
-//        movie.setRuntime(tmdbMovie.getRuntime());
-//
-//        // Pobierz trailer URL
-//        String trailerUrl = getTrailerUrl(movieId);
-//        movie.setTrailerUrl(trailerUrl);
-//
-//        // Pobierz backdrops (ograniczone do 10)
-//        List<String> backdrops = getMovieBackdrops(movieId, 10);
-//        movie.setBackdrops(backdrops);
-//
-//        for (TmdbGenreResponse g : tmdbMovie.getGenres()){
-//            if(!movie.getGenres().contains(g.getName())) {
-//                movie.getGenres().add(g.getName());
-//            }
-//        }
-//        return movie;
-//    }
+    public Movie createMovieFromTmdbData(Long movieId) {
+        TmdbMovieDetailsResponse tmdbMovie = getMovieDetails(movieId);
+
+        Movie movie = new Movie();
+        movie.setTmdbId(tmdbMovie.getId());
+        movie.setImdbId(tmdbMovie.getImdbId());
+        movie.setTitle(tmdbMovie.getTitle());
+        movie.setOverview(tmdbMovie.getOverview());
+        movie.setReleaseDate(tmdbMovie.getReleaseDate());
+        movie.setPosterPath(tmdbMovie.getPosterPath());
+        movie.setBackdropPath(tmdbMovie.getBackdropPath());
+        movie.setVoteAverage(tmdbMovie.getVoteAverage());
+        movie.setVoteCount(tmdbMovie.getVoteCount());
+        movie.setPopularity(tmdbMovie.getPopularity());
+        movie.setRuntime(tmdbMovie.getRuntime());
+
+        // Pobierz trailer URL
+        String trailerUrl = getTrailerUrl(movieId);
+        movie.setTrailerUrl(trailerUrl);
+
+        // Pobierz backdrops (ograniczone do 10)
+        List<String> backdrops = getMovieBackdrops(movieId, 10);
+        movie.setBackdrops(backdrops);
+
+        for (TmdbGenreResponse g : tmdbMovie.getGenres()){
+            if(!movie.getGenres().contains(g.getName())) {
+                movie.getGenres().add(g.getName());
+            }
+        }
+        return movie;
+    }
 
 }

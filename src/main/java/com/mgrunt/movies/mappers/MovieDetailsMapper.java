@@ -1,10 +1,8 @@
 package com.mgrunt.movies.mappers;
 
 
-import com.mgrunt.movies.domain.dtos.MovieDetailsResponse;
-import com.mgrunt.movies.domain.dtos.MovieSearchResponse;
-import com.mgrunt.movies.domain.dtos.TmdbMovieDetailsResponse;
-import com.mgrunt.movies.domain.dtos.TmdbMovieSearchResult;
+import com.mgrunt.movies.domain.dtos.*;
+import com.mgrunt.movies.domain.entities.Movie;
 import com.mgrunt.movies.domain.entities.Review;
 import com.mgrunt.movies.services.TmdbService;
 import org.mapstruct.Mapper;
@@ -12,6 +10,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.mapstruct.ReportingPolicy;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Mapper(
@@ -20,6 +19,8 @@ import java.util.List;
         uses = {ReviewMapper.class}
 )
 public interface MovieDetailsMapper {
+
+    // MAPPER FOR TMDB -> MovieDetailsResponse
     @Mapping(target = "tmdbId", source = "tmdbData.id")
     @Mapping(target = "imdbId", source = "tmdbData.imdbId")
     @Mapping(target = "title", source = "tmdbData.title")
@@ -52,12 +53,34 @@ public interface MovieDetailsMapper {
     @Mapping(target = "backdropPath", source = "backdropPath", qualifiedByName = "buildFullUrl")
     List<MovieSearchResponse> toMovieSearchResponseList(List<TmdbMovieSearchResult> searchResults);
 
-    // Helper method dla URL-i obrazków
+    // Helper method for URL and images
     @Named("buildFullUrl")
     default String buildFullUrl(String path) {
         if (path == null || path.trim().isEmpty()) {
             return null;
         }
         return "https://image.tmdb.org/t/p/w500" + path;
+    }
+
+    // Mapper for Movie -> MovieDetailsResponse
+
+    @Mapping(target = "backdrops", source = "backdrops")
+    @Mapping(target = "reviews", source = "reviews")
+    @Mapping(target = "genres", source = "genres", qualifiedByName = "mapGenres")
+    @Mapping(target = "belongsToCollection", ignore = true)
+    @Mapping(target = "posterPath", source = "posterPath", qualifiedByName = "buildFullUrl")
+    @Mapping(target = "backdropPath", source = "backdropPath", qualifiedByName = "buildFullUrl")
+    MovieDetailsResponse toMovieDetailsResponse(Movie movie);
+
+    @Named("mapGenres")
+    default List<TmdbGenreResponse> mapGenres(List<String> genres) {
+        if (genres == null) return new ArrayList<>();
+        return genres.stream()
+                .map(name -> {
+                    TmdbGenreResponse g = new TmdbGenreResponse();
+                    g.setName(name);
+                    return g;
+                })
+                .toList();
     }
 }

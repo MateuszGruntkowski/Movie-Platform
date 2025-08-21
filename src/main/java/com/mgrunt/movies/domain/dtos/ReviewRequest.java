@@ -11,5 +11,4 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ReviewRequest {
     private String reviewBody;
-    private MovieDto movie;
 }

@@ -13,5 +13,7 @@ public interface ReviewService {
 
     List<ReviewDto> getReviewsForMovie(Long tmdbId);
 
-    ReviewDto createReview(ReviewRequest reviewRequest, Authentication authentication);
+    ReviewDto createReview(Long tmdbId, ReviewRequest reviewRequest, Authentication authentication);
+
+//    ReviewDto createReview(ReviewRequest reviewRequest, Authentication authentication);
 }

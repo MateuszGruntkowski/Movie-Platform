@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.*;
 
 @Entity
@@ -27,14 +28,32 @@ public class Movie {
     @Column(nullable = false)
     private String title;
 
-    @Column
-    private String releaseDate;
+    @Column(columnDefinition = "TEXT")
+    private String overview;
 
     @Column
-    private String trailerLink;
+    private LocalDate releaseDate;
+
+    @Column(name="trailer_url")
+    private String trailerUrl;
 
     @Column
-    private String poster;
+    private String posterPath;
+
+    @Column(name= "backdrop_path")
+    private String backdropPath;
+
+    @Column(name = "vote_average")
+    private Double voteAverage;
+
+    @Column(name = "vote_Count")
+    private Integer voteCount;
+
+    @Column
+    private Double popularity;
+
+    @Column
+    private Integer runtime;
 
     @ElementCollection
     @CollectionTable(name = "movie_genres", joinColumns = @JoinColumn(name = "movie_id"))
@@ -77,8 +96,8 @@ public class Movie {
                 ", imdbId='" + imdbId + '\'' +
                 ", title='" + title + '\'' +
                 ", releaseDate='" + releaseDate + '\'' +
-                ", trailerLink='" + trailerLink + '\'' +
-                ", poster='" + poster + '\'' +
+                ", trailerLink='" + trailerUrl + '\'' +
+                ", poster='" + posterPath + '\'' +
                 ", genres=" + genres +
                 ", backdrops=" + backdrops +
                 '}';

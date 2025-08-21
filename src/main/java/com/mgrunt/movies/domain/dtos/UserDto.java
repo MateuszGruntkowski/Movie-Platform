@@ -14,8 +14,8 @@ import java.util.UUID;
 public class UserDto {
 
     private String username;
-    private Set<String> moviesToWatchIds;
-    private Set<String> moviesWatchedIds;
+    private Set<Long> moviesToWatchIds;
+    private Set<Long> moviesWatchedIds;
     private List<UUID> reviewIds;
 
 }

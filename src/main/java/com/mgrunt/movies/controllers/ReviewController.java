@@ -27,11 +27,20 @@ public class ReviewController {
         return new ResponseEntity<>(review, HttpStatus.CREATED);
     }
 
-    @PostMapping
+//    @PostMapping
+//    public ResponseEntity<ReviewDto> createReview(
+//            @RequestBody ReviewRequest reviewRequest,
+//            Authentication authentication){
+//        ReviewDto review = reviewService.createReview(reviewRequest, authentication);
+//        return new ResponseEntity<>(review, HttpStatus.CREATED);
+//    }
+
+    @PostMapping(path="/create/{tmdbId}")
     public ResponseEntity<ReviewDto> createReview(
             @RequestBody ReviewRequest reviewRequest,
+            @PathVariable Long tmdbId,
             Authentication authentication){
-        ReviewDto review = reviewService.createReview(reviewRequest, authentication);
+        ReviewDto review = reviewService.createReview(tmdbId, reviewRequest, authentication);
         return new ResponseEntity<>(review, HttpStatus.CREATED);
     }
 

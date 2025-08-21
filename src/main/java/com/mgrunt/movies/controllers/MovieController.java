@@ -42,7 +42,7 @@ public class MovieController {
 //    }
 
     @GetMapping
-    public ResponseEntity<List<MovieDto>> ListRandomMovies(){
+    public ResponseEntity<List<MovieDetailsResponse>> ListRandomMovies(){
         return new ResponseEntity<>(movieService.getRandomMovies(), HttpStatus.OK);
     }
 

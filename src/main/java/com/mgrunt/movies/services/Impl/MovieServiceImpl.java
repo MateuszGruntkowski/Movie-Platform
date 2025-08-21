@@ -56,10 +56,10 @@ public class MovieServiceImpl implements MovieService {
 
     }
 
-    public List<MovieDto> getRandomMovies() {
+    public List<MovieDetailsResponse> getRandomMovies() {
         int MAX_MOVIES_NUMBER = 8;
         List<Movie> movies = movieRepository.findRandomMovies(MAX_MOVIES_NUMBER);
-        return movies.stream().map(movieMapper::toDtoWithoutReviews).toList();
+        return movies.stream().map(movieDetailsMapper::toMovieDetailsResponse).toList();
     }
 
     // TMDB METHODS
@@ -99,19 +99,20 @@ public class MovieServiceImpl implements MovieService {
         }
     }
 
-//    private Movie findOrCreateMovie(String imdbId) {
-//        Optional<Movie> existingMovie = movieRepository.findByImdbId(imdbId);
-//        if (existingMovie.isPresent()) {
-//            return existingMovie.get();
-//        }
-//
-//        try {
-//            Movie movieFromTmdb = tmdbService.createMovieFromTmdbData(imdbId);
-//            return movieRepository.save(movieFromTmdb);
-//        } catch (Exception e) {
-//            log.error("Failed to fetch movie from TMDB for imdbId: {}", imdbId, e);
-//            throw new RuntimeException("Failed to fetch movie from TMDB for imdbId: " + imdbId, e);
-//        }
-//    }
+    @Override
+    public Movie findOrCreateMovie(Long tmdbId) {
+        Optional<Movie> existingMovie = movieRepository.findByTmdbId(tmdbId);
+        if (existingMovie.isPresent()) {
+            return existingMovie.get();
+        }
+
+        try {
+            Movie movieFromTmdb = tmdbService.createMovieFromTmdbData(tmdbId);
+            return movieRepository.save(movieFromTmdb);
+        } catch (Exception e) {
+            log.error("Failed to fetch movie from TMDB for tmdbId: {}", tmdbId, e);
+            throw new RuntimeException("Failed to fetch movie from TMDB for tmdbId: " + tmdbId, e);
+        }
+    }
 
 }

@@ -11,6 +11,7 @@ import com.mgrunt.movies.mappers.ReviewMapper;
 import com.mgrunt.movies.repositories.MovieRepository;
 import com.mgrunt.movies.repositories.ReviewRepository;
 import com.mgrunt.movies.repositories.UserRepository;
+import com.mgrunt.movies.services.MovieService;
 import com.mgrunt.movies.services.ReviewService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +36,7 @@ public class ReviewServiceImpl implements ReviewService {
     private final MovieRepository movieRepository;
     private final UserRepository userRepository;
     private final ReviewMapper reviewMapper;
+    private final MovieService movieService;
     private final MovieMapper movieMapper;
 
 //    @Autowired
@@ -84,13 +86,11 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public ReviewDto createReview(ReviewRequest reviewRequest, Authentication authentication) {
-
+    public ReviewDto createReview(Long tmdbId, ReviewRequest reviewRequest, Authentication authentication) {
         String reviewBody = reviewRequest.getReviewBody();
-        String imdbId = reviewRequest.getMovie().getImdbId();
 
-        if (reviewBody == null || reviewBody.trim().isEmpty()) {
-            throw new IllegalArgumentException("Review body cannot be empty");
+        if(reviewBody == null || reviewBody.trim().isEmpty()){
+            throw new IllegalArgumentException("Review body cannot be null");
         }
 
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
@@ -99,28 +99,60 @@ public class ReviewServiceImpl implements ReviewService {
         User currentUser = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
-        Optional<Movie> movieOpt = movieRepository.findByImdbId(imdbId);
-        Movie movie;
-        if(movieOpt.isEmpty()){
-            movie = movieMapper.toEntity(reviewRequest.getMovie());
-            movie.setReviews(new ArrayList<>());
-            movie = movieRepository.save(movie);
-        }else{
-            movie = movieOpt.get();
-        }
+        Movie movie = movieService.findOrCreateMovie(tmdbId);
 
         Review review = Review.builder()
-                .body(reviewBody)
-                .author(currentUser)
                 .movie(movie)
+                .author(currentUser)
+                .body(reviewBody)
                 .build();
-
         reviewRepository.save(review);
 
         movie.getReviews().add(review);
-        movieRepository.save(movie);
-
         return reviewMapper.toDto(review);
+
     }
+
+
+    // STARA METODA
+//    @Override
+//    public ReviewDto createReview(ReviewRequest reviewRequest, Authentication authentication) {
+//
+//        String reviewBody = reviewRequest.getReviewBody();
+//        String imdbId = reviewRequest.getMovie().getImdbId();
+//
+//        if (reviewBody == null || reviewBody.trim().isEmpty()) {
+//            throw new IllegalArgumentException("Review body cannot be empty");
+//        }
+//
+//        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+//        UUID userId = userDetails.getId();
+//
+//        User currentUser = userRepository.findById(userId)
+//                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+//
+//        Optional<Movie> movieOpt = movieRepository.findByImdbId(imdbId);
+//        Movie movie;
+//        if(movieOpt.isEmpty()){
+//            movie = movieMapper.toEntity(reviewRequest.getMovie());
+//            movie.setReviews(new ArrayList<>());
+//            movie = movieRepository.save(movie);
+//        }else{
+//            movie = movieOpt.get();
+//        }
+//
+//        Review review = Review.builder()
+//                .body(reviewBody)
+//                .author(currentUser)
+//                .movie(movie)
+//                .build();
+//
+//        reviewRepository.save(review);
+//
+//        movie.getReviews().add(review);
+//        movieRepository.save(movie);
+//
+//        return reviewMapper.toDto(review);
+//    }
 
 }
