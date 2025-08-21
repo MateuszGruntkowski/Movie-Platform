@@ -1,7 +1,5 @@
 .movie-poster-container {
-  /* background: linear-gradient(145deg, #1a1d23, #23272f); */
   background: #2a2a2a;
-  /* border: 1px solid #343a46; */
   border-radius: 16px;
   padding: 20px;
   text-align: center;
@@ -16,7 +14,6 @@
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
   transition: transform 0.3s ease;
-  /* border: none; */
 }
 
 .movie-poster:hover {
@@ -67,7 +64,6 @@
   font-size: 0.75rem;
 }
 
-/* Responsive adjustments for movie info */
 @media (max-width: 768px) {
   .movie-genres {
     justify-content: center;
@@ -78,7 +74,6 @@
   }
 }
 
-/* Update existing movie-title to match */
 .movie-title {
   color: #ffffff;
   font-size: 1.4rem;

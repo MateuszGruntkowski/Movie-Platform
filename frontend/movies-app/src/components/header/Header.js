@@ -1,21 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faVideoSlash } from "@fortawesome/free-solid-svg-icons";
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-import { NavLink } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import { useUser } from "../context/UserContext";
+import MovieSearchBar from "./MovieSearchBar";
 
-const header = () => {
+const Header = () => {
   const { user, logout } = useUser();
-
-  // const handleLogout = () => {
-  //   localStorage.removeItem("token");
-  //   setIsLoggedIn(false);
-  // };
 
   return (
     <Navbar bg="dark" variant="dark" expand="lg">
@@ -27,7 +22,7 @@ const header = () => {
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll">
           <Nav
-            className="me-auto my-2 my-lg-0"
+            className="my-2 my-lg-0"
             style={{ maxHeight: "100px" }}
             navbarScroll
           >
@@ -39,35 +34,37 @@ const header = () => {
             </NavLink>
           </Nav>
 
-          {user ? (
-            <Button variant="outline-info" className="me-2" onClick={logout}>
-              Logout
-            </Button>
-          ) : (
-            <>
-              <Button
-                as={Link}
-                to="/login"
-                variant="outline-info"
-                className="me-2"
-                state={{ from: "/" }}
-              >
-                Login
+          {/* Search Bar - wyśrodkowany */}
+          <div className="mx-auto">
+            <MovieSearchBar />
+          </div>
+
+          <div className="d-flex">
+            {user ? (
+              <Button variant="outline-info" onClick={logout}>
+                Logout
               </Button>
-              <Button
-                as={Link}
-                to="/register"
-                variant="outline-info"
-                className="me-2"
-              >
-                Register
-              </Button>
-            </>
-          )}
+            ) : (
+              <>
+                <Button
+                  as={Link}
+                  to="/login"
+                  variant="outline-info"
+                  className="me-2"
+                  state={{ from: "/" }}
+                >
+                  Login
+                </Button>
+                <Button as={Link} to="/register" variant="outline-info">
+                  Register
+                </Button>
+              </>
+            )}
+          </div>
         </Navbar.Collapse>
       </Container>
     </Navbar>
   );
 };
 
-export default header;
+export default Header;

@@ -13,6 +13,7 @@ import java.util.UUID;
 public class MovieDto {
     private UUID id;
     private String imdbId;
+    private Long tmdbId;
     private String title;
     private String releaseDate;
     private String trailerLink;

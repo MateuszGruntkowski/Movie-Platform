@@ -14,6 +14,8 @@ public interface ReviewRepository extends JpaRepository<Review, UUID> {
 
     List<Review> findByMovieId(UUID movieId);
 
+    List<Review> findByMovieTmdbId(Long tmdbId);
+
     List<Review> findByAuthorId(UUID authorId);
 
     // Znajdź recenzje z autorami i filmami

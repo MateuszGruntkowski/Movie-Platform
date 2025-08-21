@@ -6,11 +6,12 @@ import { Routes, Route } from "react-router-dom";
 import Home from "./components/home/Home";
 import Header from "./components/header/Header";
 import Trailer from "./components/trailer/Trailer";
-import Reviews from "./components/reviews/Reviews";
+import Details from "./components/details/Details";
 import NotFound from "./components/notFound/NotFound";
 import Login from "./components/auth/login/Login";
 import Register from "./components/auth/register/Register";
 import WatchList from "./components/watchList/WatchList";
+import SearchResults from "./components/searchResults/SearchResults";
 
 function App() {
   const [movies, setMovies] = useState([]);
@@ -52,18 +53,21 @@ function App() {
           <Route path="/" element={<Home movies={movies} />} />
           <Route path="/Trailer/:ytTrailerId" element={<Trailer />} />
           <Route
-            path="/Reviews/:movieId"
+            path="/Details/:movieId"
             element={
-              <Reviews
+              <Details
                 getMovieData={getMovieData}
                 reviews={reviews}
                 setReviews={setReviews}
                 movie={movie}
+                setMovie={setMovie}
               />
             }
           />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/search" element={<SearchResults />} />
+          {/* <Route path="/movie/:id" element={<MovieDetail />} /> */}
           <Route path="/watchlist" element={<WatchList />} />
           <Route path="*" element={<NotFound />} />
         </Route>

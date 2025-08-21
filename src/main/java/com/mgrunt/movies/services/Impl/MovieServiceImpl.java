@@ -44,6 +44,12 @@ public class MovieServiceImpl implements MovieService {
 
     }
 
+    public List<MovieDto> getRandomMovies() {
+        int MAX_MOVIES_NUMBER = 8;
+        List<Movie> movies = movieRepository.findRandomMovies(MAX_MOVIES_NUMBER);
+        return movies.stream().map(movieMapper::toDtoWithoutReviews).toList();
+    }
+
 //    @Transactional
 //    @Override
 //    public void addMovieToWatchlist(UUID userId, String imdbId) {

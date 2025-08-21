@@ -14,6 +14,8 @@ public interface MovieMapper {
 
     MovieDto toDto(Movie movie);
 
+    Movie toEntity(MovieDto movieDto);
+
     @Mapping(target = "reviews", ignore = true)
     @Named("movieToDtoWithoutReviews")
     MovieDto toDtoWithoutReviews(Movie movie);

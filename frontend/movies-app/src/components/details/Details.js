@@ -1,0 +1,167 @@
+import { useEffect, useRef, useState } from "react";
+import api from "../../api/axiosConfig";
+import { useParams } from "react-router-dom";
+import { useUser } from "../context/UserContext";
+import { Container, Row, Col } from "react-bootstrap";
+import { CheckCircle, Clock } from "lucide-react";
+import ReviewForm from "./ReviewForm";
+import MovieCard from "./MovieCard";
+import ReviewList from "./ReviewList";
+import { usePopup } from "../../hooks/usePopup";
+import "./Details.css";
+
+import React from "react";
+import { movieDetailsService } from "../../Services/movieDetailsService";
+
+const Details = ({ getMovieData, movie, reviews, setReviews, setMovie }) => {
+  const revText = useRef();
+  let params = useParams();
+  const movieId = params.movieId;
+  const [isLoading, setIsLoading] = useState(true);
+
+  const { user, toggleMovieStatus, isWatched, isToWatch } = useUser();
+  const { popup, showPopup } = usePopup();
+
+  // useEffect(() => {
+  //   getMovieData(movieId);
+  // }, []);
+
+  useEffect(() => {
+    if (!movieId) return;
+
+    setIsLoading(true);
+
+    movieDetailsService
+      .getMovieDetails(movieId)
+      .then((data) => {
+        setMovie(data);
+        console.log("Movie details fetched:", data);
+        setReviews(data.reviews || []);
+      })
+      .catch((error) => {
+        console.error("Error fetching movie details:", error);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, [movieId]);
+
+  useEffect(() => {
+    const fetchReviews = async () => {
+      try {
+        const response = await api.get(`/v1/reviews/${movieId}`);
+        const reviews = response.data;
+        console.log("reviews:", reviews);
+        setReviews(reviews || []);
+      } catch (error) {
+        console.error("Error fetching reviews:", error);
+      }
+    };
+
+    fetchReviews();
+  }, [movieId]);
+
+  const addReview = async (e) => {
+    e.preventDefault();
+    const rev = revText.current;
+
+    try {
+      const trailerUrl = await movieDetailsService.getTrailerUrl(movie.id);
+      const backdrops = await movieDetailsService.getMovieBackdrops(
+        movie.id,
+        5
+      );
+
+      const response = await api.post("/v1/reviews", {
+        reviewBody: rev.value,
+        movie: {
+          tmdbId: movie.id,
+          imdbId: movie.imdb_id,
+          title: movie.title,
+          releaseDate: movie.release_date,
+          poster: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
+          backdrops: backdrops,
+          genres: movie.genres.map((g) => g.name),
+          trailerLink: trailerUrl,
+        },
+      });
+
+      const updatedReviews = [...reviews, response.data];
+      console.log("Updated reviews:", updatedReviews);
+      console.log("Review added:", response.data);
+      rev.value = "";
+      setReviews(updatedReviews);
+    } catch (err) {
+      console.error("Error adding review:", err);
+    }
+  };
+
+  const handleWatchlistClick = async (movieId, listType) => {
+    await toggleMovieStatus(movieId, listType, showPopup);
+  };
+
+  return (
+    <div className="reviews-container">
+      {/* Header */}
+      <div className="reviews-header">
+        <h1 className="reviews-title">Reviews of the film</h1>
+      </div>
+
+      <div className="reviews-content">
+        {/* Movie Card*/}
+        <div className="movie-section">
+          <MovieCard movie={movie} />
+        </div>
+
+        {/* Reviews Section */}
+        <div className="reviews-section">
+          {/* Review Form */}
+          <ReviewForm
+            handleSubmit={addReview}
+            revText={revText}
+            labelText="Write your review:"
+          />
+
+          {/* Reviews List */}
+          <ReviewList reviews={reviews} />
+        </div>
+
+        {isLoading ? (
+          <div>Loading...</div>
+        ) : (
+          <div className="watchlist-buttons-container">
+            <button
+              className={`watchlist-button watched-button ${
+                isWatched(movie.imdb_id) ? "active" : ""
+              }`}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleWatchlistClick(movie.imdb_id, "watched");
+              }}
+              title="Mark as watched"
+            >
+              <CheckCircle size={20} />
+              <span>Watched</span>
+            </button>
+
+            <button
+              className={`watchlist-button to-watch-button ${
+                isToWatch(movie.imdb_id) ? "active" : ""
+              }`}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleWatchlistClick(movie.imdb_id, "toWatch");
+              }}
+              title="Mark as to watch"
+            >
+              <Clock size={20} />
+              <span>To Watch</span>
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default Details;

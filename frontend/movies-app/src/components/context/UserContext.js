@@ -19,6 +19,7 @@ export const UserProvider = ({ children }) => {
     const fetchUser = async () => {
       try {
         const res = await api.get("/v1/users/me");
+        console.log("Fetched user:", res.data);
         setUser(res.data);
       } catch (err) {
         console.error("Błąd pobierania usera:", err);

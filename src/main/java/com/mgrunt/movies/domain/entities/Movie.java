@@ -18,6 +18,9 @@ public class Movie {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @Column(name = "tmdb_id", nullable = false, unique = true)
+    private Long tmdbId;
+
     @Column(name = "imdb_id", nullable = false, unique = true)
     private String imdbId;
 

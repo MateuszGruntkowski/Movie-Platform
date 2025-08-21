@@ -1,5 +1,6 @@
 import React from "react";
 import "./MovieCard.css";
+import { movieDetailsService } from "../../Services/movieDetailsService";
 
 const MovieCard = ({ movie }) => {
   if (!movie) return null;
@@ -22,8 +23,8 @@ const MovieCard = ({ movie }) => {
     return (
       <div className="movie-genres">
         {visibleGenres.map((genre, index) => (
-          <span key={index} className="genre-tag">
-            {genre}
+          <span key={genre.id || index} className="genre-tag">
+            {genre.name || genre}
           </span>
         ))}
         {hiddenCount > 0 && (
@@ -35,8 +36,10 @@ const MovieCard = ({ movie }) => {
 
   return (
     <div className="movie-poster-container">
+      {console.log("MovieCard movie:", movie)}
       <img
         src={
+          movieDetailsService.getImageUrl(movie.poster_path) ||
           movie.poster ||
           "https://via.placeholder.com/300x450/2A2D3A/FFD700?text=No+Poster"
         }
@@ -45,9 +48,9 @@ const MovieCard = ({ movie }) => {
       />
       <div className="movie-info">
         <h3 className="movie-title">{movie.title}</h3>
-        {movie.releaseDate && (
+        {movie.release_date && (
           <div className="movie-year">
-            {formatReleaseDate(movie.releaseDate)}
+            {formatReleaseDate(movie.release_date || movie.releaseDate)}
           </div>
         )}
         {renderGenres(movie.genres)}

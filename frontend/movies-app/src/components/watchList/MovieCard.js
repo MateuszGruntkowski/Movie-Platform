@@ -17,7 +17,7 @@ const MovieCard = ({
           {listType === "moviesToWatch" ? (
             <button
               className="wl-action-btn wl-watch-btn"
-              onClick={() => onMarkAsWatched(movie.id)}
+              onClick={() => onMarkAsWatched(movie.imdbId)}
               title="Mark as watched"
             >
               <CheckCircle size={20} />
@@ -25,7 +25,7 @@ const MovieCard = ({
           ) : (
             <button
               className="wl-action-btn wl-unwatch-btn"
-              onClick={() => onMarkAsToWatch(movie.id)}
+              onClick={() => onMarkAsToWatch(movie.imdbId)}
               title="Move to watchlist"
             >
               <Clock size={20} />
@@ -33,7 +33,7 @@ const MovieCard = ({
           )}
           <button
             className="wl-action-btn wl-remove-btn"
-            onClick={() => onRemove(movie.id)}
+            onClick={() => onRemove(movie.imdbId)}
             title="Remove from list"
           >
             <X size={20} />

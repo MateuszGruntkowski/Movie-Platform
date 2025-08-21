@@ -18,5 +18,5 @@ public interface WatchlistService {
 
     void markAsWatched(UUID movieId, Authentication authentication);
 
-    void toggleMovie(UUID movieId, String listType, Authentication authentication);
+    void toggleMovie(String imdbId, String listType, Authentication authentication);
 }

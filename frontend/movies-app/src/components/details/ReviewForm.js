@@ -3,7 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import React, { use } from "react";
 import { useUser } from "../context/UserContext";
 
-const ReviewForm = ({ handleSubmit, labelText, defaultValue, revText }) => {
+const ReviewForm = ({ handleSubmit, labelText, revText }) => {
   const params = useParams();
   let movieId = params.movieId;
 
@@ -18,7 +18,6 @@ const ReviewForm = ({ handleSubmit, labelText, defaultValue, revText }) => {
             <textarea
               ref={revText}
               rows={4}
-              defaultValue={defaultValue}
               placeholder="Share your opinion about this movie..."
               className="review-textarea"
             />

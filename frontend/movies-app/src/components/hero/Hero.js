@@ -111,20 +111,20 @@ const Hero = ({ movies }) => {
                     )}
                     <button
                       className="review-button"
-                      onClick={() => navigate(`/Reviews/${movie.imdbId}`)}
+                      onClick={() => navigate(`/Details/${movie.imdbId}`)}
                     >
-                      Reviews
+                      See more
                     </button>
                   </div>
 
                   <div className="watchlist-buttons-container">
                     <button
                       className={`watchlist-button watched-button ${
-                        isWatched(movie.id) ? "active" : ""
+                        isWatched(movie.imdbId) ? "active" : ""
                       }`}
                       onClick={(e) => {
                         e.stopPropagation();
-                        handleWatchlistClick(movie.id, "watched");
+                        handleWatchlistClick(movie.imdbId, "watched");
                       }}
                       title="Mark as watched"
                     >
@@ -134,11 +134,11 @@ const Hero = ({ movies }) => {
 
                     <button
                       className={`watchlist-button to-watch-button ${
-                        isToWatch(movie.id) ? "active" : ""
+                        isToWatch(movie.imdbId) ? "active" : ""
                       }`}
                       onClick={(e) => {
                         e.stopPropagation();
-                        handleWatchlistClick(movie.id, "toWatch");
+                        handleWatchlistClick(movie.imdbId, "toWatch");
                       }}
                       title="Mark as to watch"
                     >

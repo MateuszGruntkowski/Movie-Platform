@@ -10,8 +10,8 @@ import org.mapstruct.ReportingPolicy;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE, uses = {ReviewMapper.class, MovieMapper.class})
 public interface UserMapper {
 
-    @Mapping(target = "moviesToWatchIds", expression = "java(user.getMoviesToWatch().stream().map(movie -> movie.getId()).collect(java.util.stream.Collectors.toSet()))")
-    @Mapping(target = "moviesWatchedIds", expression = "java(user.getMoviesWatched().stream().map(movie -> movie.getId()).collect(java.util.stream.Collectors.toSet()))")
+    @Mapping(target = "moviesToWatchIds", expression = "java(user.getMoviesToWatch().stream().map(movie -> movie.getImdbId()).collect(java.util.stream.Collectors.toSet()))")
+    @Mapping(target = "moviesWatchedIds", expression = "java(user.getMoviesWatched().stream().map(movie -> movie.getImdbId()).collect(java.util.stream.Collectors.toSet()))")
     @Mapping(target = "reviewIds", expression = "java(user.getReviews().stream().map(review -> review.getId()).collect(java.util.stream.Collectors.toList()))")
     UserDto toDto(User user);
 

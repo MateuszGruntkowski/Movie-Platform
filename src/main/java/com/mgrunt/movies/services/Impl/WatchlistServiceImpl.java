@@ -102,12 +102,12 @@ public class WatchlistServiceImpl implements WatchlistService {
 
     @Override
     @Transactional
-    public void toggleMovie(UUID movieId, String listType, Authentication authentication) {
+    public void toggleMovie(String imdbId, String listType, Authentication authentication) {
         String username = authentication.getName();
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
-        Movie movie = movieRepository.findById(movieId)
+        Movie movie = movieRepository.findByImdbId(imdbId)
                 .orElseThrow(() -> new EntityNotFoundException("Movie not found"));
 
         Set<Movie> moviesToWatch = user.getMoviesToWatch();

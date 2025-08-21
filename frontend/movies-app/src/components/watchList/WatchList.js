@@ -68,11 +68,15 @@ const WatchList = () => {
               movie={movie}
               listType={listType}
               // Przekazujemy odpowiedni listType do toggle
-              onMarkAsWatched={() => handleWatchlistAction(movie.id, "watched")}
-              onMarkAsToWatch={() => handleWatchlistAction(movie.id, "toWatch")}
+              onMarkAsWatched={() =>
+                handleWatchlistAction(movie.imdbId, "watched")
+              }
+              onMarkAsToWatch={() =>
+                handleWatchlistAction(movie.imdbId, "toWatch")
+              }
               onRemove={() =>
                 handleWatchlistAction(
-                  movie.id,
+                  movie.imdbId,
                   listType === "moviesToWatch" ? "toWatch" : "watched"
                 )
               }

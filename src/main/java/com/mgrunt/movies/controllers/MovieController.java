@@ -19,7 +19,7 @@ public class MovieController {
 
     private final MovieService movieService;
 
-    @GetMapping
+    @GetMapping(path = "/all")
     public ResponseEntity<List<MovieDto>> ListAllMovies(){
         return new ResponseEntity<>(movieService.getAllMovies(), HttpStatus.OK);
     }
@@ -27,5 +27,10 @@ public class MovieController {
     @GetMapping(path = "/{imdbId}")
     public ResponseEntity<MovieDto> getMovie(@PathVariable String imdbId) {
         return new ResponseEntity<>(movieService.getSingleMovie(imdbId),HttpStatus.OK);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<MovieDto>> ListRandomMovies(){
+        return new ResponseEntity<>(movieService.getRandomMovies(), HttpStatus.OK);
     }
 }
