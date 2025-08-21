@@ -111,7 +111,7 @@ const Hero = ({ movies }) => {
                     )}
                     <button
                       className="review-button"
-                      onClick={() => navigate(`/Details/${movie.imdbId}`)}
+                      onClick={() => navigate(`/Details/${movie.tmdbId}`)}
                     >
                       See more
                     </button>

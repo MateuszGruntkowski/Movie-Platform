@@ -120,11 +120,9 @@ const MovieSearchBar = () => {
                     onClick={() => handleMovieClick(movie)}
                   >
                     <div className="result-poster">
-                      {movieSearchService.getImageUrl(movie.poster_path) ? (
+                      {movie.posterUrl ? (
                         <img
-                          src={movieSearchService.getImageUrl(
-                            movie.poster_path
-                          )}
+                          src={movie.posterUrl}
                           alt={movie.title}
                           onError={(e) => {
                             e.target.src =
@@ -140,14 +138,14 @@ const MovieSearchBar = () => {
                     <div className="result-info">
                       <h6 className="result-title">{movie.title}</h6>
                       <p className="result-year">
-                        {movie.release_date
-                          ? new Date(movie.release_date).getFullYear()
+                        {movie.releaseDate
+                          ? new Date(movie.releaseDate).getFullYear()
                           : "N/A"}
                       </p>
                       <div className="result-rating">
                         ⭐{" "}
-                        {movie.vote_average
-                          ? movie.vote_average.toFixed(1)
+                        {movie.voteAverage
+                          ? movie.voteAverage.toFixed(1)
                           : "N/A"}
                       </div>
                     </div>

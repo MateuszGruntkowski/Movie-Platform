@@ -33,6 +33,9 @@ public interface MovieRepository extends JpaRepository<Movie, UUID> {
 
     boolean existsByImdbId(String imdbId);
 
+//    Optional<Movie> findByTmdbId(String movieId);
+    Optional<Movie> findByTmdbId(Long tmdbId);
+
     // Znajdź najlepiej oceniane filmy (jeśli dodasz rating do Review)
 //    @Query("SELECT m FROM Movie m " +
 //            "LEFT JOIN m.reviews r " +

@@ -20,6 +20,7 @@ public class ReviewController {
 
     private final ReviewService reviewService;
 
+    // NIEUZTWANE
     @PostMapping(path = "/old")
     public ResponseEntity<ReviewDto> createReview(@RequestBody Map<String, String> payload, Authentication authentication) {
         ReviewDto review = reviewService.createReview(payload.get("imdbId"), payload.get("reviewBody"), authentication);

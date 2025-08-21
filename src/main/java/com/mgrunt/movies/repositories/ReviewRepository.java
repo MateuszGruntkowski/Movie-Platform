@@ -1,5 +1,6 @@
 package com.mgrunt.movies.repositories;
 
+import com.mgrunt.movies.domain.entities.Movie;
 import com.mgrunt.movies.domain.entities.Review;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -15,6 +16,8 @@ public interface ReviewRepository extends JpaRepository<Review, UUID> {
     List<Review> findByMovieId(UUID movieId);
 
     List<Review> findByMovieTmdbId(Long tmdbId);
+
+    List<Review> getReviewsByMovie(Movie movie);
 
     List<Review> findByAuthorId(UUID authorId);
 

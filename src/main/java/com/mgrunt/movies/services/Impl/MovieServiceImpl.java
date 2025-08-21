@@ -1,29 +1,41 @@
 package com.mgrunt.movies.services.Impl;
-import com.mgrunt.movies.domain.dtos.MovieDto;
-import com.mgrunt.movies.domain.dtos.ReviewDto;
+import com.mgrunt.movies.domain.dtos.*;
 import com.mgrunt.movies.domain.entities.Movie;
+import com.mgrunt.movies.domain.entities.Review;
 import com.mgrunt.movies.domain.entities.User;
+import com.mgrunt.movies.exceptions.MovieDetailsException;
+import com.mgrunt.movies.exceptions.MovieSearchException;
+import com.mgrunt.movies.mappers.MovieDetailsMapper;
 import com.mgrunt.movies.mappers.MovieMapper;
 import com.mgrunt.movies.mappers.ReviewMapper;
 import com.mgrunt.movies.repositories.MovieRepository;
+import com.mgrunt.movies.repositories.ReviewRepository;
 import com.mgrunt.movies.repositories.UserRepository;
 import com.mgrunt.movies.services.MovieService;
+import com.mgrunt.movies.services.TmdbService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class MovieServiceImpl implements MovieService {
 
+    private final TmdbService tmdbService;
     private final MovieRepository movieRepository;
     private final MovieMapper movieMapper;
     private final ReviewMapper reviewMapper;
     private final UserRepository userRepository;
+    private final ReviewRepository reviewRepository;
+    private final MovieDetailsMapper movieDetailsMapper;
 
     @Override
     public List<MovieDto> getAllMovies() {
@@ -50,15 +62,56 @@ public class MovieServiceImpl implements MovieService {
         return movies.stream().map(movieMapper::toDtoWithoutReviews).toList();
     }
 
-//    @Transactional
-//    @Override
-//    public void addMovieToWatchlist(UUID userId, String imdbId) {
-//        User user = userRepository.findById(userId)
-//                .orElseThrow(() -> new RuntimeException("User not found"));
-//        Movie movie = movieRepository.findByImdbId(imdbId)
-//                .orElseThrow(() -> new RuntimeException("Movie not found"));
+    // TMDB METHODS
+    public MovieDetailsResponse getMovieDetails(Long movieId) {
+        try {
+            Optional<Movie> localMovie = movieRepository.findByTmdbId(movieId);
+
+            TmdbMovieDetailsResponse tmdbData = tmdbService.getMovieDetails(movieId);
+            String trailerUrl = tmdbService.getTrailerUrl(movieId);
+            List<String> backdrops = tmdbService.getMovieBackdrops(movieId, 10);
+
+            List<Review> reviews = localMovie
+                    .map(reviewRepository::getReviewsByMovie)
+                    .orElse(Collections.emptyList());
+
+            return movieDetailsMapper.toMovieDetailsResponse(
+                    tmdbData,
+                    trailerUrl,
+                    backdrops,
+                    reviews
+            );
+
+        } catch (Exception e) {
+            log.error("Error fetching movie details for ID: {}", movieId, e);
+            throw new MovieDetailsException("Failed to fetch movie details for ID: " + movieId, e);
+        }
+    }
+
+    public List<MovieSearchResponse> searchMovies(String query, int limit) {
+        try {
+            List<TmdbMovieSearchResult> searchResults = tmdbService.searchMovies(query, limit);
+            System.out.println(searchResults);
+            return movieDetailsMapper.toMovieSearchResponseList(searchResults);
+        } catch (Exception e) {
+            log.error("Error searching movies with query: {}", query, e);
+            throw new MovieSearchException("Failed to search movies with query: " + query, e);
+        }
+    }
+
+//    private Movie findOrCreateMovie(String imdbId) {
+//        Optional<Movie> existingMovie = movieRepository.findByImdbId(imdbId);
+//        if (existingMovie.isPresent()) {
+//            return existingMovie.get();
+//        }
 //
-//        user.getMoviesToWatch().add(movie);
-//        userRepository.save(user);
+//        try {
+//            Movie movieFromTmdb = tmdbService.createMovieFromTmdbData(imdbId);
+//            return movieRepository.save(movieFromTmdb);
+//        } catch (Exception e) {
+//            log.error("Failed to fetch movie from TMDB for imdbId: {}", imdbId, e);
+//            throw new RuntimeException("Failed to fetch movie from TMDB for imdbId: " + imdbId, e);
+//        }
 //    }
+
 }

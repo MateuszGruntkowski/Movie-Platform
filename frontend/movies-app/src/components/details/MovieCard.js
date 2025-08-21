@@ -39,8 +39,8 @@ const MovieCard = ({ movie }) => {
       {console.log("MovieCard movie:", movie)}
       <img
         src={
-          movieDetailsService.getImageUrl(movie.poster_path) ||
-          movie.poster ||
+          // movieDetailsService.getImageUrl(movie.posterPath) ||
+          movie.posterPath ||
           "https://via.placeholder.com/300x450/2A2D3A/FFD700?text=No+Poster"
         }
         alt={movie.title || "Movie poster"}
@@ -48,9 +48,9 @@ const MovieCard = ({ movie }) => {
       />
       <div className="movie-info">
         <h3 className="movie-title">{movie.title}</h3>
-        {movie.release_date && (
+        {movie.releaseDate && (
           <div className="movie-year">
-            {formatReleaseDate(movie.release_date || movie.releaseDate)}
+            {formatReleaseDate(movie.releaseDate)}
           </div>
         )}
         {renderGenres(movie.genres)}
