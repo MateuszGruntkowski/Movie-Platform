@@ -3,6 +3,7 @@ package com.mgrunt.movies.services;
 import com.mgrunt.movies.domain.dtos.MovieDetailsResponse;
 import com.mgrunt.movies.domain.dtos.MovieDto;
 import com.mgrunt.movies.domain.dtos.MovieSearchResponse;
+import com.mgrunt.movies.domain.dtos.TmdbSearchResponse;
 import com.mgrunt.movies.domain.entities.Movie;
 
 import java.util.List;
@@ -19,5 +20,7 @@ public interface MovieService {
     List<MovieSearchResponse> searchMovies(String query, int limit);
 
     Movie findOrCreateMovie(Long tmdbId);
+
+    TmdbSearchResponse getSearchResults(String query, int page);
 //    void addMovieToWatchlist(UUID userId, String imdbId);
 }

@@ -109,6 +109,17 @@ public class MovieController {
         }
     }
 
-
+    @GetMapping("/search-results")
+    public ResponseEntity<TmdbSearchResponse> getSearchResults(
+            @RequestParam String query,
+            @RequestParam(defaultValue = "1") int page) {
+        try {
+            TmdbSearchResponse response = movieService.getSearchResults(query, page);
+            return ResponseEntity.ok(response);
+        } catch (MovieSearchException e) {
+            log.error("Error in controller searching movies with query: {}", query, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 
 }

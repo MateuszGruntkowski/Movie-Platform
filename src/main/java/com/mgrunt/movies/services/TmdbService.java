@@ -2,6 +2,7 @@ package com.mgrunt.movies.services;
 
 import com.mgrunt.movies.domain.dtos.TmdbMovieDetailsResponse;
 import com.mgrunt.movies.domain.dtos.TmdbMovieSearchResult;
+import com.mgrunt.movies.domain.dtos.TmdbSearchResponse;
 import com.mgrunt.movies.domain.dtos.TmdbVideoResponse;
 import com.mgrunt.movies.domain.entities.Movie;
 
@@ -16,4 +17,5 @@ public interface TmdbService {
     List<String> getCollectionBackdrops(Long collectionId);
     List<TmdbMovieSearchResult> searchMovies(String query, int limit);
     Movie createMovieFromTmdbData(Long movieId);
+    TmdbSearchResponse searchResult(String query, int page);
 }

@@ -228,6 +228,33 @@ public class TmdbServiceImpl implements TmdbService {
         }
     }
 
+    @Override
+    public TmdbSearchResponse searchResult(String query, int page){
+        try {
+            String encodedQuery = URLEncoder.encode(query, StandardCharsets.UTF_8);
+            String url = tmdbBaseUrl + "/search/movie?query=" + encodedQuery + "&language=en-US&page=" + page;
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("accept", "application/json");
+            headers.set("Authorization", "Bearer " + tmdbApiKey);
+
+            HttpEntity<String> entity = new HttpEntity<>(headers);
+
+            ResponseEntity<TmdbSearchResponse> response = restTemplate.exchange(
+                    url,
+                    HttpMethod.GET,
+                    entity,
+                    TmdbSearchResponse.class
+            );
+            return response.getBody() != null && response.getBody().getResults() != null
+                    ? response.getBody()
+                    : null;
+        }catch (Exception e){
+            log.error("Error getting search results with query: {}", query, e);
+            return null;
+        }
+    }
+
     public Movie createMovieFromTmdbData(Long movieId) {
         TmdbMovieDetailsResponse tmdbMovie = getMovieDetails(movieId);
 

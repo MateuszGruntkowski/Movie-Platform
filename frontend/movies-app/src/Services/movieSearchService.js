@@ -60,4 +60,51 @@ export const movieSearchService = {
     if (!posterPath) return null;
     return `https://image.tmdb.org/t/p/${size}${posterPath}`;
   },
+
+  async searchMoviesDetailed(query, page = 1) {
+    try {
+      // Wywołaj swoje API zamiast TMDB bezpośrednio
+      const response = await api.get(`/v1/movies/search-results`, {
+        params: { query, page },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Error searching movies:", error);
+      throw error;
+    }
+  },
+
+  // async searchMoviesDetailed(query, page = 1) {
+  //   try {
+  //     const options = {
+  //       method: "GET",
+  //       headers: {
+  //         accept: "application/json",
+  //         Authorization: `Bearer ${process.env.REACT_APP_TMDB_API_KEY}`,
+  //       },
+  //     };
+
+  //     const response = await fetch(
+  //       `https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(
+  //         query
+  //       )}&language=en-US&page=${page}`,
+  //       options
+  //     );
+
+  //     if (!response.ok) {
+  //       throw new Error("Failed to fetch movies");
+  //     }
+
+  //     const data = await response.json();
+  //     return {
+  //       results: data.results,
+  //       totalPages: data.total_pages,
+  //       totalResults: data.total_results,
+  //       page: data.page,
+  //     };
+  //   } catch (error) {
+  //     console.error("Error searching movies:", error);
+  //     throw error;
+  //   }
+  // },
 };

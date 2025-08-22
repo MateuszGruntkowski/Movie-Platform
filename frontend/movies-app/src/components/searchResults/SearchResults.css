@@ -1,0 +1,254 @@
+/* SearchResults.css */
+
+.sr-container {
+  min-height: 100vh;
+  background: #1a1a1a;
+  color: #fff;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.sr-content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Loading state */
+.sr-loading {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.sr-loading p {
+  margin-top: 15px;
+  color: #ffd700;
+  font-size: 1.1rem;
+}
+
+/* Header */
+.sr-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.sr-header h1 {
+  color: #ffd700;
+  font-size: 2.5rem;
+  margin-bottom: 15px;
+}
+
+.sr-search-info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.sr-query {
+  color: #fff;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.sr-count {
+  background: #333;
+  color: #ffd700;
+  padding: 5px 15px;
+  border-radius: 15px;
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+/* Movies Grid */
+.sr-movies-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+  margin-bottom: 40px;
+}
+
+/* Movie Card */
+.sr-movie-card {
+  background: #2a2a2a;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.sr-movie-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 35px rgba(255, 215, 0, 0.2);
+}
+
+/* Movie Poster */
+.sr-movie-poster {
+  width: 100%;
+  height: 300px;
+  position: relative;
+  overflow: hidden;
+}
+
+.sr-movie-poster img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.sr-movie-card:hover .sr-movie-poster img {
+  transform: scale(1.05);
+}
+
+.sr-no-poster {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* Movie Info */
+.sr-movie-info {
+  padding: 15px;
+}
+
+.sr-movie-title {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #fff;
+  margin: 0 0 8px 0;
+  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sr-movie-year {
+  color: #999;
+  font-size: 0.9rem;
+  margin: 0 0 8px 0;
+}
+
+.sr-movie-rating {
+  font-size: 0.9rem;
+  color: #ffd700;
+  font-weight: 600;
+}
+
+/* Empty State */
+.sr-empty-state {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 60px 20px;
+  color: #999;
+}
+
+.sr-empty-state p {
+  font-size: 1.3rem;
+  margin: 0 0 8px 0;
+  color: #fff;
+}
+
+.sr-empty-state small {
+  font-size: 1rem;
+  opacity: 0.7;
+}
+
+/* Pagination */
+.sr-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  margin-top: 40px;
+  padding: 20px 0;
+}
+
+.sr-page-btn {
+  background: #333;
+  color: #fff;
+  border: 2px solid #ffd700;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+}
+
+.sr-page-btn:hover:not(:disabled) {
+  background: #ffd700;
+  color: #000;
+  transform: translateY(-2px);
+}
+
+.sr-page-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.sr-page-info {
+  color: #ffd700;
+  font-size: 1.1rem;
+  font-weight: 600;
+  padding: 0 15px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .sr-container {
+    padding: 15px;
+  }
+
+  .sr-header h1 {
+    font-size: 2rem;
+  }
+
+  .sr-movies-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 15px;
+  }
+
+  .sr-movie-poster {
+    height: 250px;
+  }
+
+  .sr-movie-info {
+    padding: 12px;
+  }
+
+  .sr-movie-title {
+    font-size: 1rem;
+  }
+
+  .sr-pagination {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .sr-page-btn {
+    padding: 12px 24px;
+    width: 120px;
+  }
+}
+
+@media (max-width: 480px) {
+  .sr-search-info {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .sr-movies-grid {
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 12px;
+  }
+
+  .sr-movie-poster {
+    height: 200px;
+  }
+}
