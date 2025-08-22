@@ -39,7 +39,7 @@
 
 import api from "../api/axiosConfig";
 
-const API_BASE_URL = "http://localhost:8080/api/v1/movies";
+// const API_BASE_URL = "http://localhost:8080/api/v1/movies";
 
 export const movieSearchService = {
   async searchMovies(query, limit = 8) {

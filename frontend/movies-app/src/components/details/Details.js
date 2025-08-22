@@ -18,13 +18,7 @@ const Details = ({ getMovieData, movie, reviews, setReviews, setMovie }) => {
   let params = useParams();
   const movieId = params.movieId;
   const [isLoading, setIsLoading] = useState(true);
-
-  const { user, toggleMovieStatus, isWatched, isToWatch } = useUser();
   const { popup, showPopup } = usePopup();
-
-  // useEffect(() => {
-  //   getMovieData(movieId);
-  // }, []);
 
   useEffect(() => {
     if (!movieId) return;
@@ -66,30 +60,10 @@ const Details = ({ getMovieData, movie, reviews, setReviews, setMovie }) => {
     const rev = revText.current;
 
     try {
-      // const trailerUrl = await movieDetailsService.getTrailerUrl(movie.id);
-      // const backdrops = await movieDetailsService.getMovieBackdrops(
-      //   movie.id,
-      //   5
-      // );
-
       const response = await api.post(`/v1/reviews/create/${movieId}`, {
         reviewBody: rev.value,
-
-        // movie: {
-        //   tmdbId: movie.id,
-        //   imdbId: movie.imdb_id,
-        //   title: movie.title,
-        //   releaseDate: movie.release_date,
-        //   poster: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
-        //   backdrops: backdrops,
-        //   genres: movie.genres.map((g) => g.name),
-        //   trailerLink: trailerUrl,
-        // },
       });
-
       const updatedReviews = [...reviews, response.data];
-      console.log("Updated reviews:", updatedReviews);
-      console.log("Review added:", response.data);
       rev.value = "";
       setReviews(updatedReviews);
     } catch (err) {
@@ -97,9 +71,9 @@ const Details = ({ getMovieData, movie, reviews, setReviews, setMovie }) => {
     }
   };
 
-  const handleWatchlistClick = async (movieId, listType) => {
-    await toggleMovieStatus(movieId, listType, showPopup);
-  };
+  // const handleWatchlistClick = async (movieId, listType) => {
+  //   await toggleMovieStatus(movieId, listType, showPopup);
+  // };
 
   return (
     <div className="reviews-container">
@@ -117,7 +91,11 @@ const Details = ({ getMovieData, movie, reviews, setReviews, setMovie }) => {
       <div className="reviews-content">
         {/* Movie Card*/}
         <div className="movie-section">
-          <MovieCard movie={movie} />
+          <MovieCard
+            movie={movie}
+            isLoading={isLoading}
+            showPopup={showPopup}
+          />
         </div>
 
         {/* Reviews Section */}
@@ -133,7 +111,7 @@ const Details = ({ getMovieData, movie, reviews, setReviews, setMovie }) => {
           <ReviewList reviews={reviews} />
         </div>
 
-        {isLoading ? (
+        {/* {isLoading ? (
           <div>Loading...</div>
         ) : (
           <div className="watchlist-buttons-container">
@@ -167,7 +145,7 @@ const Details = ({ getMovieData, movie, reviews, setReviews, setMovie }) => {
               <span>To Watch</span>
             </button>
           </div>
-        )}
+        )} */}
       </div>
     </div>
   );

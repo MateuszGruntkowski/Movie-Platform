@@ -27,7 +27,7 @@
 .movie-title {
   color: #ffffff;
   font-size: 1.4rem;
-  margin: 0;
+  margin: 0 0 8px 0;
   font-weight: 600;
   line-height: 1.3;
 }
@@ -39,11 +39,100 @@
   font-weight: 400;
 }
 
+/* Nowe style */
+.movie-overview {
+  color: #cccccc;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin: 12px 0;
+  text-align: left;
+  max-height: 120px;
+  overflow-y: auto;
+  padding: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  border-left: 3px solid #ffd700;
+}
+
+.movie-details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 12px 0;
+  gap: 15px;
+}
+
+.movie-rating {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.rating-value {
+  color: #ffd700;
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+.vote-count {
+  color: #999;
+  font-size: 0.8rem;
+}
+
+.movie-runtime {
+  color: #cccccc;
+  font-size: 0.9rem;
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+.trailer-section {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+/* Style dla przycisku play */
+.play-button-icon-container {
+  padding: 15px;
+  background: rgba(255, 215, 0, 0.1);
+  border: 2px solid gold;
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.play-button-icon-container:hover {
+  background: rgba(255, 215, 0, 0.3);
+  transform: scale(1.1);
+}
+
+.play-button-icon {
+  color: gold;
+  font-size: 2.5rem;
+  transition: all 0.3s ease;
+}
+
+.play-button-icon:hover {
+  color: white;
+  transform: scale(1.1);
+}
+
+/* Istniejące style */
 .movie-genres {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
-  margin-top: 8px;
+  margin-top: 12px;
+  justify-content: center;
 }
 
 .genre-tag {
@@ -72,12 +161,23 @@
   .movie-year {
     text-align: center;
   }
-}
 
-.movie-title {
-  color: #ffffff;
-  font-size: 1.4rem;
-  margin: 0 0 8px 0;
-  font-weight: 600;
-  line-height: 1.3;
+  .movie-details {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .movie-overview {
+    text-align: center;
+    max-height: 100px;
+  }
+
+  .play-button-icon-container {
+    width: 60px;
+    height: 60px;
+  }
+
+  .play-button-icon {
+    font-size: 2rem;
+  }
 }

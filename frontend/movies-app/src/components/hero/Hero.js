@@ -73,7 +73,7 @@ const Hero = ({ movies }) => {
                   to bottom,
                   rgba(0,0,0,0.3),
                   rgba(0,0,0,0.8)
-                ), url(${movie.backdrops?.[0] || ""})`,
+                ), url(${movie.backdrops?.[0] || movie.backdropPath || ""})`,
               }}
             >
               <div className="movie-detail">
