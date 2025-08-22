@@ -38,8 +38,8 @@ const SearchResults = () => {
         page
       );
       setMovies(data.results);
-      setTotalPages(data.totalPages);
-      setTotalResults(data.totalResults);
+      setTotalPages(data.total_pages);
+      setTotalResults(data.total_results);
     } catch (error) {
       console.error("Error searching movies:", error);
       setError("Failed to search movies. Please try again.");

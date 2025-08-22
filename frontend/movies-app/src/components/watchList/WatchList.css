@@ -162,6 +162,10 @@
   background: #ef4444;
 }
 
+.wl-details-btn:hover {
+  background: #0472f8;
+}
+
 /* Informacje o filmie */
 .wl-movie-info {
   padding: 15px;
