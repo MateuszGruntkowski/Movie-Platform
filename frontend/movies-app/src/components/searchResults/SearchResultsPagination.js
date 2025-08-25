@@ -1,4 +1,3 @@
-// SearchResultsPagination.js
 import React from "react";
 
 const SearchResultsPagination = ({ currentPage, totalPages, onPageChange }) => {

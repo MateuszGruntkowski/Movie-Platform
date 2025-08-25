@@ -26,8 +26,6 @@ import java.util.stream.Collectors;
 public class WatchlistServiceImpl implements WatchlistService {
 
     private final UserRepository userRepository;
-    private final MovieMapper movieMapper;
-    private final MovieRepository movieRepository;
     private final MovieService movieService;
     private final MovieDetailsMapper movieDetailsMapper;
 
@@ -51,105 +49,6 @@ public class WatchlistServiceImpl implements WatchlistService {
                 .moviesWatched(moviesWatched)
                 .build();
     }
-
-    @Override
-    @Transactional
-    public void removeFromToWatch(Authentication authentication, UUID movieId) {
-        String username = authentication.getName();
-
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new EntityNotFoundException("User not found"));
-
-        user.getMoviesToWatch().removeIf(movie -> movie.getId().equals(movieId));
-        userRepository.save(user);
-    }
-
-    @Override
-    @Transactional
-    public void removeFromWatched(Authentication authentication, UUID movieId) {
-        String username = authentication.getName();
-
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new EntityNotFoundException("User not found"));
-
-        user.getMoviesWatched().removeIf(movie -> movie.getId().equals(movieId));
-        userRepository.save(user);
-    }
-
-    @Override
-    @Transactional
-    public void markAsToWatch(UUID movieId, Authentication authentication) {
-        String username = authentication.getName();
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new EntityNotFoundException("User not found"));
-        Movie movie = movieRepository.findById(movieId)
-                .orElseThrow(() -> new EntityNotFoundException("Movie not found"));
-
-        user.getMoviesWatched().removeIf(m -> m.getId().equals(movieId));
-        user.getMoviesToWatch().add(movie);
-        userRepository.save(user);
-    }
-
-    @Override
-    @Transactional
-    public void markAsWatched(UUID movieId, Authentication authentication) {
-        String username = authentication.getName();
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new EntityNotFoundException("User not found"));
-        Movie movie = movieRepository.findById(movieId)
-                .orElseThrow(() -> new EntityNotFoundException("Movie not found"));
-
-        user.getMoviesToWatch().removeIf(m -> m.getId().equals(movieId));
-        user.getMoviesWatched().add(movie);
-        userRepository.save(user);
-
-    }
-
-    // STARA METODA
-
-//    @Override
-//    @Transactional
-//    public void toggleMovie(String imdbId, String listType, Authentication authentication) {
-//        String username = authentication.getName();
-//        User user = userRepository.findByUsername(username)
-//                .orElseThrow(() -> new EntityNotFoundException("User not found"));
-//
-//        Movie movie = movieRepository.findByImdbId(imdbId)
-//                .orElseThrow(() -> new EntityNotFoundException("Movie not found"));
-//
-//        Set<Movie> moviesToWatch = user.getMoviesToWatch();
-//        Set<Movie> moviesWatched = user.getMoviesWatched();
-//
-//        if (listType.equalsIgnoreCase("watched")) {
-//            // Usuń z "do obejrzenia", jeśli jest
-//            moviesToWatch.remove(movie);
-//
-//            // Jeśli już był w obejrzanych → usuń go (toggle off)
-//            if (moviesWatched.remove(movie)) {
-//                userRepository.save(user);
-//                return;
-//            }
-//
-//            // W przeciwnym razie dodaj do obejrzanych
-//            moviesWatched.add(movie);
-//        } else if (listType.equalsIgnoreCase("toWatch")) {
-//            // Usuń z obejrzanych, jeśli jest
-//            moviesWatched.remove(movie);
-//
-//            // Jeśli już był na liście do obejrzenia → usuń go (toggle off)
-//            if (moviesToWatch.remove(movie)) {
-//                userRepository.save(user);
-//                return;
-//            }
-//
-//            // W przeciwnym razie dodaj do listy do obejrzenia
-//            moviesToWatch.add(movie);
-//        } else {
-//            throw new IllegalArgumentException("Invalid listType: " + listType);
-//        }
-//
-//        userRepository.save(user);
-//    }
 
     @Transactional
     public void toggleMovie(Long tmdbId, String listType, Authentication authentication) {

@@ -32,30 +32,8 @@ public class MovieServiceImpl implements MovieService {
 
     private final TmdbService tmdbService;
     private final MovieRepository movieRepository;
-    private final MovieMapper movieMapper;
-    private final ReviewMapper reviewMapper;
-    private final UserRepository userRepository;
     private final ReviewRepository reviewRepository;
     private final MovieDetailsMapper movieDetailsMapper;
-
-    @Override
-    public List<MovieDto> getAllMovies() {
-        List<Movie> movies = movieRepository.findAll();
-
-        // return without reviews
-        return movies.stream().map(movieMapper::toDtoWithoutReviews)
-                .toList();
-    }
-
-    @Override
-    public MovieDto getSingleMovie(String imdbId) {
-
-        Movie movie = movieRepository.findByImdbIdWithReviewsAndAuthors(imdbId)
-                .orElseThrow(() -> new EntityNotFoundException("Movie not found with id: " + imdbId));
-
-        return movieMapper.toDto(movie);
-
-    }
 
     public List<MovieDetailsResponse> getRandomMovies() {
         int MAX_MOVIES_NUMBER = 8;

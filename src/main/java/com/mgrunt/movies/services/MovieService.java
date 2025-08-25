@@ -10,8 +10,6 @@ import java.util.List;
 import java.util.UUID;
 
 public interface MovieService {
-    List<MovieDto> getAllMovies();
-    MovieDto getSingleMovie(String imdbId);
 
     List<MovieDetailsResponse> getRandomMovies();
 
@@ -22,5 +20,5 @@ public interface MovieService {
     Movie findOrCreateMovie(Long tmdbId);
 
     TmdbSearchResponse getSearchResults(String query, int page);
-//    void addMovieToWatchlist(UUID userId, String imdbId);
+
 }

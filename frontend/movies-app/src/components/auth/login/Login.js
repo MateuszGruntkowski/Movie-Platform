@@ -26,7 +26,6 @@ const Login = () => {
   return (
     <div className="auth-container">
       <div className="auth-wrapper">
-        {/* Welcome Section */}
         <div className="auth-welcome">
           <div className="welcome-content">
             <div className="welcome-icon">

@@ -1,4 +1,3 @@
-// SearchResultsGrid.js
 import React from "react";
 import SearchMovieCard from "./SearchMovieCard";
 

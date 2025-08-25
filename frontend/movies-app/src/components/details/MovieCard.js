@@ -10,7 +10,7 @@ import { usePopup } from "../../hooks/usePopup";
 const MovieCard = ({ movie, isLoading, showPopup }) => {
   if (!movie) return null;
 
-  const { user, toggleMovieStatus, isWatched, isToWatch } = useUser();
+  const { toggleMovieStatus, isWatched, isToWatch } = useUser();
 
   const handleWatchlistClick = async (movieId, listType) => {
     await toggleMovieStatus(movieId, listType, showPopup);
@@ -57,7 +57,6 @@ const MovieCard = ({ movie, isLoading, showPopup }) => {
       {console.log("MovieCard movie:", movie)}
       <img
         src={
-          // movieDetailsService.getImageUrl(movie.posterPath) ||
           movie.posterPath ||
           "https://via.placeholder.com/300x450/2A2D3A/FFD700?text=No+Poster"
         }
@@ -72,7 +71,6 @@ const MovieCard = ({ movie, isLoading, showPopup }) => {
           </div>
         )}
 
-        {/* Nowe pola */}
         {movie.overview && (
           <div className="movie-overview">{movie.overview}</div>
         )}
@@ -96,7 +94,7 @@ const MovieCard = ({ movie, isLoading, showPopup }) => {
 
         {renderGenres(movie.genres)}
 
-        {/* Przycisk trailer */}
+        {/* Trailer button */}
         {movie.trailerUrl && (
           <div className="trailer-section">
             <Link

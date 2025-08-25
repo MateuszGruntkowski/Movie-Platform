@@ -26,44 +26,6 @@ public class WatchlistController {
         );
     }
 
-    @PatchMapping(path = "/toWatch/{movieId}")
-    public ResponseEntity<Void> markAsToWatch(
-            @PathVariable UUID movieId,
-            Authentication authentication){
-        watchlistService.markAsToWatch(
-                movieId,
-                authentication
-        );
-        return ResponseEntity.ok().build();
-    }
-
-    @PatchMapping(path = "/watched/{movieId}")
-    public ResponseEntity<Void> markAsWatched(
-            @PathVariable UUID movieId,
-            Authentication authentication) {
-        watchlistService.markAsWatched(
-                movieId,
-                authentication
-        );
-        return ResponseEntity.ok().build();
-    }
-
-    @DeleteMapping(path="toWatch/{movieId}")
-    public ResponseEntity<Void> removeFromToWatch(
-            @PathVariable UUID movieId,
-            Authentication authentication) {
-        watchlistService.removeFromToWatch(authentication, movieId);
-        return ResponseEntity.ok().build();
-    }
-
-    @DeleteMapping(path="watched/{movieId}")
-    public ResponseEntity<Void> removeFromWatched(
-            @PathVariable UUID movieId,
-            Authentication authentication) {
-        watchlistService.removeFromWatched(authentication, movieId);
-        return ResponseEntity.ok().build();
-    }
-
     @PutMapping("/toggle/{tmdbId}")
     public ResponseEntity<Void> toggleMovie(
             @PathVariable Long tmdbId,

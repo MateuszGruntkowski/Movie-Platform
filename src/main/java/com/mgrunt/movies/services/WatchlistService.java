@@ -10,13 +10,5 @@ public interface WatchlistService {
 
     UserWatchListResponse getWatchlist(Authentication authentication);
 
-    void removeFromToWatch(Authentication authentication, UUID movieId);
-
-    void removeFromWatched(Authentication authentication, UUID movieId);
-
-    void markAsToWatch(UUID movieId, Authentication authentication);
-
-    void markAsWatched(UUID movieId, Authentication authentication);
-
     void toggleMovie(Long tmdbId, String listType, Authentication authentication);
 }

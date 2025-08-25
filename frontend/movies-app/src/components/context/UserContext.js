@@ -47,7 +47,6 @@ export const UserProvider = ({ children }) => {
     setUser(null);
   };
 
-  // Główna funkcja do toggle - używa tylko jednego endpointa
   const toggleMovieStatus = async (movieId, listType, showPopup) => {
     if (!user) {
       showPopup?.("Zaloguj się, aby dodać do listy!", "login");
@@ -59,11 +58,9 @@ export const UserProvider = ({ children }) => {
         params: { listType },
       });
 
-      // Odświeżamy dane użytkownika
       const res = await api.get("/v1/users/me");
       setUser(res.data);
 
-      // Określamy co się stało i pokazujemy odpowiedni komunikat
       const isNowInList =
         listType === "watched"
           ? res.data.moviesWatchedIds?.includes(movieId)
@@ -82,7 +79,6 @@ export const UserProvider = ({ children }) => {
     }
   };
 
-  // Proste funkcje pomocnicze
   const isWatched = (movieId) =>
     user?.moviesWatchedIds?.includes(movieId) ?? false;
   const isToWatch = (movieId) =>

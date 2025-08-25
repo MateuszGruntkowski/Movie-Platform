@@ -27,19 +27,6 @@ public class MovieController {
 
     private final MovieService movieService;
     private final TmdbService tmdbService;
-    private final ReviewService reviewService;
-
-    // NIEUŻYWANE
-//    @GetMapping(path = "/all")
-//    public ResponseEntity<List<MovieDto>> ListAllMovies(){
-//        return new ResponseEntity<>(movieService.getAllMovies(), HttpStatus.OK);
-//    }
-
-    // NIEUZTWANE
-//    @GetMapping(path = "/{imdbId}")
-//    public ResponseEntity<MovieDto> getMovie(@PathVariable String imdbId) {
-//        return new ResponseEntity<>(movieService.getSingleMovie(imdbId),HttpStatus.OK);
-//    }
 
     @GetMapping
     public ResponseEntity<List<MovieDetailsResponse>> ListRandomMovies(){
@@ -47,7 +34,6 @@ public class MovieController {
     }
 
     // TMDB METHODS
-
     @GetMapping("/{movieId}/details")
     public ResponseEntity<MovieDetailsResponse> getMovieDetails(@PathVariable Long movieId) {
         try {

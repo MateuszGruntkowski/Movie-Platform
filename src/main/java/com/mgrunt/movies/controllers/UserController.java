@@ -29,20 +29,4 @@ public class UserController {
         );
     }
 
-//    @PatchMapping(path = "/watchlist")
-//    public ResponseEntity<Void> addToWatchlist(
-//            @RequestBody AddMovieRequest addMovieRequest,
-//            Authentication authentication) {
-//
-//        userService.addToWatchlist(addMovieRequest, authentication);
-//        return ResponseEntity.ok().build();
-//    }
-
-//    @GetMapping(path = "/watchlist")
-//    public ResponseEntity<UserWatchListResponse> getWatchlist(Authentication authentication) {
-//        return new ResponseEntity<>(
-//                userService.getWatchlist(authentication),
-//                HttpStatus.OK
-//        );
-//    }
 }

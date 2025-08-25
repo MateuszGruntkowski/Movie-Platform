@@ -28,19 +28,6 @@ function App() {
     }
   };
 
-  // const getMovieData = async (movieId) => {
-  //   try {
-  //     const response = await api.get(`/v1/movies/${movieId}`);
-  //     const singleMovie = response.data;
-  //     console.log("Single movie data:", singleMovie);
-  //     setMovie(singleMovie);
-  //     setReviews(singleMovie.reviews || []);
-  //     console.log("Reviews for movie:", singleMovie.reviews);
-  //   } catch (error) {
-  //     console.error("Error fetching movie data:", error);
-  //   }
-  // };
-
   useEffect(() => {
     getMovies();
   }, []);
@@ -56,7 +43,6 @@ function App() {
             path="/Details/:movieId"
             element={
               <Details
-                // getMovieData={getMovieData}
                 reviews={reviews}
                 setReviews={setReviews}
                 movie={movie}
@@ -67,7 +53,6 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/search" element={<SearchResults />} />
-          {/* <Route path="/movie/:id" element={<MovieDetail />} /> */}
           <Route path="/watchlist" element={<WatchList />} />
           <Route path="*" element={<NotFound />} />
         </Route>

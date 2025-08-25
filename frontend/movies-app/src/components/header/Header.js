@@ -34,7 +34,6 @@ const Header = () => {
             </NavLink>
           </Nav>
 
-          {/* Search Bar - wyśrodkowany */}
           <div className="mx-auto">
             <MovieSearchBar />
           </div>

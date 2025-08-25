@@ -9,11 +9,9 @@ import java.util.List;
 import java.util.UUID;
 
 public interface ReviewService {
-    ReviewDto createReview(String imdbId, String reviewBody, Authentication authentication);
 
     List<ReviewDto> getReviewsForMovie(Long tmdbId);
 
     ReviewDto createReview(Long tmdbId, ReviewRequest reviewRequest, Authentication authentication);
 
-//    ReviewDto createReview(ReviewRequest reviewRequest, Authentication authentication);
 }
