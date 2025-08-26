@@ -71,10 +71,6 @@ const Details = ({ getMovieData, movie, reviews, setReviews, setMovie }) => {
     }
   };
 
-  // const handleWatchlistClick = async (movieId, listType) => {
-  //   await toggleMovieStatus(movieId, listType, showPopup);
-  // };
-
   return (
     <div className="reviews-container">
       {popup.show && (

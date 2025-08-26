@@ -6,6 +6,7 @@ import { CheckCircle, Clock } from "lucide-react";
 import "./MovieCard.css";
 import { useUser } from "../context/UserContext";
 import { usePopup } from "../../hooks/usePopup";
+import Buttons from "../buttons/Buttons";
 
 const MovieCard = ({ movie, isLoading, showPopup }) => {
   if (!movie) return null;
@@ -116,37 +117,43 @@ const MovieCard = ({ movie, isLoading, showPopup }) => {
         {isLoading ? (
           <div>Loading...</div>
         ) : (
-          <div className="watchlist-buttons-container">
-            <button
-              className={`watchlist-button watched-button ${
-                isWatched(movie.tmdbId) ? "active" : ""
-              }`}
-              onClick={(e) => {
-                e.stopPropagation();
-                handleWatchlistClick(movie.tmdbId, "watched");
-                console.log(movie.tmdbId);
-                console.log(typeof movie.tmdbId);
-              }}
-              title="Mark as watched"
-            >
-              <CheckCircle size={20} />
-              <span>Watched</span>
-            </button>
+          <Buttons
+            movie={movie}
+            isWatched={isWatched}
+            isToWatch={isToWatch}
+            handleWatchlistClick={handleWatchlistClick}
+          />
+          // <div className="watchlist-buttons-container">
+          //   <button
+          //     className={`watchlist-button watched-button ${
+          //       isWatched(movie.tmdbId) ? "active" : ""
+          //     }`}
+          //     onClick={(e) => {
+          //       e.stopPropagation();
+          //       handleWatchlistClick(movie.tmdbId, "watched");
+          //       console.log(movie.tmdbId);
+          //       console.log(typeof movie.tmdbId);
+          //     }}
+          //     title="Mark as watched"
+          //   >
+          //     <CheckCircle size={20} />
+          //     <span>Watched</span>
+          //   </button>
 
-            <button
-              className={`watchlist-button to-watch-button ${
-                isToWatch(movie.tmdbId) ? "active" : ""
-              }`}
-              onClick={(e) => {
-                e.stopPropagation();
-                handleWatchlistClick(movie.tmdbId, "toWatch");
-              }}
-              title="Mark as to watch"
-            >
-              <Clock size={20} />
-              <span>To Watch</span>
-            </button>
-          </div>
+          //   <button
+          //     className={`watchlist-button to-watch-button ${
+          //       isToWatch(movie.tmdbId) ? "active" : ""
+          //     }`}
+          //     onClick={(e) => {
+          //       e.stopPropagation();
+          //       handleWatchlistClick(movie.tmdbId, "toWatch");
+          //     }}
+          //     title="Mark as to watch"
+          //   >
+          //     <Clock size={20} />
+          //     <span>To Watch</span>
+          //   </button>
+          // </div>
         )}
       </div>
     </div>

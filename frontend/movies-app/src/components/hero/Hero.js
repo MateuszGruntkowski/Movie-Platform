@@ -13,6 +13,7 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import { useUser } from "../context/UserContext";
 import { usePopup } from "../../hooks/usePopup";
+import Buttons from "../buttons/Buttons";
 
 const PrevArrow = ({ onClick }) => (
   <div className="custom-arrow custom-prev-arrow" onClick={onClick}>
@@ -116,8 +117,14 @@ const Hero = ({ movies }) => {
                       See more
                     </button>
                   </div>
+                  <Buttons
+                    movie={movie}
+                    handleWatchlistClick={handleWatchlistClick}
+                    isWatched={isWatched}
+                    isToWatch={isToWatch}
+                  />
 
-                  <div className="watchlist-buttons-container">
+                  {/* <div className="watchlist-buttons-container">
                     <button
                       className={`watchlist-button watched-button ${
                         isWatched(movie.tmdbId) ? "active" : ""
@@ -145,7 +152,7 @@ const Hero = ({ movies }) => {
                       <Clock size={20} />
                       <span>To Watch</span>
                     </button>
-                  </div>
+                  </div> */}
                 </div>
               </div>
             </div>
