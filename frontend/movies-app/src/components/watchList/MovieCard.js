@@ -1,4 +1,3 @@
-// MovieCard.js
 import React from "react";
 import { CheckCircle, Clock, X, Info } from "lucide-react";
 import { useNavigate } from "react-router-dom";

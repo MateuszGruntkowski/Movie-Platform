@@ -1,12 +1,10 @@
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCirclePlay } from "@fortawesome/free-solid-svg-icons";
-import { Container, Row, Col } from "react-bootstrap";
-import { CheckCircle, Clock } from "lucide-react";
 import "./MovieCard.css";
 import { useUser } from "../context/UserContext";
-import { usePopup } from "../../hooks/usePopup";
-import Buttons from "../buttons/Buttons";
+import ToWatchButton from "../buttons/ToWatchButton";
+import WatchedButton from "../buttons/WatchedButton";
 
 const MovieCard = ({ movie, isLoading, showPopup }) => {
   if (!movie) return null;
@@ -117,43 +115,18 @@ const MovieCard = ({ movie, isLoading, showPopup }) => {
         {isLoading ? (
           <div>Loading...</div>
         ) : (
-          <Buttons
-            movie={movie}
-            isWatched={isWatched}
-            isToWatch={isToWatch}
-            handleWatchlistClick={handleWatchlistClick}
-          />
-          // <div className="watchlist-buttons-container">
-          //   <button
-          //     className={`watchlist-button watched-button ${
-          //       isWatched(movie.tmdbId) ? "active" : ""
-          //     }`}
-          //     onClick={(e) => {
-          //       e.stopPropagation();
-          //       handleWatchlistClick(movie.tmdbId, "watched");
-          //       console.log(movie.tmdbId);
-          //       console.log(typeof movie.tmdbId);
-          //     }}
-          //     title="Mark as watched"
-          //   >
-          //     <CheckCircle size={20} />
-          //     <span>Watched</span>
-          //   </button>
-
-          //   <button
-          //     className={`watchlist-button to-watch-button ${
-          //       isToWatch(movie.tmdbId) ? "active" : ""
-          //     }`}
-          //     onClick={(e) => {
-          //       e.stopPropagation();
-          //       handleWatchlistClick(movie.tmdbId, "toWatch");
-          //     }}
-          //     title="Mark as to watch"
-          //   >
-          //     <Clock size={20} />
-          //     <span>To Watch</span>
-          //   </button>
-          // </div>
+          <div className="watchlist-buttons-container">
+            <WatchedButton
+              movie={movie}
+              handleWatchlistClick={handleWatchlistClick}
+              isWatched={isWatched}
+            />
+            <ToWatchButton
+              movie={movie}
+              handleWatchlistClick={handleWatchlistClick}
+              isToWatch={isToWatch}
+            />
+          </div>
         )}
       </div>
     </div>

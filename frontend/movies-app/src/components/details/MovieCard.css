@@ -153,6 +153,14 @@
   font-size: 0.75rem;
 }
 
+.watchlist-buttons-container {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+
 @media (max-width: 768px) {
   .movie-genres {
     justify-content: center;

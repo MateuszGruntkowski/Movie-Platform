@@ -1,6 +1,5 @@
 import React from "react";
 import Slider from "react-slick";
-import { CheckCircle, Clock } from "lucide-react";
 import "./Hero.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -13,7 +12,8 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import { useUser } from "../context/UserContext";
 import { usePopup } from "../../hooks/usePopup";
-import Buttons from "../buttons/Buttons";
+import ToWatchButton from "../buttons/ToWatchButton";
+import WatchedButton from "../buttons/WatchedButton";
 
 const PrevArrow = ({ onClick }) => (
   <div className="custom-arrow custom-prev-arrow" onClick={onClick}>
@@ -117,42 +117,18 @@ const Hero = ({ movies }) => {
                       See more
                     </button>
                   </div>
-                  <Buttons
-                    movie={movie}
-                    handleWatchlistClick={handleWatchlistClick}
-                    isWatched={isWatched}
-                    isToWatch={isToWatch}
-                  />
-
-                  {/* <div className="watchlist-buttons-container">
-                    <button
-                      className={`watchlist-button watched-button ${
-                        isWatched(movie.tmdbId) ? "active" : ""
-                      }`}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleWatchlistClick(movie.tmdbId, "watched");
-                      }}
-                      title="Mark as watched"
-                    >
-                      <CheckCircle size={20} />
-                      <span>Watched</span>
-                    </button>
-
-                    <button
-                      className={`watchlist-button to-watch-button ${
-                        isToWatch(movie.tmdbId) ? "active" : ""
-                      }`}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleWatchlistClick(movie.tmdbId, "toWatch");
-                      }}
-                      title="Mark as to watch"
-                    >
-                      <Clock size={20} />
-                      <span>To Watch</span>
-                    </button>
-                  </div> */}
+                  <div className="watchlist-buttons-container">
+                    <WatchedButton
+                      movie={movie}
+                      handleWatchlistClick={handleWatchlistClick}
+                      isWatched={isWatched}
+                    />
+                    <ToWatchButton
+                      movie={movie}
+                      handleWatchlistClick={handleWatchlistClick}
+                      isToWatch={isToWatch}
+                    />
+                  </div>
                 </div>
               </div>
             </div>
