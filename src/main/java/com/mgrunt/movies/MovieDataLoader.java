@@ -33,19 +33,16 @@ public class MovieDataLoader {
         try {
             log.info("Loading movie data from JSON...");
 
-            // Wczytaj JSON z resources
             InputStream inputStream = getClass().getResourceAsStream("/data/movies.json");
             if (inputStream == null) {
                 throw new RuntimeException("movies.json not found in resources/data/");
             }
 
-            // Parse JSON do MovieDto list
             List<MovieDataDto> movieDataList = objectMapper.readValue(
                     inputStream,
                     new TypeReference<List<MovieDataDto>>() {}
             );
 
-            // Konwertuj i zapisz każdy film
             for (MovieDataDto movieData : movieDataList) {
                 Movie movie = convertToEntity(movieData);
                 movieRepository.save(movie);
