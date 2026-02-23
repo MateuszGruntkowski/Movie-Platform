@@ -1,23 +1,58 @@
-
 services:
   db:
     image: postgres:15
-    container_name: ${DB_CONTAINER_NAME}
+    container_name: ${DB_CONTAINER_NAME:-movies_db}
     environment:
-      POSTGRES_DB: ${POSTGRES_DATABASE}
-      POSTGRES_USER: ${POSTGRES_USERNAME}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DATABASE:-movies_db}
+      POSTGRES_USER: ${POSTGRES_USERNAME:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
     ports:
-      - "${POSTGRES_PORT}:5432"
+      - "${POSTGRES_PORT:-5432}:5432"
     restart: always
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
   adminer:
     image: adminer:latest
-    container_name: my_adminer
+    container_name: movies_adminer
     ports:
-      - "${ADMINER_PORT}:8080"
+      - "${ADMINER_PORT:-8088}:8080"
+    restart: always
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: movies_backend
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+      - POSTGRES_DATABASE=${POSTGRES_DATABASE:-movies_db}
+      - POSTGRES_USERNAME=${POSTGRES_USERNAME:-postgres}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-password}
+
+      # SECURITY NOTE: In a production environment, secrets should never have default fallbacks in version control.
+      # A default value is provided here STRICTLY for ease of local deployment and portfolio demonstration.
+      - JWT_SECRET=${JWT_SECRET:-myVerySecureSecretKey1234567890abcdefghijklmnopqrstuvwxyz}
+
+      # NOTE: This application requires a TMDB API Key.
+      # If not provided via .env, the app will start, but requests to external Movie APIs will fail.
+      - TMDB_API_KEY=${TMDB_API_KEY:-placeholder_key_please_provide_real_one}
+    restart: on-failure
+
+  frontend:
+    build:
+      context: ./frontend/movies-app
+      dockerfile: Dockerfile
+    container_name: movies_frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
     restart: always
 
 volumes:

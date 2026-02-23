@@ -1,0 +1,9 @@
+.git
+.idea
+.env
+target
+frontend/movies-app/node_modules
+frontend/movies-app/dist
+frontend/movies-app/build
+postgres_data
+
