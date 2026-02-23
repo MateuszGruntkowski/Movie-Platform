@@ -9,7 +9,59 @@ Movie Platform is a web application for exploring and managing movies. It integr
 ![Trailer](Screenshots/Trailer.png)
 ![Register](Screenshots/Register.png)
 
-## 🔑 Main Features
+## Installation & Setup (Quick Start)
+
+You can run the entire application (Frontend + Backend + Database) with a single command using Docker.
+
+### Prerequisites
+* Docker & Docker Compose installed.
+* git
+
+### Step-by-Step Guide
+
+**1. Clone the repository**
+```bash
+git clone <your-repo-url>
+cd <your-project-folder>
+```
+**2. Configure Environment (Crucial for Movie Data)**
+
+The project includes a default configuration for a quick start. However, to fetch real movie data, you need a TMDB API Key.
+
+* Copy the example environment file:
+```bash
+cp .env.example .env
+```
+*(Windows CMD users: `copy .env.example .env`)*
+
+* Open the newly created `.env` file and paste your key:
+```ini
+TMDB_API_KEY=your_actual_api_key_here
+```
+
+> **Important Note:** If you skip this step or do not provide a valid API Key, the application will still launch successfully (using fallback defaults), but movie lists will be empty and external API requests will fail.
+
+**3. Run the Application**
+
+Build and start the containers:
+```bash
+docker-compose up --build
+```
+Please wait a few minutes for the initial build (Maven dependencies & Node modules).
+
+**4. Access the App**
+
+Once the logs settle, the application is available at:
+
+| Service | URL | Default Credentials |
+|:---|:---|:---|
+| Frontend | http://localhost:3000 | Register with username & password to access all features |
+| Swagger UI | http://localhost:8080/swagger-ui/index.html | — |
+| Adminer (DB) | http://localhost:8088 | System: `PostgreSQL`, Server: `moviesdb`, User: `username`, Pass: `password` |
+
+---
+
+## Main Features
 - **Search movies** – powered by TMDB API.
 - **Movie details** – view description, rating, runtime, and release date.
 - **Reviews** – write and share movie reviews. A movie is stored in the database only when a review is added or the user saves it to a list.
@@ -17,7 +69,7 @@ Movie Platform is a web application for exploring and managing movies. It integr
 - **Trailers** – watch official trailers directly on the platform.
 - **User authentication** – sign up and log in to access personalized features.
 
-## 🚀 Technologies
+## Technologies
 - Spring Boot 3.x  
 - Spring Security + JWT  
 - PostgreSQL 
@@ -25,7 +77,7 @@ Movie Platform is a web application for exploring and managing movies. It integr
 - React 19
 - OpenAPI/Swagger  
 
-## 📚 API Documentation
+## API Documentation
 
 Full API documentation is available in Swagger UI once the application is running:
 
