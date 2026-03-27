@@ -3,7 +3,6 @@ package com.mgrunt.movies.Security;
 import com.mgrunt.movies.domain.entities.User;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.bson.types.ObjectId;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

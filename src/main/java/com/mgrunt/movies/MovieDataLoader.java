@@ -60,6 +60,7 @@ public class MovieDataLoader {
     private Movie convertToEntity(MovieDataDto dto) {
         Movie movie = new Movie();
         movie.setImdbId(dto.getImdbId());
+        movie.setTmdbId(dto.getTmdbId());
         movie.setTitle(dto.getTitle());
         movie.setReleaseDate(dto.getReleaseDate());
         movie.setTrailerUrl(dto.getTrailerUrl());

@@ -29,11 +29,10 @@ services:
     depends_on:
       - db
     environment:
-      - DB_HOST=db
-      - DB_PORT=5432
-      - POSTGRES_DATABASE=${POSTGRES_DATABASE:-movies_db}
-      - POSTGRES_USERNAME=${POSTGRES_USERNAME:-postgres}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-password}
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/${POSTGRES_DATABASE:-movies_db}
+      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USERNAME:-postgres}
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD:-password}
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
 
       # SECURITY NOTE: In a production environment, secrets should never have default fallbacks in version control.
       # A default value is provided here STRICTLY for ease of local deployment and portfolio demonstration.

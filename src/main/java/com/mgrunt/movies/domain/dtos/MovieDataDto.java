@@ -15,6 +15,7 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class MovieDataDto {
     private String imdbId;
+    private Long tmdbId;
     private String title;
     private LocalDate releaseDate;
     private String trailerUrl;
