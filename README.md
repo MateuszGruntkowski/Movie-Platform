@@ -2,6 +2,12 @@
 
 Movie Platform is a web application for exploring and managing movies. It integrates with TMDB API to provide up-to-date movie data and allows users to review, save, and organize films.
 
+## Demo (YT video)
+
+[![Watch the demo](https://img.shields.io/badge/▶_Watch_Demo-YouTube-red?style=for-the-badge&logo=youtube)](https://www.youtube.com/watch?v=qI3TioYV1BM)
+
+## Screenshots
+
 ![Home Page](Screenshots/Home.png)
 ![Movie Details](Screenshots/MovieDetails.png)
 ![Search](Screenshots/Search.png)
