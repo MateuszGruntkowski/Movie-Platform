@@ -2,28 +2,20 @@ package com.mgrunt.movies.services.Impl;
 import com.mgrunt.movies.domain.dtos.*;
 import com.mgrunt.movies.domain.entities.Movie;
 import com.mgrunt.movies.domain.entities.Review;
-import com.mgrunt.movies.domain.entities.User;
 import com.mgrunt.movies.exceptions.MovieDetailsException;
 import com.mgrunt.movies.exceptions.MovieSearchException;
 import com.mgrunt.movies.exceptions.SearchResultsException;
 import com.mgrunt.movies.mappers.MovieDetailsMapper;
-import com.mgrunt.movies.mappers.MovieMapper;
-import com.mgrunt.movies.mappers.ReviewMapper;
 import com.mgrunt.movies.repositories.MovieRepository;
 import com.mgrunt.movies.repositories.ReviewRepository;
-import com.mgrunt.movies.repositories.UserRepository;
 import com.mgrunt.movies.services.MovieService;
 import com.mgrunt.movies.services.TmdbService;
-import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor

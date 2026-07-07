@@ -1,7 +1,6 @@
 package com.mgrunt.movies.mappers;
 
 import com.mgrunt.movies.domain.dtos.UserDto;
-import com.mgrunt.movies.domain.dtos.UserWatchListResponse;
 import com.mgrunt.movies.domain.entities.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

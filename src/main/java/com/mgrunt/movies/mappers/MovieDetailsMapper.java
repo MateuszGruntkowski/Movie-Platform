@@ -4,12 +4,10 @@ package com.mgrunt.movies.mappers;
 import com.mgrunt.movies.domain.dtos.*;
 import com.mgrunt.movies.domain.entities.Movie;
 import com.mgrunt.movies.domain.entities.Review;
-import com.mgrunt.movies.services.TmdbService;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.mapstruct.ReportingPolicy;
-
 import java.util.ArrayList;
 import java.util.List;
 

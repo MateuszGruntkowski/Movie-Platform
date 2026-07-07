@@ -5,7 +5,6 @@ import com.mgrunt.movies.domain.dtos.TmdbMovieSearchResult;
 import com.mgrunt.movies.domain.dtos.TmdbSearchResponse;
 import com.mgrunt.movies.domain.dtos.TmdbVideoResponse;
 import com.mgrunt.movies.domain.entities.Movie;
-
 import java.util.List;
 
 public interface TmdbService {
