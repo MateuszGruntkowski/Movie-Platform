@@ -43,10 +43,14 @@ const MovieSearchBar = () => {
   const performSearch = async (query) => {
     setIsSearching(true);
     try {
-      const results = await movieSearchService.searchMovies(query);
-      setSearchResults(results);
+      const data = await movieSearchService.searchMovies(query);
+
+      const moviesArray = data && data.results ? data.results : [];
+
+      setSearchResults(moviesArray);
       setShowResults(true);
     } catch (error) {
+      console.error("Błąd wyszukiwania:", error); // Dobrze wiedzieć w konsoli, co poszło nie tak
       setSearchResults([]);
       setShowResults(false);
     } finally {
