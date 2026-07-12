@@ -3,7 +3,6 @@ package com.mgrunt.movies.controllers;
 import com.mgrunt.movies.domain.dtos.ApiErrorResponse;
 import com.mgrunt.movies.exceptions.MovieDetailsException;
 import com.mgrunt.movies.exceptions.MovieSearchException;
-import com.mgrunt.movies.exceptions.SearchResultsException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -70,9 +69,4 @@ public class ErrorController {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
-    @ExceptionHandler(SearchResultsException.class)
-    public ResponseEntity<Void> handleSearchResults(SearchResultsException e) {
-        log.error("Search results error", e);
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-    }
 }

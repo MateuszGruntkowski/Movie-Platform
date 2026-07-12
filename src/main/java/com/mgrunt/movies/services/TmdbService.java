@@ -11,7 +11,6 @@ public interface TmdbService {
     String getTrailerUrl(Long movieId);
     List<String> getMovieBackdrops(Long movieId, int limit);
     List<String> getCollectionBackdrops(Long collectionId);
-    List<TmdbMovieSearchResult> searchMovies(String query, int limit);
     TmdbSearchResponse searchResult(String query, int page);
     Movie createMovieFromTmdbData(Long movieId);
 }

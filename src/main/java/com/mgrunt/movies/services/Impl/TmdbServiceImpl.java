@@ -136,34 +136,15 @@ public class TmdbServiceImpl implements TmdbService {
     }
 
     @Override
-    public List<TmdbMovieSearchResult> searchMovies(String query, int limit) {
-        try {
-            String url = buildSearchUrl(query, 1);
-            TmdbSearchResponse response = fetchFromTmdb(url, TmdbSearchResponse.class);
-
-            return response != null && response.getResults() != null
-                    ? response.getResults().stream().limit(limit).collect(Collectors.toList())
-                    : Collections.emptyList();
-        } catch (Exception e) {
-            log.error("Error searching movies with query: {}", query, e);
-            return Collections.emptyList();
-        }
-    }
-
-    @Override
     public TmdbSearchResponse searchResult(String query, int page) {
         try {
-            String url = buildSearchUrl(query, page);
+            String encodedQuery = URLEncoder.encode(query, StandardCharsets.UTF_8);
+            String url = tmdbBaseUrl + "/search/movie?query=" + encodedQuery + "&language=en-US&page=" + page;
             return fetchFromTmdb(url, TmdbSearchResponse.class);
         } catch (Exception e) {
             log.error("Error getting search results with query: {}", query, e);
             return null;
         }
-    }
-
-    private String buildSearchUrl(String query, int page) {
-        String encodedQuery = URLEncoder.encode(query, StandardCharsets.UTF_8);
-        return tmdbBaseUrl + "/search/movie?query=" + encodedQuery + "&language=en-US&page=" + page;
     }
 
     @Override

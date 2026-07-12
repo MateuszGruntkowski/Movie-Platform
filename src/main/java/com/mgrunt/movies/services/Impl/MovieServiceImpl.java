@@ -5,7 +5,6 @@ import com.mgrunt.movies.domain.entities.Movie;
 import com.mgrunt.movies.domain.entities.Review;
 import com.mgrunt.movies.exceptions.MovieDetailsException;
 import com.mgrunt.movies.exceptions.MovieSearchException;
-import com.mgrunt.movies.exceptions.SearchResultsException;
 import com.mgrunt.movies.mappers.MovieDetailsMapper;
 import com.mgrunt.movies.repositories.MovieRepository;
 import com.mgrunt.movies.repositories.ReviewRepository;
@@ -59,23 +58,13 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public List<MovieSearchResponse> searchMovies(String query, int limit) {
+    public MovieSearchPageResponse searchMovies(String query, int page) {
         try {
-            List<TmdbMovieSearchResult> searchResults = tmdbService.searchMovies(query, limit);
-            return movieDetailsMapper.toMovieSearchResponseList(searchResults);
+            TmdbSearchResponse tmdbResponse = tmdbService.searchResult(query, page);
+            return movieDetailsMapper.toMovieSearchPageResponse(tmdbResponse);
         } catch (Exception e) {
             log.error("Error searching movies with query: {}", query, e);
             throw new MovieSearchException("Failed to search movies with query: " + query, e);
-        }
-    }
-
-    @Override
-    public TmdbSearchResponse getSearchResults(String query, int page) {
-        try {
-            return tmdbService.searchResult(query, page);
-        } catch (Exception e) {
-            log.error("Error getting search results with query: {}", query, e);
-            throw new SearchResultsException("Failed to get search results with query: " + query, e);
         }
     }
 

@@ -1,6 +1,7 @@
 package com.mgrunt.movies.controllers;
 
-import com.mgrunt.movies.domain.dtos.*;
+import com.mgrunt.movies.domain.dtos.MovieDetailsResponse;
+import com.mgrunt.movies.domain.dtos.MovieSearchPageResponse;
 import com.mgrunt.movies.services.MovieService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -27,16 +28,9 @@ public class MovieController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<MovieSearchResponse>> searchMovies(
-            @RequestParam String query,
-            @RequestParam(defaultValue = "8") int limit) {
-        return ResponseEntity.ok(movieService.searchMovies(query, limit));
-    }
-
-    @GetMapping("/search-results")
-    public ResponseEntity<TmdbSearchResponse> getSearchResults(
+    public ResponseEntity<MovieSearchPageResponse> searchMovies(
             @RequestParam String query,
             @RequestParam(defaultValue = "1") int page) {
-        return ResponseEntity.ok(movieService.getSearchResults(query, page));
+        return ResponseEntity.ok(movieService.searchMovies(query, page));
     }
 }
