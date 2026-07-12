@@ -38,7 +38,7 @@ public interface MovieDetailsMapper {
     @Mapping(target = "genres", source = "tmdbData.genres")
     @Mapping(target = "belongsToCollection", source = "tmdbData.belongsToCollection")
     @Mapping(target = "trailerUrl", source = "trailerUrl")
-    @Mapping(target = "backdrops", source = "backdrops")
+    @Mapping(target = "backdrops", source = "backdrops", qualifiedByName = "buildFullUrl")
     @Mapping(target = "reviews", source = "reviews")
     MovieDetailsResponse toMovieDetailsResponse(
             TmdbMovieDetailsResponse tmdbData,
@@ -47,7 +47,7 @@ public interface MovieDetailsMapper {
             List<Review> reviews
     );
 
-    @Mapping(target = "backdrops", source = "backdrops")
+    @Mapping(target = "backdrops", source = "backdrops", qualifiedByName = "buildFullUrl")
     @Mapping(target = "reviews", source = "reviews")
     @Mapping(target = "genres", source = "genres", qualifiedByName = "mapGenres")
     @Mapping(target = "belongsToCollection", ignore = true)
@@ -58,8 +58,6 @@ public interface MovieDetailsMapper {
     @Mapping(target = "posterUrl", source = "posterPath", qualifiedByName = "buildFullUrl")
     @Mapping(target = "backdropUrl", source = "backdropPath", qualifiedByName = "buildFullUrl")
     MovieSearchResponse toMovieSearchResponse(TmdbMovieSearchResult searchResult);
-
-    List<MovieSearchResponse> toMovieSearchResponseList(List<TmdbMovieSearchResult> searchResults);
 
     @Mapping(target = "results", source = "results")
     @Mapping(target = "page", source = "page")
