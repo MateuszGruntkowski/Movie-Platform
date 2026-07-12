@@ -1,13 +1,10 @@
 package com.mgrunt.movies.services.Impl;
 
 import com.mgrunt.movies.domain.dtos.MovieDetailsResponse;
-import com.mgrunt.movies.domain.dtos.MovieDto;
 import com.mgrunt.movies.domain.dtos.UserWatchListResponse;
 import com.mgrunt.movies.domain.entities.Movie;
 import com.mgrunt.movies.domain.entities.User;
 import com.mgrunt.movies.mappers.MovieDetailsMapper;
-import com.mgrunt.movies.mappers.MovieMapper;
-import com.mgrunt.movies.repositories.MovieRepository;
 import com.mgrunt.movies.repositories.UserRepository;
 import com.mgrunt.movies.services.MovieService;
 import com.mgrunt.movies.services.WatchlistService;
@@ -18,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
