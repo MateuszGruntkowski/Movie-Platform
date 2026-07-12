@@ -1,6 +1,9 @@
 package com.mgrunt.movies.controllers;
 
 import com.mgrunt.movies.domain.dtos.ApiErrorResponse;
+import com.mgrunt.movies.exceptions.MovieDetailsException;
+import com.mgrunt.movies.exceptions.MovieSearchException;
+import com.mgrunt.movies.exceptions.SearchResultsException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -53,5 +56,23 @@ public class ErrorController {
                 .build();
 
         return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(MovieDetailsException.class)
+    public ResponseEntity<Void> handleMovieDetails(MovieDetailsException e) {
+        log.error("Movie details error", e);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+
+    @ExceptionHandler(MovieSearchException.class)
+    public ResponseEntity<Void> handleMovieSearch(MovieSearchException e) {
+        log.error("Movie search error", e);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+
+    @ExceptionHandler(SearchResultsException.class)
+    public ResponseEntity<Void> handleSearchResults(SearchResultsException e) {
+        log.error("Search results error", e);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 }

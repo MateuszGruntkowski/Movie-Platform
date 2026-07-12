@@ -1,4 +1,5 @@
 package com.mgrunt.movies.services.Impl;
+
 import com.mgrunt.movies.domain.dtos.*;
 import com.mgrunt.movies.domain.entities.Movie;
 import com.mgrunt.movies.domain.entities.Review;
@@ -23,43 +24,41 @@ import java.util.Optional;
 @Slf4j
 public class MovieServiceImpl implements MovieService {
 
+    private static final int RANDOM_MOVIES_COUNT = 8;
+    private static final int DEFAULT_BACKDROPS_LIMIT = 10;
+
     private final TmdbService tmdbService;
     private final MovieRepository movieRepository;
     private final ReviewRepository reviewRepository;
     private final MovieDetailsMapper movieDetailsMapper;
 
+    @Override
     public List<MovieDetailsResponse> getRandomMovies() {
-        int MAX_MOVIES_NUMBER = 8;
-        List<Movie> movies = movieRepository.findRandomMovies(MAX_MOVIES_NUMBER);
+        List<Movie> movies = movieRepository.findRandomMovies(RANDOM_MOVIES_COUNT);
         return movies.stream().map(movieDetailsMapper::toMovieDetailsResponse).toList();
     }
 
-    // TMDB METHODS
+    @Override
     public MovieDetailsResponse getMovieDetails(Long movieId) {
         try {
             Optional<Movie> localMovie = movieRepository.findByTmdbId(movieId);
 
             TmdbMovieDetailsResponse tmdbData = tmdbService.getMovieDetails(movieId);
             String trailerUrl = tmdbService.getTrailerUrl(movieId);
-            List<String> backdrops = tmdbService.getMovieBackdrops(movieId, 10);
+            List<String> backdrops = tmdbService.getMovieBackdrops(movieId, DEFAULT_BACKDROPS_LIMIT);
 
             List<Review> reviews = localMovie
                     .map(reviewRepository::getReviewsByMovie)
                     .orElse(Collections.emptyList());
 
-            return movieDetailsMapper.toMovieDetailsResponse(
-                    tmdbData,
-                    trailerUrl,
-                    backdrops,
-                    reviews
-            );
-
+            return movieDetailsMapper.toMovieDetailsResponse(tmdbData, trailerUrl, backdrops, reviews);
         } catch (Exception e) {
             log.error("Error fetching movie details for ID: {}", movieId, e);
             throw new MovieDetailsException("Failed to fetch movie details for ID: " + movieId, e);
         }
     }
 
+    @Override
     public List<MovieSearchResponse> searchMovies(String query, int limit) {
         try {
             List<TmdbMovieSearchResult> searchResults = tmdbService.searchMovies(query, limit);
@@ -70,29 +69,27 @@ public class MovieServiceImpl implements MovieService {
         }
     }
 
-    public TmdbSearchResponse getSearchResults(String query, int page){
-        try{
+    @Override
+    public TmdbSearchResponse getSearchResults(String query, int page) {
+        try {
             return tmdbService.searchResult(query, page);
-        }catch(Exception e){
-            log.error("Error getting search results");
+        } catch (Exception e) {
+            log.error("Error getting search results with query: {}", query, e);
             throw new SearchResultsException("Failed to get search results with query: " + query, e);
         }
     }
 
     @Override
     public Movie findOrCreateMovie(Long tmdbId) {
-        Optional<Movie> existingMovie = movieRepository.findByTmdbId(tmdbId);
-        if (existingMovie.isPresent()) {
-            return existingMovie.get();
-        }
-
-        try {
-            Movie movieFromTmdb = tmdbService.createMovieFromTmdbData(tmdbId);
-            return movieRepository.save(movieFromTmdb);
-        } catch (Exception e) {
-            log.error("Failed to fetch movie from TMDB for tmdbId: {}", tmdbId, e);
-            throw new RuntimeException("Failed to fetch movie from TMDB for tmdbId: " + tmdbId, e);
-        }
+        return movieRepository.findByTmdbId(tmdbId)
+                .orElseGet(() -> {
+                    try {
+                        Movie movieFromTmdb = tmdbService.createMovieFromTmdbData(tmdbId);
+                        return movieRepository.save(movieFromTmdb);
+                    } catch (Exception e) {
+                        log.error("Failed to fetch movie from TMDB for tmdbId: {}", tmdbId, e);
+                        throw new RuntimeException("Failed to fetch movie from TMDB for tmdbId: " + tmdbId, e);
+                    }
+                });
     }
-
 }
