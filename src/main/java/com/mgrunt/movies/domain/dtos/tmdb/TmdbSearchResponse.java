@@ -1,6 +1,7 @@
-package com.mgrunt.movies.domain.dtos;
+package com.mgrunt.movies.domain.dtos.tmdb;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,9 +14,13 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class MovieSearchPageResponse {
-    private List<MovieSearchResponse> results;
+public class TmdbSearchResponse {
     private Integer page;
+    private List<TmdbMovieSearchResult> results;
+
+    @JsonProperty("total_pages")
     private Integer totalPages;
+
+    @JsonProperty("total_results")
     private Integer totalResults;
 }

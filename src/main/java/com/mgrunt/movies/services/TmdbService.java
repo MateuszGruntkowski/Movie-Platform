@@ -1,6 +1,8 @@
 package com.mgrunt.movies.services;
 
-import com.mgrunt.movies.domain.dtos.*;
+import com.mgrunt.movies.domain.dtos.tmdb.TmdbMovieDetailsResponse;
+import com.mgrunt.movies.domain.dtos.tmdb.TmdbSearchResponse;
+import com.mgrunt.movies.domain.dtos.tmdb.TmdbVideoResponse;
 import com.mgrunt.movies.domain.entities.Movie;
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.mgrunt.movies.domain.dtos;
+package com.mgrunt.movies.domain.dtos.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

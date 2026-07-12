@@ -1,7 +1,7 @@
 package com.mgrunt.movies.services.Impl;
 
-import com.mgrunt.movies.domain.dtos.MovieDetailsResponse;
-import com.mgrunt.movies.domain.dtos.UserWatchListResponse;
+import com.mgrunt.movies.domain.dtos.movie.MovieDetailsResponse;
+import com.mgrunt.movies.domain.dtos.user.UserWatchListResponse;
 import com.mgrunt.movies.domain.entities.Movie;
 import com.mgrunt.movies.domain.entities.User;
 import com.mgrunt.movies.mappers.MovieDetailsMapper;

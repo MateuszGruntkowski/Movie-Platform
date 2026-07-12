@@ -1,6 +1,6 @@
 package com.mgrunt.movies.mappers;
 
-import com.mgrunt.movies.domain.dtos.ReviewDto;
+import com.mgrunt.movies.domain.dtos.review.ReviewDto;
 import com.mgrunt.movies.domain.entities.Review;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

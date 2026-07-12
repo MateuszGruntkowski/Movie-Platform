@@ -1,7 +1,7 @@
 package com.mgrunt.movies.services;
 
-import com.mgrunt.movies.domain.dtos.MovieDetailsResponse;
-import com.mgrunt.movies.domain.dtos.MovieSearchPageResponse;
+import com.mgrunt.movies.domain.dtos.movie.MovieDetailsResponse;
+import com.mgrunt.movies.domain.dtos.movie.MovieSearchPageResponse;
 import com.mgrunt.movies.domain.entities.Movie;
 
 import java.util.List;

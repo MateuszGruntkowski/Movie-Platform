@@ -1,6 +1,12 @@
 package com.mgrunt.movies.mappers;
 
-import com.mgrunt.movies.domain.dtos.*;
+import com.mgrunt.movies.domain.dtos.movie.MovieDetailsResponse;
+import com.mgrunt.movies.domain.dtos.movie.MovieSearchPageResponse;
+import com.mgrunt.movies.domain.dtos.movie.MovieSearchResponse;
+import com.mgrunt.movies.domain.dtos.tmdb.TmdbGenreResponse;
+import com.mgrunt.movies.domain.dtos.tmdb.TmdbMovieDetailsResponse;
+import com.mgrunt.movies.domain.dtos.tmdb.TmdbMovieSearchResult;
+import com.mgrunt.movies.domain.dtos.tmdb.TmdbSearchResponse;
 import com.mgrunt.movies.domain.entities.Movie;
 import com.mgrunt.movies.domain.entities.Review;
 import org.mapstruct.Mapper;

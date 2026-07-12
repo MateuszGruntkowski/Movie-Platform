@@ -1,7 +1,7 @@
 package com.mgrunt.movies.controllers;
 
-import com.mgrunt.movies.domain.dtos.MovieDetailsResponse;
-import com.mgrunt.movies.domain.dtos.MovieSearchPageResponse;
+import com.mgrunt.movies.domain.dtos.movie.MovieDetailsResponse;
+import com.mgrunt.movies.domain.dtos.movie.MovieSearchPageResponse;
 import com.mgrunt.movies.services.MovieService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

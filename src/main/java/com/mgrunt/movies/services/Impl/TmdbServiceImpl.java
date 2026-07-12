@@ -1,6 +1,6 @@
 package com.mgrunt.movies.services.Impl;
 
-import com.mgrunt.movies.domain.dtos.*;
+import com.mgrunt.movies.domain.dtos.tmdb.*;
 import com.mgrunt.movies.domain.entities.Movie;
 import com.mgrunt.movies.exceptions.ExternalApiException;
 import com.mgrunt.movies.services.TmdbService;

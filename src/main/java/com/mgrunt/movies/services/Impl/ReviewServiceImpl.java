@@ -1,8 +1,8 @@
 package com.mgrunt.movies.services.Impl;
 
 import com.mgrunt.movies.Security.CustomUserDetails;
-import com.mgrunt.movies.domain.dtos.ReviewDto;
-import com.mgrunt.movies.domain.dtos.ReviewRequest;
+import com.mgrunt.movies.domain.dtos.review.ReviewDto;
+import com.mgrunt.movies.domain.dtos.review.ReviewRequest;
 import com.mgrunt.movies.domain.entities.Movie;
 import com.mgrunt.movies.domain.entities.Review;
 import com.mgrunt.movies.domain.entities.User;

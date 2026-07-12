@@ -1,6 +1,9 @@
 package com.mgrunt.movies.services.Impl;
 
-import com.mgrunt.movies.domain.dtos.*;
+import com.mgrunt.movies.domain.dtos.movie.MovieDetailsResponse;
+import com.mgrunt.movies.domain.dtos.movie.MovieSearchPageResponse;
+import com.mgrunt.movies.domain.dtos.tmdb.TmdbMovieDetailsResponse;
+import com.mgrunt.movies.domain.dtos.tmdb.TmdbSearchResponse;
 import com.mgrunt.movies.domain.entities.Movie;
 import com.mgrunt.movies.domain.entities.Review;
 import com.mgrunt.movies.exceptions.MovieDetailsException;
