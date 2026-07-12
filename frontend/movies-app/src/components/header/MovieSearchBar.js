@@ -50,7 +50,7 @@ const MovieSearchBar = () => {
       setSearchResults(moviesArray);
       setShowResults(true);
     } catch (error) {
-      console.error("Błąd wyszukiwania:", error); // Dobrze wiedzieć w konsoli, co poszło nie tak
+      console.error("Błąd wyszukiwania:", error);
       setSearchResults([]);
       setShowResults(false);
     } finally {
@@ -65,7 +65,7 @@ const MovieSearchBar = () => {
   const handleMovieClick = (movie) => {
     setShowResults(false);
     setSearchQuery("");
-    navigate(`/Details/${movie.imdbId || movie.id}`);
+    navigate(`/Details/${movie.id}`);
   };
 
   const clearSearch = () => {
@@ -81,103 +81,103 @@ const MovieSearchBar = () => {
   };
 
   return (
-    <div className="movie-search-container" ref={searchRef}>
-      <div className="search-input-wrapper">
-        <Form.Control
-          type="text"
-          placeholder="Search movies..."
-          className="movie-search-input"
-          value={searchQuery}
-          onChange={handleInputChange}
-          onFocus={() => searchQuery.length >= 2 && setShowResults(true)}
-        />
+      <div className="movie-search-container" ref={searchRef}>
+        <div className="search-input-wrapper">
+          <Form.Control
+              type="text"
+              placeholder="Search movies..."
+              className="movie-search-input"
+              value={searchQuery}
+              onChange={handleInputChange}
+              onFocus={() => searchQuery.length >= 2 && setShowResults(true)}
+          />
 
-        {searchQuery && (
-          <button
-            type="button"
-            className="clear-search-button"
-            onClick={clearSearch}
-            aria-label="Clear search"
-          >
-            <FontAwesomeIcon icon={faTimes} />
-          </button>
-        )}
+          {searchQuery && (
+              <button
+                  type="button"
+                  className="clear-search-button"
+                  onClick={clearSearch}
+                  aria-label="Clear search"
+              >
+                <FontAwesomeIcon icon={faTimes} />
+              </button>
+          )}
 
-        {isSearching && (
-          <div className="search-spinner">
-            <div className="spinner-border spinner-border-sm" role="status">
-              <span className="visually-hidden">Loading...</span>
-            </div>
-          </div>
-        )}
-      </div>
-
-      {showResults && (
-        <div className="search-dropdown">
-          {searchResults.length > 0 ? (
-            <>
-              <div className="search-results">
-                {searchResults.map((movie) => (
-                  <div
-                    key={movie.id}
-                    className="search-result-item"
-                    onClick={() => handleMovieClick(movie)}
-                  >
-                    <div className="result-poster">
-                      {movie.posterUrl ? (
-                        <img
-                          src={movie.posterUrl}
-                          alt={movie.title}
-                          onError={(e) => {
-                            e.target.src =
-                              "https://via.placeholder.com/92x138/cccccc/666666?text=No+Image";
-                          }}
-                        />
-                      ) : (
-                        <div className="no-poster">
-                          <FontAwesomeIcon icon={faVideoSlash} />
-                        </div>
-                      )}
-                    </div>
-                    <div className="result-info">
-                      <h6 className="result-title">{movie.title}</h6>
-                      <p className="result-year">
-                        {movie.releaseDate
-                          ? new Date(movie.releaseDate).getFullYear()
-                          : "N/A"}
-                      </p>
-                      <div className="result-rating">
-                        ⭐{" "}
-                        {movie.voteAverage
-                          ? movie.voteAverage.toFixed(1)
-                          : "N/A"}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              {searchQuery && (
-                <div className="search-footer">
-                  <button
-                    className="view-all-button"
-                    onClick={handleViewAllResults}
-                  >
-                    View all results for "{searchQuery}"
-                  </button>
+          {isSearching && (
+              <div className="search-spinner">
+                <div className="spinner-border spinner-border-sm" role="status">
+                  <span className="visually-hidden">Loading...</span>
                 </div>
-              )}
-            </>
-          ) : (
-            searchQuery.length >= 2 &&
-            !isSearching && (
-              <div className="no-results">
-                <p>No movies found for "{searchQuery}"</p>
               </div>
-            )
           )}
         </div>
-      )}
-    </div>
+
+        {showResults && (
+            <div className="search-dropdown">
+              {searchResults.length > 0 ? (
+                  <>
+                    <div className="search-results">
+                      {searchResults.map((movie) => (
+                          <div
+                              key={movie.id}
+                              className="search-result-item"
+                              onClick={() => handleMovieClick(movie)}
+                          >
+                            <div className="result-poster">
+                              {movie.posterUrl ? (
+                                  <img
+                                      src={movie.posterUrl}
+                                      alt={movie.title}
+                                      onError={(e) => {
+                                        e.target.src =
+                                            "https://via.placeholder.com/92x138/cccccc/666666?text=No+Image";
+                                      }}
+                                  />
+                              ) : (
+                                  <div className="no-poster">
+                                    <FontAwesomeIcon icon={faVideoSlash} />
+                                  </div>
+                              )}
+                            </div>
+                            <div className="result-info">
+                              <h6 className="result-title">{movie.title}</h6>
+                              <p className="result-year">
+                                {movie.releaseDate
+                                    ? new Date(movie.releaseDate).getFullYear()
+                                    : "N/A"}
+                              </p>
+                              <div className="result-rating">
+                                ⭐{" "}
+                                {movie.voteAverage
+                                    ? movie.voteAverage.toFixed(1)
+                                    : "N/A"}
+                              </div>
+                            </div>
+                          </div>
+                      ))}
+                    </div>
+                    {searchQuery && (
+                        <div className="search-footer">
+                          <button
+                              className="view-all-button"
+                              onClick={handleViewAllResults}
+                          >
+                            View all results for "{searchQuery}"
+                          </button>
+                        </div>
+                    )}
+                  </>
+              ) : (
+                  searchQuery.length >= 2 &&
+                  !isSearching && (
+                      <div className="no-results">
+                        <p>No movies found for "{searchQuery}"</p>
+                      </div>
+                  )
+              )}
+            </div>
+        )}
+      </div>
   );
 };
 
