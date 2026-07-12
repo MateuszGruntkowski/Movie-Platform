@@ -7,8 +7,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -35,14 +33,4 @@ public class TmdbMovieSearchResult {
     private Integer voteCount;
 
     private Double popularity;
-    private Boolean adult;
-
-    @JsonProperty("genre_ids")
-    private List<Integer> genreIds;
-
-    @JsonProperty("original_language")
-    private String originalLanguage;
-
-    @JsonProperty("original_title")
-    private String originalTitle;
 }

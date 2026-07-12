@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -51,10 +50,7 @@ public class TmdbServiceImpl implements TmdbService {
             HttpEntity<String> entity = new HttpEntity<>(headers);
 
             ResponseEntity<TmdbMovieDetailsResponse> response = restTemplate.exchange(
-                    url,
-                    HttpMethod.GET,
-                    entity,
-                    TmdbMovieDetailsResponse.class
+                    url, HttpMethod.GET, entity, TmdbMovieDetailsResponse.class
             );
 
             return response.getBody();
@@ -63,14 +59,6 @@ public class TmdbServiceImpl implements TmdbService {
             log.error("Error fetching movie details for ID: {}", movieId, e);
             throw new ExternalApiException("Failed to fetch movie details from TMDB", e);
         }
-    }
-
-    @Override
-    public String getImageUrl(String imagePath, String size) {
-        if (imagePath == null || imagePath.trim().isEmpty()) {
-            return null;
-        }
-        return tmdbImageBaseUrl + "/" + (size != null ? size : "w500") + imagePath;
     }
 
     @Override
@@ -85,10 +73,7 @@ public class TmdbServiceImpl implements TmdbService {
             HttpEntity<String> entity = new HttpEntity<>(headers);
 
             ResponseEntity<TmdbVideosWrapperResponse> response = restTemplate.exchange(
-                    url,
-                    HttpMethod.GET,
-                    entity,
-                    TmdbVideosWrapperResponse.class
+                    url, HttpMethod.GET, entity, TmdbVideosWrapperResponse.class
             );
 
             return response.getBody() != null ? response.getBody().getResults() : Collections.emptyList();
@@ -104,14 +89,12 @@ public class TmdbServiceImpl implements TmdbService {
         try {
             List<TmdbVideoResponse> videos = getMovieVideos(movieId);
 
-            // Szukaj oficjalnego trailera na YouTube
             Optional<TmdbVideoResponse> trailer = videos.stream()
                     .filter(video -> "Trailer".equals(video.getType())
                             && "YouTube".equals(video.getSite())
                             && Boolean.TRUE.equals(video.getOfficial()))
                     .findFirst();
 
-            // Jeśli nie ma oficjalnego, szukaj dowolnego trailera na YouTube
             if (trailer.isEmpty()) {
                 trailer = videos.stream()
                         .filter(video -> "Trailer".equals(video.getType())
@@ -134,15 +117,12 @@ public class TmdbServiceImpl implements TmdbService {
         try {
             List<String> backdrops = new ArrayList<>();
 
-            // Pobierz szczegóły filmu
             TmdbMovieDetailsResponse movieDetails = getMovieDetails(movieId);
 
-            // Dodaj główny backdrop filmu
             if (movieDetails.getBackdropPath() != null) {
-                backdrops.add(getImageUrl(movieDetails.getBackdropPath(), "original"));
+                backdrops.add(movieDetails.getBackdropPath());
             }
 
-            // Sprawdź czy film należy do kolekcji
             if (movieDetails.getBelongsToCollection() != null
                     && movieDetails.getBelongsToCollection().getId() != null) {
 
@@ -150,9 +130,7 @@ public class TmdbServiceImpl implements TmdbService {
                         movieDetails.getBelongsToCollection().getId()
                 );
 
-                // Dodaj backdrops z kolekcji (filtruj duplikaty)
                 collectionBackdrops.stream()
-                        .map(backdrop -> getImageUrl(backdrop, "original"))
                         .filter(backdrop -> !backdrops.contains(backdrop))
                         .forEach(backdrops::add);
             }
@@ -179,10 +157,7 @@ public class TmdbServiceImpl implements TmdbService {
             HttpEntity<String> entity = new HttpEntity<>(headers);
 
             ResponseEntity<TmdbCollectionImagesResponse> response = restTemplate.exchange(
-                    url,
-                    HttpMethod.GET,
-                    entity,
-                    TmdbCollectionImagesResponse.class
+                    url, HttpMethod.GET, entity, TmdbCollectionImagesResponse.class
             );
 
             return response.getBody() != null && response.getBody().getBackdrops() != null
@@ -210,10 +185,7 @@ public class TmdbServiceImpl implements TmdbService {
             HttpEntity<String> entity = new HttpEntity<>(headers);
 
             ResponseEntity<TmdbSearchResponse> response = restTemplate.exchange(
-                    url,
-                    HttpMethod.GET,
-                    entity,
-                    TmdbSearchResponse.class
+                    url, HttpMethod.GET, entity, TmdbSearchResponse.class
             );
 
             return response.getBody() != null && response.getBody().getResults() != null
@@ -229,7 +201,7 @@ public class TmdbServiceImpl implements TmdbService {
     }
 
     @Override
-    public TmdbSearchResponse searchResult(String query, int page){
+    public TmdbSearchResponse searchResult(String query, int page) {
         try {
             String encodedQuery = URLEncoder.encode(query, StandardCharsets.UTF_8);
             String url = tmdbBaseUrl + "/search/movie?query=" + encodedQuery + "&language=en-US&page=" + page;
@@ -241,20 +213,18 @@ public class TmdbServiceImpl implements TmdbService {
             HttpEntity<String> entity = new HttpEntity<>(headers);
 
             ResponseEntity<TmdbSearchResponse> response = restTemplate.exchange(
-                    url,
-                    HttpMethod.GET,
-                    entity,
-                    TmdbSearchResponse.class
+                    url, HttpMethod.GET, entity, TmdbSearchResponse.class
             );
             return response.getBody() != null && response.getBody().getResults() != null
                     ? response.getBody()
                     : null;
-        }catch (Exception e){
+        } catch (Exception e) {
             log.error("Error getting search results with query: {}", query, e);
             return null;
         }
     }
 
+    @Override
     public Movie createMovieFromTmdbData(Long movieId) {
         TmdbMovieDetailsResponse tmdbMovie = getMovieDetails(movieId);
 
@@ -271,20 +241,17 @@ public class TmdbServiceImpl implements TmdbService {
         movie.setPopularity(tmdbMovie.getPopularity());
         movie.setRuntime(tmdbMovie.getRuntime());
 
-        // Pobierz trailer URL
         String trailerUrl = getTrailerUrl(movieId);
         movie.setTrailerUrl(trailerUrl);
 
-        // Pobierz backdrops (ograniczone do 10)
         List<String> backdrops = getMovieBackdrops(movieId, 10);
         movie.setBackdrops(backdrops);
 
-        for (TmdbGenreResponse g : tmdbMovie.getGenres()){
-            if(!movie.getGenres().contains(g.getName())) {
+        for (TmdbGenreResponse g : tmdbMovie.getGenres()) {
+            if (!movie.getGenres().contains(g.getName())) {
                 movie.getGenres().add(g.getName());
             }
         }
         return movie;
     }
-
 }

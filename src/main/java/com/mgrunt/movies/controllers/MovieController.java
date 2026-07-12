@@ -45,43 +45,6 @@ public class MovieController {
         }
     }
 
-    @GetMapping("/{movieId}/videos")
-    public ResponseEntity<List<TmdbVideoResponse>> getMovieVideos(@PathVariable Long movieId) {
-        try {
-            List<TmdbVideoResponse> videos = tmdbService.getMovieVideos(movieId);
-            return ResponseEntity.ok(videos);
-        } catch (Exception e) {
-            log.error("Error fetching movie videos for ID: {}", movieId, e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-    }
-
-    @GetMapping("/{movieId}/trailer")
-    public ResponseEntity<TrailerResponse> getMovieTrailer(@PathVariable Long movieId) {
-        try {
-            String trailerUrl = tmdbService.getTrailerUrl(movieId);
-            TrailerResponse response = new TrailerResponse(trailerUrl);
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            log.error("Error fetching movie trailer for ID: {}", movieId, e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-    }
-
-    @GetMapping("/{movieId}/backdrops")
-    public ResponseEntity<BackdropsResponse> getMovieBackdrops(
-            @PathVariable Long movieId,
-            @RequestParam(defaultValue = "10") int limit) {
-        try {
-            List<String> backdrops = tmdbService.getMovieBackdrops(movieId, limit);
-            BackdropsResponse response = new BackdropsResponse(backdrops);
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            log.error("Error fetching movie backdrops for ID: {}", movieId, e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-    }
-
     @GetMapping("/search")
     public ResponseEntity<List<MovieSearchResponse>> searchMovies(
             @RequestParam String query,
