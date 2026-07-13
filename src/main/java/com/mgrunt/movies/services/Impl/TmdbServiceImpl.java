@@ -164,7 +164,9 @@ public class TmdbServiceImpl implements TmdbService {
         movie.setPopularity(tmdbMovie.getPopularity());
         movie.setRuntime(tmdbMovie.getRuntime());
         movie.setTrailerUrl(getTrailerUrl(tmdbId));
-        movie.setBackdrops(getMovieBackdrops(tmdbId, DEFAULT_BACKDROPS_LIMIT));
+
+        movie.getBackdrops().clear();
+        movie.getBackdrops().addAll(getMovieBackdrops(tmdbId, DEFAULT_BACKDROPS_LIMIT));
 
         List<String> genreNames = Optional.ofNullable(tmdbMovie.getGenres())
                 .orElse(Collections.emptyList())
