@@ -8,7 +8,8 @@ import java.util.List;
 
 public interface MovieService {
     List<MovieDetailsResponse> getRandomMovies();
-    MovieDetailsResponse getMovieDetails(Long movieId);
+    MovieDetailsResponse getMovieDetails(Long tmdbId);
     MovieSearchPageResponse searchMovies(String query, int page);
-    Movie findOrCreateMovie(Long tmdbId);
+    /** Returns the local Movie entity for the given tmdbId - retrieves from the TMDB and saves if it is missing or the data is stale (> 24h). */
+    Movie getOrRefreshMovie(Long tmdbId);
 }

@@ -2,24 +2,20 @@ package com.mgrunt.movies.services.Impl;
 
 import com.mgrunt.movies.domain.dtos.movie.MovieDetailsResponse;
 import com.mgrunt.movies.domain.dtos.movie.MovieSearchPageResponse;
-import com.mgrunt.movies.domain.dtos.tmdb.TmdbMovieDetailsResponse;
 import com.mgrunt.movies.domain.dtos.tmdb.TmdbSearchResponse;
 import com.mgrunt.movies.domain.entities.Movie;
-import com.mgrunt.movies.domain.entities.Review;
-import com.mgrunt.movies.exceptions.MovieDetailsException;
 import com.mgrunt.movies.exceptions.MovieSearchException;
 import com.mgrunt.movies.mappers.MovieDetailsMapper;
 import com.mgrunt.movies.repositories.MovieRepository;
-import com.mgrunt.movies.repositories.ReviewRepository;
 import com.mgrunt.movies.services.MovieService;
 import com.mgrunt.movies.services.TmdbService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -27,11 +23,10 @@ import java.util.Optional;
 public class MovieServiceImpl implements MovieService {
 
     private static final int RANDOM_MOVIES_COUNT = 8;
-    private static final int DEFAULT_BACKDROPS_LIMIT = 10;
+    private static final long CACHE_TTL_HOURS = 24;
 
     private final TmdbService tmdbService;
     private final MovieRepository movieRepository;
-    private final ReviewRepository reviewRepository;
     private final MovieDetailsMapper movieDetailsMapper;
 
     @Override
@@ -41,23 +36,10 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public MovieDetailsResponse getMovieDetails(Long movieId) {
-        try {
-            Optional<Movie> localMovie = movieRepository.findByTmdbId(movieId);
-
-            TmdbMovieDetailsResponse tmdbData = tmdbService.getMovieDetails(movieId);
-            String trailerUrl = tmdbService.getTrailerUrl(movieId);
-            List<String> backdrops = tmdbService.getMovieBackdrops(movieId, DEFAULT_BACKDROPS_LIMIT);
-
-            List<Review> reviews = localMovie
-                    .map(reviewRepository::getReviewsByMovie)
-                    .orElse(Collections.emptyList());
-
-            return movieDetailsMapper.toMovieDetailsResponse(tmdbData, trailerUrl, backdrops, reviews);
-        } catch (Exception e) {
-            log.error("Error fetching movie details for ID: {}", movieId, e);
-            throw new MovieDetailsException("Failed to fetch movie details for ID: " + movieId, e);
-        }
+    @Transactional(readOnly = true)
+    public MovieDetailsResponse getMovieDetails(Long tmdbId) {
+        Movie movie = getOrRefreshMovie(tmdbId);
+        return movieDetailsMapper.toMovieDetailsResponse(movie);
     }
 
     @Override
@@ -72,17 +54,20 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public Movie findOrCreateMovie(Long tmdbId) {
-        return movieRepository.findByTmdbId(tmdbId)
-                .orElseGet(() -> {
-                    try {
-                        Movie movieFromTmdb = new Movie();
-                        tmdbService.syncMovieData(movieFromTmdb, tmdbId);
-                        return movieRepository.save(movieFromTmdb);
-                    } catch (Exception e) {
-                        log.error("Failed to fetch movie from TMDB for tmdbId: {}", tmdbId, e);
-                        throw new RuntimeException("Failed to fetch movie from TMDB for tmdbId: " + tmdbId, e);
-                    }
-                });
+    @Transactional
+    public Movie getOrRefreshMovie(Long tmdbId) {
+        Movie movie = movieRepository.findByTmdbId(tmdbId)
+                .orElseGet(Movie::new);
+
+        if (isStale(movie)) {
+            tmdbService.syncMovieData(movie, tmdbId);
+            return movieRepository.save(movie);
+        }
+        return movie;
+    }
+
+    private boolean isStale(Movie movie) {
+        return movie.getUpdatedAt() == null
+                || movie.getUpdatedAt().isBefore(LocalDateTime.now().minusHours(CACHE_TTL_HOURS));
     }
 }
