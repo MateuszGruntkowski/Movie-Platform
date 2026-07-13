@@ -14,5 +14,6 @@ public interface TmdbService {
     List<String> getMovieBackdrops(Long movieId, int limit);
     List<String> getCollectionBackdrops(Long collectionId);
     TmdbSearchResponse searchResult(String query, int page);
-    Movie createMovieFromTmdbData(Long movieId);
+    /** Nadpisuje pola {@code movie} aktualnymi danymi z TMDB dla podanego tmdbId. Działa tak samo dla nowej jak i istniejącej encji. */
+    void syncMovieData(Movie movie, Long tmdbId);
 }

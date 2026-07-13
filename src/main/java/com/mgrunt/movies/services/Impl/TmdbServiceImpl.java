@@ -19,12 +19,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class TmdbServiceImpl implements TmdbService {
+
+    private static final int DEFAULT_BACKDROPS_LIMIT = 10;
 
     private final RestTemplate restTemplate;
 
@@ -111,7 +112,7 @@ public class TmdbServiceImpl implements TmdbService {
                         .forEach(backdrops::add);
             }
 
-            return backdrops.stream().limit(limit).collect(Collectors.toList());
+            return backdrops.stream().limit(limit).toList();
         } catch (Exception e) {
             log.error("Error fetching movie backdrops for ID: {}", movieId, e);
             return Collections.emptyList();
@@ -127,7 +128,7 @@ public class TmdbServiceImpl implements TmdbService {
             return response != null && response.getBackdrops() != null
                     ? response.getBackdrops().stream()
                     .map(TmdbImageResponse::getFilePath)
-                    .collect(Collectors.toList())
+                    .toList()
                     : Collections.emptyList();
         } catch (Exception e) {
             log.error("Error fetching collection backdrops for ID: {}", collectionId, e);
@@ -148,11 +149,10 @@ public class TmdbServiceImpl implements TmdbService {
     }
 
     @Override
-    public Movie createMovieFromTmdbData(Long movieId) {
-        TmdbMovieDetailsResponse tmdbMovie = getMovieDetails(movieId);
+    public void syncMovieData(Movie movie, Long tmdbId) {
+        TmdbMovieDetailsResponse tmdbMovie = getMovieDetails(tmdbId);
 
-        Movie movie = new Movie();
-        movie.setTmdbId(tmdbMovie.getId());
+        movie.setTmdbId(tmdbId);
         movie.setImdbId(tmdbMovie.getImdbId());
         movie.setTitle(tmdbMovie.getTitle());
         movie.setOverview(tmdbMovie.getOverview());
@@ -163,14 +163,17 @@ public class TmdbServiceImpl implements TmdbService {
         movie.setVoteCount(tmdbMovie.getVoteCount());
         movie.setPopularity(tmdbMovie.getPopularity());
         movie.setRuntime(tmdbMovie.getRuntime());
-        movie.setTrailerUrl(getTrailerUrl(movieId));
-        movie.setBackdrops(getMovieBackdrops(movieId, 10));
+        movie.setTrailerUrl(getTrailerUrl(tmdbId));
+        movie.setBackdrops(getMovieBackdrops(tmdbId, DEFAULT_BACKDROPS_LIMIT));
 
-        for (TmdbGenreResponse g : tmdbMovie.getGenres()) {
-            if (!movie.getGenres().contains(g.getName())) {
-                movie.getGenres().add(g.getName());
-            }
-        }
-        return movie;
+        List<String> genreNames = Optional.ofNullable(tmdbMovie.getGenres())
+                .orElse(Collections.emptyList())
+                .stream()
+                .map(TmdbGenreResponse::getName)
+                .distinct()
+                .toList();
+
+        movie.getGenres().clear();
+        movie.getGenres().addAll(genreNames);
     }
 }

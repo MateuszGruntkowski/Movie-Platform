@@ -76,7 +76,8 @@ public class MovieServiceImpl implements MovieService {
         return movieRepository.findByTmdbId(tmdbId)
                 .orElseGet(() -> {
                     try {
-                        Movie movieFromTmdb = tmdbService.createMovieFromTmdbData(tmdbId);
+                        Movie movieFromTmdb = new Movie();
+                        tmdbService.syncMovieData(movieFromTmdb, tmdbId);
                         return movieRepository.save(movieFromTmdb);
                     } catch (Exception e) {
                         log.error("Failed to fetch movie from TMDB for tmdbId: {}", tmdbId, e);
