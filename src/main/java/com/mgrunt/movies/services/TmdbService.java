@@ -8,7 +8,7 @@ import com.mgrunt.movies.domain.entities.Movie;
 import java.util.List;
 
 public interface TmdbService {
-    TmdbMovieDetailsResponse getMovieDetails(Long movieId);
+    TmdbMovieDetailsResponse fetchRawMovieDetails(Long movieId);
     List<TmdbVideoResponse> getMovieVideos(Long movieId);
     String getTrailerUrl(Long movieId);
     List<String> getMovieBackdrops(Long movieId, int limit);

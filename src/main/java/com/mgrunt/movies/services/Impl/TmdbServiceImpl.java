@@ -48,7 +48,7 @@ public class TmdbServiceImpl implements TmdbService {
     }
 
     @Override
-    public TmdbMovieDetailsResponse getMovieDetails(Long movieId) {
+    public TmdbMovieDetailsResponse fetchRawMovieDetails(Long movieId) {
         try {
             String url = tmdbBaseUrl + "/movie/" + movieId + "?language=en-US";
             return fetchFromTmdb(url, TmdbMovieDetailsResponse.class);
@@ -98,7 +98,7 @@ public class TmdbServiceImpl implements TmdbService {
     public List<String> getMovieBackdrops(Long movieId, int limit) {
         try {
             List<String> backdrops = new ArrayList<>();
-            TmdbMovieDetailsResponse movieDetails = getMovieDetails(movieId);
+            TmdbMovieDetailsResponse movieDetails = fetchRawMovieDetails(movieId);
 
             if (movieDetails.getBackdropPath() != null) {
                 backdrops.add(movieDetails.getBackdropPath());
@@ -150,7 +150,7 @@ public class TmdbServiceImpl implements TmdbService {
 
     @Override
     public void syncMovieData(Movie movie, Long tmdbId) {
-        TmdbMovieDetailsResponse tmdbMovie = getMovieDetails(tmdbId);
+        TmdbMovieDetailsResponse tmdbMovie = fetchRawMovieDetails(tmdbId);
 
         movie.setTmdbId(tmdbId);
         movie.setImdbId(tmdbMovie.getImdbId());
