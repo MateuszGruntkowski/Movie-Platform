@@ -38,7 +38,7 @@ public class MovieServiceImpl implements MovieService {
     @Override
     @Transactional(readOnly = true)
     public MovieDetailsResponse getMovieDetails(Long tmdbId) {
-        Movie movie = getOrRefreshMovie(tmdbId);
+        Movie movie = getMovie(tmdbId);
         return movieDetailsMapper.toMovieDetailsResponse(movie);
     }
 
@@ -55,7 +55,7 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     @Transactional
-    public Movie getOrRefreshMovie(Long tmdbId) {
+    public Movie getMovie(Long tmdbId) {
         Movie movie = movieRepository.findByTmdbId(tmdbId)
                 .orElseGet(Movie::new);
 

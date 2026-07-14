@@ -30,9 +30,6 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public List<ReviewDto> getReviewsForMovie(Long tmdbId) {
-//        Movie movie = movieRepository.findById(movieId)
-//                .orElseThrow(() -> new EntityNotFoundException("Movie not found"));
-
         List<Review> reviews = reviewRepository.findByMovieTmdbId(Long.valueOf(tmdbId));
 
         return reviews.stream()
@@ -54,7 +51,7 @@ public class ReviewServiceImpl implements ReviewService {
         User currentUser = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
-        Movie movie = movieService.getOrRefreshMovie(tmdbId);
+        Movie movie = movieService.getMovie(tmdbId);
 
         Review review = Review.builder()
                 .movie(movie)

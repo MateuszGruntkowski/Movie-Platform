@@ -24,29 +24,6 @@ import java.util.List;
 )
 public interface MovieDetailsMapper {
 
-    @Mapping(target = "tmdbId", source = "tmdbData.id")
-    @Mapping(target = "imdbId", source = "tmdbData.imdbId")
-    @Mapping(target = "title", source = "tmdbData.title")
-    @Mapping(target = "overview", source = "tmdbData.overview")
-    @Mapping(target = "releaseDate", source = "tmdbData.releaseDate")
-    @Mapping(target = "posterPath", source = "tmdbData.posterPath", qualifiedByName = "buildFullUrl")
-    @Mapping(target = "backdropPath", source = "tmdbData.backdropPath", qualifiedByName = "buildFullUrl")
-    @Mapping(target = "voteAverage", source = "tmdbData.voteAverage")
-    @Mapping(target = "voteCount", source = "tmdbData.voteCount")
-    @Mapping(target = "popularity", source = "tmdbData.popularity")
-    @Mapping(target = "runtime", source = "tmdbData.runtime")
-    @Mapping(target = "genres", source = "tmdbData.genres")
-    @Mapping(target = "belongsToCollection", source = "tmdbData.belongsToCollection")
-    @Mapping(target = "trailerUrl", source = "trailerUrl")
-    @Mapping(target = "backdrops", source = "backdrops", qualifiedByName = "buildFullUrl")
-    @Mapping(target = "reviews", source = "reviews")
-    MovieDetailsResponse toMovieDetailsResponse(
-            TmdbMovieDetailsResponse tmdbData,
-            String trailerUrl,
-            List<String> backdrops,
-            List<Review> reviews
-    );
-
     @Mapping(target = "backdrops", source = "backdrops", qualifiedByName = "buildFullUrl")
     @Mapping(target = "reviews", source = "reviews")
     @Mapping(target = "genres", source = "genres", qualifiedByName = "mapGenres")
