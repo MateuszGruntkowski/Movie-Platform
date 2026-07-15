@@ -1,6 +1,6 @@
 package com.mgrunt.movies.controllers;
 
-import com.mgrunt.movies.domain.dtos.UserDto;
+import com.mgrunt.movies.domain.dtos.user.UserDto;
 import com.mgrunt.movies.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

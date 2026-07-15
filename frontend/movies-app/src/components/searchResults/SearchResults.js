@@ -17,7 +17,6 @@ const SearchResults = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [totalResults, setTotalResults] = useState(0);
 
-  // Extract search query from URL parameters
   const searchParams = new URLSearchParams(location.search);
   const query = searchParams.get("q");
 
@@ -32,13 +31,11 @@ const SearchResults = () => {
     setError(null);
 
     try {
-      const data = await movieSearchService.searchMoviesDetailed(
-        searchQuery,
-        page
-      );
+      const data = await movieSearchService.searchMovies(searchQuery, page);
       setMovies(data.results);
-      setTotalPages(data.total_pages);
-      setTotalResults(data.total_results);
+      console.log("Search results:", data.results);
+      setTotalPages(data.totalPages);
+      setTotalResults(data.totalResults);
     } catch (error) {
       console.error("Error searching movies:", error);
       setError("Failed to search movies. Please try again.");
@@ -58,49 +55,49 @@ const SearchResults = () => {
 
   if (!query) {
     return (
-      <div className="sr-container">
-        <Alert variant="warning">
-          No search query provided. Please use the search bar to find movies.
-        </Alert>
-      </div>
+        <div className="sr-container">
+          <Alert variant="warning">
+            No search query provided. Please use the search bar to find movies.
+          </Alert>
+        </div>
     );
   }
 
   if (loading) {
     return (
-      <div className="sr-container">
-        <div className="sr-loading">
-          <Spinner animation="border" variant="warning" />
-          <p>Searching for movies...</p>
+        <div className="sr-container">
+          <div className="sr-loading">
+            <Spinner animation="border" variant="warning" />
+            <p>Searching for movies...</p>
+          </div>
         </div>
-      </div>
     );
   }
 
   if (error) {
     return (
-      <div className="sr-container">
-        <Alert variant="danger">{error}</Alert>
-      </div>
+        <div className="sr-container">
+          <Alert variant="danger">{error}</Alert>
+        </div>
     );
   }
 
   return (
-    <div className="sr-container">
-      <div className="sr-content">
-        <SearchResultsHeader query={query} resultsCount={movies.length} />
-        <SearchResultsGrid
-          movies={movies}
-          onMovieClick={handleMovieClick}
-          query={query}
-        />
-        <SearchResultsPagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={handlePageChange}
-        />
+      <div className="sr-container">
+        <div className="sr-content">
+          <SearchResultsHeader query={query} resultsCount={movies.length} />
+          <SearchResultsGrid
+              movies={movies}
+              onMovieClick={handleMovieClick}
+              query={query}
+          />
+          <SearchResultsPagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+          />
+        </div>
       </div>
-    </div>
   );
 };
 

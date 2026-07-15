@@ -1,5 +1,6 @@
-package com.mgrunt.movies.domain.dtos;
+package com.mgrunt.movies.domain.dtos.user;
 
+import com.mgrunt.movies.domain.dtos.movie.MovieDetailsResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package com.mgrunt.movies.domain.dtos;
+package com.mgrunt.movies.domain.dtos.tmdb;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -12,15 +12,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class TmdbVideoResponse {
-    private String id;
-    private String key;
-    private String name;
-    private String site;
-    private String type;
-    private Boolean official;
-    private String size;
+public class TmdbCollectionResponse {
 
-    @JsonProperty("published_at")
-    private String publishedAt;
+    private Long id;
+    private String name;
+
+    @JsonProperty("poster_path")
+    private String posterPath;
+
+    @JsonProperty("backdrop_path")
+    private String backdropPath;
 }

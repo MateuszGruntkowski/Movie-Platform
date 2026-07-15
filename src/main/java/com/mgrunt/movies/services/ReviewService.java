@@ -1,8 +1,9 @@
 package com.mgrunt.movies.services;
 
-import com.mgrunt.movies.domain.dtos.ReviewDto;
-import com.mgrunt.movies.domain.dtos.ReviewRequest;
+import com.mgrunt.movies.domain.dtos.review.ReviewDto;
+import com.mgrunt.movies.domain.dtos.review.ReviewRequest;
 import org.springframework.security.core.Authentication;
+
 import java.util.List;
 
 public interface ReviewService {

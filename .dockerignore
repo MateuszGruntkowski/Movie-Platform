@@ -1,6 +1,6 @@
 .git
 .idea
-.env
+src/main/resources/.env
 target
 frontend/movies-app/node_modules
 frontend/movies-app/dist

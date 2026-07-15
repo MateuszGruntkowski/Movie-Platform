@@ -1,104 +1,36 @@
 package com.mgrunt.movies.controllers;
 
-import com.mgrunt.movies.domain.dtos.*;
-import com.mgrunt.movies.exceptions.MovieDetailsException;
-import com.mgrunt.movies.exceptions.MovieSearchException;
+import com.mgrunt.movies.domain.dtos.movie.MovieDetailsResponse;
+import com.mgrunt.movies.domain.dtos.movie.MovieSearchPageResponse;
 import com.mgrunt.movies.services.MovieService;
-import com.mgrunt.movies.services.TmdbService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/movies")
-@Slf4j
 public class MovieController {
 
     private final MovieService movieService;
-    private final TmdbService tmdbService;
 
     @GetMapping
-    public ResponseEntity<List<MovieDetailsResponse>> ListRandomMovies(){
+    public ResponseEntity<List<MovieDetailsResponse>> listRandomMovies() {
         return new ResponseEntity<>(movieService.getRandomMovies(), HttpStatus.OK);
     }
 
-    // TMDB METHODS
     @GetMapping("/{movieId}/details")
     public ResponseEntity<MovieDetailsResponse> getMovieDetails(@PathVariable Long movieId) {
-        try {
-            MovieDetailsResponse response = movieService.getMovieDetails(movieId);
-            return ResponseEntity.ok(response);
-        } catch (MovieDetailsException e) {
-            log.error("Error in controller getting movie details for ID: {}", movieId, e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-    }
-
-    @GetMapping("/{movieId}/videos")
-    public ResponseEntity<List<TmdbVideoResponse>> getMovieVideos(@PathVariable Long movieId) {
-        try {
-            List<TmdbVideoResponse> videos = tmdbService.getMovieVideos(movieId);
-            return ResponseEntity.ok(videos);
-        } catch (Exception e) {
-            log.error("Error fetching movie videos for ID: {}", movieId, e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-    }
-
-    @GetMapping("/{movieId}/trailer")
-    public ResponseEntity<TrailerResponse> getMovieTrailer(@PathVariable Long movieId) {
-        try {
-            String trailerUrl = tmdbService.getTrailerUrl(movieId);
-            TrailerResponse response = new TrailerResponse(trailerUrl);
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            log.error("Error fetching movie trailer for ID: {}", movieId, e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-    }
-
-    @GetMapping("/{movieId}/backdrops")
-    public ResponseEntity<BackdropsResponse> getMovieBackdrops(
-            @PathVariable Long movieId,
-            @RequestParam(defaultValue = "10") int limit) {
-        try {
-            List<String> backdrops = tmdbService.getMovieBackdrops(movieId, limit);
-            BackdropsResponse response = new BackdropsResponse(backdrops);
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            log.error("Error fetching movie backdrops for ID: {}", movieId, e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+        return ResponseEntity.ok(movieService.getMovieDetails(movieId));
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<MovieSearchResponse>> searchMovies(
-            @RequestParam String query,
-            @RequestParam(defaultValue = "8") int limit) {
-        try {
-            List<MovieSearchResponse> response = movieService.searchMovies(query, limit);
-            return ResponseEntity.ok(response);
-        } catch (MovieSearchException e) {
-            log.error("Error in controller searching movies with query: {}", query, e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-    }
-
-    @GetMapping("/search-results")
-    public ResponseEntity<TmdbSearchResponse> getSearchResults(
+    public ResponseEntity<MovieSearchPageResponse> searchMovies(
             @RequestParam String query,
             @RequestParam(defaultValue = "1") int page) {
-        try {
-            TmdbSearchResponse response = movieService.getSearchResults(query, page);
-            return ResponseEntity.ok(response);
-        } catch (MovieSearchException e) {
-            log.error("Error in controller searching movies with query: {}", query, e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+        return ResponseEntity.ok(movieService.searchMovies(query, page));
     }
-
 }

@@ -1,4 +1,4 @@
-package com.mgrunt.movies.domain.dtos;
+package com.mgrunt.movies.domain.dtos.movie;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -9,11 +9,16 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * The data structure of the seed file (src/main/resources/data/movies.json),
+ * used exclusively by MovieDataLoader to pre-populate the database.
+ * Not to be confused with API response DTOs (MovieDetailsResponse, MovieSearchResponse).
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class MovieDataDto {
+public class MovieSeedDto {
     private String imdbId;
     private Long tmdbId;
     private String title;

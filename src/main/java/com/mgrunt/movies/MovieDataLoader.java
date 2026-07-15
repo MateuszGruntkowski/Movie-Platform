@@ -2,7 +2,7 @@ package com.mgrunt.movies;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mgrunt.movies.domain.dtos.MovieDataDto;
+import com.mgrunt.movies.domain.dtos.movie.MovieSeedDto;
 import com.mgrunt.movies.domain.entities.Movie;
 import com.mgrunt.movies.repositories.MovieRepository;
 import jakarta.annotation.PostConstruct;
@@ -37,18 +37,18 @@ public class MovieDataLoader {
                 throw new RuntimeException("movies.json not found in resources/data/");
             }
 
-            List<MovieDataDto> movieDataList = objectMapper.readValue(
+            List<MovieSeedDto> movieSeedList = objectMapper.readValue(
                     inputStream,
-                    new TypeReference<List<MovieDataDto>>() {}
+                    new TypeReference<List<MovieSeedDto>>() {}
             );
 
-            for (MovieDataDto movieData : movieDataList) {
-                Movie movie = convertToEntity(movieData);
+            for (MovieSeedDto seed : movieSeedList) {
+                Movie movie = convertToEntity(seed);
                 movieRepository.save(movie);
                 log.debug("Saved movie: {}", movie.getTitle());
             }
 
-            log.info("Successfully loaded {} movies into database", movieDataList.size());
+            log.info("Successfully loaded {} movies into database", movieSeedList.size());
 
         } catch (Exception e) {
             log.error("Error loading movie data", e);
@@ -56,16 +56,16 @@ public class MovieDataLoader {
         }
     }
 
-    private Movie convertToEntity(MovieDataDto dto) {
+    private Movie convertToEntity(MovieSeedDto seed) {
         Movie movie = new Movie();
-        movie.setImdbId(dto.getImdbId());
-        movie.setTmdbId(dto.getTmdbId());
-        movie.setTitle(dto.getTitle());
-        movie.setReleaseDate(dto.getReleaseDate());
-        movie.setTrailerUrl(dto.getTrailerUrl());
-        movie.setPosterPath(dto.getPoster());
-        movie.setGenres(new ArrayList<>(dto.getGenres()));
-        movie.setBackdrops(new ArrayList<>(dto.getBackdrops()));
+        movie.setImdbId(seed.getImdbId());
+        movie.setTmdbId(seed.getTmdbId());
+        movie.setTitle(seed.getTitle());
+        movie.setReleaseDate(seed.getReleaseDate());
+        movie.setTrailerUrl(seed.getTrailerUrl());
+        movie.setPosterPath(seed.getPoster());
+        movie.setGenres(new ArrayList<>(seed.getGenres()));
+        movie.setBackdrops(new ArrayList<>(seed.getBackdrops()));
 
         return movie;
     }
