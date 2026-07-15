@@ -6,6 +6,7 @@ import com.mgrunt.movies.domain.dtos.tmdb.TmdbSearchResponse;
 import com.mgrunt.movies.domain.entities.Movie;
 import com.mgrunt.movies.exceptions.MovieSearchException;
 import com.mgrunt.movies.mappers.MovieDetailsMapper;
+import com.mgrunt.movies.mappers.MovieSearchMapper;
 import com.mgrunt.movies.repositories.MovieRepository;
 import com.mgrunt.movies.services.MovieService;
 import com.mgrunt.movies.services.TmdbService;
@@ -28,6 +29,7 @@ public class MovieServiceImpl implements MovieService {
     private final TmdbService tmdbService;
     private final MovieRepository movieRepository;
     private final MovieDetailsMapper movieDetailsMapper;
+    private final MovieSearchMapper movieSearchMapper;
 
     @Override
     public List<MovieDetailsResponse> getRandomMovies() {
@@ -46,7 +48,7 @@ public class MovieServiceImpl implements MovieService {
     public MovieSearchPageResponse searchMovies(String query, int page) {
         try {
             TmdbSearchResponse tmdbResponse = tmdbService.searchResult(query, page);
-            return movieDetailsMapper.toMovieSearchPageResponse(tmdbResponse);
+            return movieSearchMapper.toMovieSearchPageResponse(tmdbResponse);
         } catch (Exception e) {
             log.error("Error searching movies with query: {}", query, e);
             throw new MovieSearchException("Failed to search movies with query: " + query, e);

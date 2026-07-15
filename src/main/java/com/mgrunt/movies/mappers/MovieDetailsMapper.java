@@ -7,6 +7,7 @@ import com.mgrunt.movies.domain.dtos.tmdb.TmdbGenreResponse;
 import com.mgrunt.movies.domain.dtos.tmdb.TmdbMovieSearchResult;
 import com.mgrunt.movies.domain.dtos.tmdb.TmdbSearchResponse;
 import com.mgrunt.movies.domain.entities.Movie;
+import com.mgrunt.movies.mappers.support.TmdbUrlBuilder;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -18,7 +19,7 @@ import java.util.List;
 @Mapper(
         componentModel = "spring",
         unmappedTargetPolicy = ReportingPolicy.IGNORE,
-        uses = {ReviewMapper.class}
+        uses = {ReviewMapper.class, TmdbUrlBuilder.class}
 )
 public interface MovieDetailsMapper {
 
@@ -28,28 +29,6 @@ public interface MovieDetailsMapper {
     @Mapping(target = "posterPath", source = "posterPath", qualifiedByName = "buildFullPosterUrl")
     @Mapping(target = "backdropPath", source = "backdropPath", qualifiedByName = "buildFullBackdropUrl")
     MovieDetailsResponse toMovieDetailsResponse(Movie movie);
-
-    @Mapping(target = "posterPath", source = "posterPath", qualifiedByName = "buildFullPosterUrl")
-    @Mapping(target = "backdropPath", source = "backdropPath", qualifiedByName = "buildFullBackdropUrl")
-    MovieSearchResponse toMovieSearchResponse(TmdbMovieSearchResult searchResult);
-
-    MovieSearchPageResponse toMovieSearchPageResponse(TmdbSearchResponse tmdbSearchResponse);
-
-    @Named("buildFullPosterUrl")
-    default String buildFullPosterUrl(String path) {
-        if (path == null || path.trim().isEmpty()) {
-            return null;
-        }
-        return "https://image.tmdb.org/t/p/w500" + path;
-    }
-
-    @Named("buildFullBackdropUrl")
-    default String buildFullBackdropUrl(String path) {
-        if (path == null || path.trim().isEmpty()) {
-            return null;
-        }
-        return "https://image.tmdb.org/t/p/original" + path;
-    }
 
     @Named("mapGenres")
     default List<TmdbGenreResponse> mapGenres(List<String> genres) {
