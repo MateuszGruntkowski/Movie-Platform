@@ -10,9 +10,9 @@ const SearchMovieCard = ({ movie, onMovieClick }) => {
     return (
         <div className="sr-movie-card" onClick={handleClick}>
             <div className="sr-movie-poster">
-                {movie.posterUrl ? (
+                {movie.posterPath ? (
                     <img
-                        src={movie.posterUrl}
+                        src={movie.posterPath}
                         alt={movie.title}
                         onError={(e) => {
                             e.target.src =

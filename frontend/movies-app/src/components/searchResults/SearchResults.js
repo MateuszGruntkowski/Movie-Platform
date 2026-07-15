@@ -33,6 +33,7 @@ const SearchResults = () => {
     try {
       const data = await movieSearchService.searchMovies(searchQuery, page);
       setMovies(data.results);
+      console.log("Search results:", data.results);
       setTotalPages(data.totalPages);
       setTotalResults(data.totalResults);
     } catch (error) {

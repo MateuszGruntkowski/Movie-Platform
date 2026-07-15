@@ -19,6 +19,6 @@ public class MovieSearchResponse {
     private Double voteAverage;
     private Integer voteCount;
     private Double popularity;
-    private String posterUrl;
-    private String backdropUrl;
+    private String posterPath;
+    private String backdropPath;
 }

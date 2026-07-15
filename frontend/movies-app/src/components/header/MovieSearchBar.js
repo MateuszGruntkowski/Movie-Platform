@@ -44,7 +44,8 @@ const MovieSearchBar = () => {
     setIsSearching(true);
     try {
       const data = await movieSearchService.searchMovies(query);
-
+      console.log("Search results:", data.results);
+      console.log("Data", data);
       const moviesArray = data && data.results ? data.results : [];
 
       setSearchResults(moviesArray);
@@ -124,9 +125,9 @@ const MovieSearchBar = () => {
                               onClick={() => handleMovieClick(movie)}
                           >
                             <div className="result-poster">
-                              {movie.posterUrl ? (
+                              {movie.posterPath ? (
                                   <img
-                                      src={movie.posterUrl}
+                                      src={movie.posterPath}
                                       alt={movie.title}
                                       onError={(e) => {
                                         e.target.src =

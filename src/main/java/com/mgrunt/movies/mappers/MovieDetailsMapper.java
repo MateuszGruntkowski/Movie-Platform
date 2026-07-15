@@ -29,14 +29,10 @@ public interface MovieDetailsMapper {
     @Mapping(target = "backdropPath", source = "backdropPath", qualifiedByName = "buildFullBackdropUrl")
     MovieDetailsResponse toMovieDetailsResponse(Movie movie);
 
-    @Mapping(target = "posterUrl", source = "posterPath", qualifiedByName = "buildFullPosterUrl")
-    @Mapping(target = "backdropUrl", source = "backdropPath", qualifiedByName = "buildFullBackdropUrl")
+    @Mapping(target = "posterPath", source = "posterPath", qualifiedByName = "buildFullPosterUrl")
+    @Mapping(target = "backdropPath", source = "backdropPath", qualifiedByName = "buildFullBackdropUrl")
     MovieSearchResponse toMovieSearchResponse(TmdbMovieSearchResult searchResult);
 
-    @Mapping(target = "results", source = "results")
-    @Mapping(target = "page", source = "page")
-    @Mapping(target = "totalPages", source = "totalPages")
-    @Mapping(target = "totalResults", source = "totalResults")
     MovieSearchPageResponse toMovieSearchPageResponse(TmdbSearchResponse tmdbSearchResponse);
 
     @Named("buildFullPosterUrl")
