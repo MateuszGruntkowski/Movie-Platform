@@ -15,6 +15,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -30,7 +31,7 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public List<ReviewDto> getReviewsForMovie(Long tmdbId) {
-        List<Review> reviews = reviewRepository.findByMovieTmdbId(Long.valueOf(tmdbId));
+        List<Review> reviews = reviewRepository.findByMovieTmdbId(tmdbId);
 
         return reviews.stream()
                 .map(reviewMapper::toDto)
@@ -38,6 +39,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
+    @Transactional
     public ReviewDto createReview(Long tmdbId, ReviewRequest reviewRequest, Authentication authentication) {
         String reviewBody = reviewRequest.getReviewBody();
 
