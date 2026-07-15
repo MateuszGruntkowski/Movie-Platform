@@ -1,21 +1,19 @@
 package com.mgrunt.movies.services;
 
-import com.mgrunt.movies.domain.dtos.TmdbMovieDetailsResponse;
-import com.mgrunt.movies.domain.dtos.TmdbMovieSearchResult;
-import com.mgrunt.movies.domain.dtos.TmdbSearchResponse;
-import com.mgrunt.movies.domain.dtos.TmdbVideoResponse;
+import com.mgrunt.movies.domain.dtos.tmdb.TmdbMovieDetailsResponse;
+import com.mgrunt.movies.domain.dtos.tmdb.TmdbSearchResponse;
+import com.mgrunt.movies.domain.dtos.tmdb.TmdbVideoResponse;
 import com.mgrunt.movies.domain.entities.Movie;
 
 import java.util.List;
 
 public interface TmdbService {
-    TmdbMovieDetailsResponse getMovieDetails(Long movieId);
-    String getImageUrl(String imagePath, String size);
+    TmdbMovieDetailsResponse fetchRawMovieDetails(Long movieId);
     List<TmdbVideoResponse> getMovieVideos(Long movieId);
     String getTrailerUrl(Long movieId);
     List<String> getMovieBackdrops(Long movieId, int limit);
     List<String> getCollectionBackdrops(Long collectionId);
-    List<TmdbMovieSearchResult> searchMovies(String query, int limit);
-    Movie createMovieFromTmdbData(Long movieId);
     TmdbSearchResponse searchResult(String query, int page);
+    /** Nadpisuje pola {@code movie} aktualnymi danymi z TMDB dla podanego tmdbId. Działa tak samo dla nowej jak i istniejącej encji. */
+    void syncMovieData(Movie movie, Long tmdbId);
 }

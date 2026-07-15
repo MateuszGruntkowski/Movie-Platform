@@ -1,7 +1,7 @@
 package com.mgrunt.movies.controllers;
 
-import com.mgrunt.movies.domain.dtos.ReviewDto;
-import com.mgrunt.movies.domain.dtos.ReviewRequest;
+import com.mgrunt.movies.domain.dtos.review.ReviewDto;
+import com.mgrunt.movies.domain.dtos.review.ReviewRequest;
 import com.mgrunt.movies.services.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -10,8 +10,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor

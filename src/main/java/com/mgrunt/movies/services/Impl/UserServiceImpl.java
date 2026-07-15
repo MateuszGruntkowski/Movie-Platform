@@ -1,14 +1,8 @@
 package com.mgrunt.movies.services.Impl;
 
-import com.mgrunt.movies.domain.dtos.AddMovieRequest;
-import com.mgrunt.movies.domain.dtos.MovieDto;
-import com.mgrunt.movies.domain.dtos.UserDto;
-import com.mgrunt.movies.domain.dtos.UserWatchListResponse;
-import com.mgrunt.movies.domain.entities.Movie;
+import com.mgrunt.movies.domain.dtos.user.UserDto;
 import com.mgrunt.movies.domain.entities.User;
-import com.mgrunt.movies.mappers.MovieMapper;
 import com.mgrunt.movies.mappers.UserMapper;
-import com.mgrunt.movies.repositories.MovieRepository;
 import com.mgrunt.movies.repositories.UserRepository;
 import com.mgrunt.movies.services.UserService;
 import jakarta.persistence.EntityNotFoundException;

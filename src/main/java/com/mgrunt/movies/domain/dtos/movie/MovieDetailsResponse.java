@@ -1,7 +1,9 @@
-package com.mgrunt.movies.domain.dtos;
+package com.mgrunt.movies.domain.dtos.movie;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.mgrunt.movies.domain.dtos.review.ReviewDto;
+import com.mgrunt.movies.domain.dtos.tmdb.TmdbCollectionResponse;
+import com.mgrunt.movies.domain.dtos.tmdb.TmdbGenreResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,35 +17,21 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class TmdbMovieDetailsResponse {
-    private Long id;
-
-    @JsonProperty("imdb_id")
+public class MovieDetailsResponse {
+    private Long tmdbId;
     private String imdbId;
-
     private String title;
     private String overview;
-
-    @JsonProperty("release_date")
     private LocalDate releaseDate;
-
-    @JsonProperty("poster_path")
     private String posterPath;
-
-    @JsonProperty("backdrop_path")
     private String backdropPath;
-
-    @JsonProperty("vote_average")
     private Double voteAverage;
-
-    @JsonProperty("vote_count")
     private Integer voteCount;
-
     private Double popularity;
     private Integer runtime;
-
     private List<TmdbGenreResponse> genres;
-
-    @JsonProperty("belongs_to_collection")
     private TmdbCollectionResponse belongsToCollection;
+    private String trailerUrl;
+    private List<String> backdrops;
+    private List<ReviewDto> reviews;
 }

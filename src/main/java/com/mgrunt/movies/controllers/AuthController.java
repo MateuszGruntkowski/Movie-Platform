@@ -1,9 +1,9 @@
 package com.mgrunt.movies.controllers;
 
 import com.mgrunt.movies.Security.JwtUtil;
-import com.mgrunt.movies.domain.dtos.AuthResponse;
-import com.mgrunt.movies.domain.dtos.LoginRequest;
-import com.mgrunt.movies.domain.dtos.RegisterRequest;
+import com.mgrunt.movies.domain.dtos.auth.AuthResponse;
+import com.mgrunt.movies.domain.dtos.auth.LoginRequest;
+import com.mgrunt.movies.domain.dtos.auth.RegisterRequest;
 import com.mgrunt.movies.services.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

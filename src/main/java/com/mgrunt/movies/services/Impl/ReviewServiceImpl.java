@@ -1,8 +1,8 @@
 package com.mgrunt.movies.services.Impl;
 
 import com.mgrunt.movies.Security.CustomUserDetails;
-import com.mgrunt.movies.domain.dtos.ReviewDto;
-import com.mgrunt.movies.domain.dtos.ReviewRequest;
+import com.mgrunt.movies.domain.dtos.review.ReviewDto;
+import com.mgrunt.movies.domain.dtos.review.ReviewRequest;
 import com.mgrunt.movies.domain.entities.Movie;
 import com.mgrunt.movies.domain.entities.Review;
 import com.mgrunt.movies.domain.entities.User;
@@ -15,6 +15,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -30,10 +31,7 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public List<ReviewDto> getReviewsForMovie(Long tmdbId) {
-//        Movie movie = movieRepository.findById(movieId)
-//                .orElseThrow(() -> new EntityNotFoundException("Movie not found"));
-
-        List<Review> reviews = reviewRepository.findByMovieTmdbId(Long.valueOf(tmdbId));
+        List<Review> reviews = reviewRepository.findByMovieTmdbId(tmdbId);
 
         return reviews.stream()
                 .map(reviewMapper::toDto)
@@ -41,6 +39,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
+    @Transactional
     public ReviewDto createReview(Long tmdbId, ReviewRequest reviewRequest, Authentication authentication) {
         String reviewBody = reviewRequest.getReviewBody();
 
@@ -54,7 +53,7 @@ public class ReviewServiceImpl implements ReviewService {
         User currentUser = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
-        Movie movie = movieService.findOrCreateMovie(tmdbId);
+        Movie movie = movieService.getMovie(tmdbId);
 
         Review review = Review.builder()
                 .movie(movie)

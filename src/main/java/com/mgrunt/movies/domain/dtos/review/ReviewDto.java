@@ -1,13 +1,10 @@
-package com.mgrunt.movies.domain.dtos;
+package com.mgrunt.movies.domain.dtos.review;
 
-import com.mgrunt.movies.domain.entities.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 @Data

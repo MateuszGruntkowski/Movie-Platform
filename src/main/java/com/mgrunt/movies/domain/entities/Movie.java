@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Entity
@@ -55,6 +56,9 @@ public class Movie {
     @Column
     private Integer runtime;
 
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
     @ElementCollection
     @CollectionTable(name = "movie_genres", joinColumns = @JoinColumn(name = "movie_id"))
     @Column(name = "genre")
@@ -75,6 +79,12 @@ public class Movie {
     @ManyToMany(mappedBy = "moviesWatched")
     @JsonIgnore
     private Set<User> usersWatched = new HashSet<>();
+
+    @PrePersist
+    @PreUpdate
+    private void touchUpdatedAt() {
+        this.updatedAt = LocalDateTime.now();
+    }
 
     @Override
     public boolean equals(Object o) {

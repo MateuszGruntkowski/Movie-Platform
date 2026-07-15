@@ -1,7 +1,6 @@
-package com.mgrunt.movies.domain.dtos;
+package com.mgrunt.movies.domain.dtos.movie;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,14 +11,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class TmdbCollectionResponse {
-
+public class MovieSearchResponse {
     private Long id;
-    private String name;
-
-    @JsonProperty("poster_path")
+    private String title;
+    private String overview;
+    private String releaseDate;
+    private Double voteAverage;
+    private Integer voteCount;
+    private Double popularity;
     private String posterPath;
-
-    @JsonProperty("backdrop_path")
     private String backdropPath;
 }

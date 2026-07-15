@@ -1,4 +1,4 @@
-package com.mgrunt.movies.domain.dtos;
+package com.mgrunt.movies.domain.dtos.tmdb;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
@@ -13,6 +13,8 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class BackdropsResponse {
-    private List<String> backdrops;
+public class TmdbCollectionImagesResponse {
+    private Long id;
+    private List<TmdbImageResponse> backdrops;
+    private List<TmdbImageResponse> posters;
 }
