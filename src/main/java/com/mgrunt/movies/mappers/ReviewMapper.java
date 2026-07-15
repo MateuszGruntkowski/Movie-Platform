@@ -4,7 +4,6 @@ import com.mgrunt.movies.domain.dtos.review.ReviewDto;
 import com.mgrunt.movies.domain.entities.Review;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.Named;
 import org.mapstruct.ReportingPolicy;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
