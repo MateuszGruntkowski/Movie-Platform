@@ -43,7 +43,4 @@ public class TmdbMovieDetailsResponse {
     private Integer runtime;
 
     private List<TmdbGenreResponse> genres;
-
-    @JsonProperty("belongs_to_collection")
-    private TmdbCollectionResponse belongsToCollection;
 }

@@ -11,9 +11,8 @@ public interface TmdbService {
     TmdbMovieDetailsResponse fetchRawMovieDetails(Long movieId);
     List<TmdbVideoResponse> getMovieVideos(Long movieId);
     String getTrailerUrl(Long movieId);
-    List<String> getMovieBackdrops(Long movieId, int limit);
-    List<String> getCollectionBackdrops(Long collectionId);
+    List<String> getImages(Long movieId, int limit);
     TmdbSearchResponse searchResult(String query, int page);
-    /** Nadpisuje pola {@code movie} aktualnymi danymi z TMDB dla podanego tmdbId. Działa tak samo dla nowej jak i istniejącej encji. */
+    /** Overwrites the {@code movie} fields with the current data from the TMDB for the given tmdbId. Works the same for new and existing entities. */
     void syncMovieData(Movie movie, Long tmdbId);
 }

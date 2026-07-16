@@ -94,46 +94,17 @@ public class TmdbServiceImpl implements TmdbService {
         }
     }
 
-    @Override
-    public List<String> getMovieBackdrops(Long movieId, int limit) {
-        try {
-            List<String> backdrops = new ArrayList<>();
-            TmdbMovieDetailsResponse movieDetails = fetchRawMovieDetails(movieId);
+    public List<String> getImages(Long movieId, int limit){
+        String url = tmdbBaseUrl + "/movie/" + movieId + "/images";
+        TmdbImageWrapperResponse response = fetchFromTmdb(url, TmdbImageWrapperResponse.class);
 
-            if (movieDetails.getBackdropPath() != null) {
-                backdrops.add(movieDetails.getBackdropPath());
-            }
-
-            if (movieDetails.getBelongsToCollection() != null
-                    && movieDetails.getBelongsToCollection().getId() != null) {
-
-                getCollectionBackdrops(movieDetails.getBelongsToCollection().getId()).stream()
-                        .filter(backdrop -> !backdrops.contains(backdrop))
-                        .forEach(backdrops::add);
-            }
-
-            return backdrops.stream().limit(limit).toList();
-        } catch (Exception e) {
-            log.error("Error fetching movie backdrops for ID: {}", movieId, e);
-            return Collections.emptyList();
-        }
-    }
-
-    @Override
-    public List<String> getCollectionBackdrops(Long collectionId) {
-        try {
-            String url = tmdbBaseUrl + "/collection/" + collectionId + "/images";
-            TmdbCollectionImagesResponse response = fetchFromTmdb(url, TmdbCollectionImagesResponse.class);
-
-            return response != null && response.getBackdrops() != null
-                    ? response.getBackdrops().stream()
-                    .map(TmdbImageResponse::getFilePath)
-                    .toList()
-                    : Collections.emptyList();
-        } catch (Exception e) {
-            log.error("Error fetching collection backdrops for ID: {}", collectionId, e);
-            return Collections.emptyList();
-        }
+        return Optional.ofNullable(response)
+                .map(TmdbImageWrapperResponse::getBackdrops)
+                .orElseGet(Collections::emptyList)
+                .stream()
+                .limit(limit)
+                .map(TmdbImageResponse::getFilePath)
+                .toList();
     }
 
     @Override
@@ -166,7 +137,7 @@ public class TmdbServiceImpl implements TmdbService {
         movie.setTrailerUrl(getTrailerUrl(tmdbId));
 
         movie.getBackdrops().clear();
-        movie.getBackdrops().addAll(getMovieBackdrops(tmdbId, DEFAULT_BACKDROPS_LIMIT));
+        movie.getBackdrops().addAll(getImages(tmdbId, DEFAULT_BACKDROPS_LIMIT));
 
         List<String> genreNames = Optional.ofNullable(tmdbMovie.getGenres())
                 .orElse(Collections.emptyList())
