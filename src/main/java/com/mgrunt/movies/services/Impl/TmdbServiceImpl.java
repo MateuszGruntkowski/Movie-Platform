@@ -107,6 +107,22 @@ public class TmdbServiceImpl implements TmdbService {
                 .toList();
     }
 
+    public List<TmdbTrendingMovieResponse> getTrendingMovies() {
+        try {
+            String url = tmdbBaseUrl + "/trending/movie/day";
+            TmdbTrendingMoviesResponseWrapper response = fetchFromTmdb(url, TmdbTrendingMoviesResponseWrapper.class);
+            return Optional.ofNullable(response)
+                    .map(TmdbTrendingMoviesResponseWrapper::getResults)
+                    .orElseGet(Collections::emptyList)
+                    .stream()
+                    .limit(10)
+                    .toList();
+        } catch (Exception e) {
+            log.error("Error fetching trending movies", e);
+            return Collections.emptyList();
+        }
+    }
+
     @Override
     public TmdbSearchResponse searchResult(String query, int page) {
         try {

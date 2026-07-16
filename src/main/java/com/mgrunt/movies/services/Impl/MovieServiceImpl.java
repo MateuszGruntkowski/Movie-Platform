@@ -2,11 +2,14 @@ package com.mgrunt.movies.services.Impl;
 
 import com.mgrunt.movies.domain.dtos.movie.MovieDetailsResponse;
 import com.mgrunt.movies.domain.dtos.movie.MovieSearchPageResponse;
+import com.mgrunt.movies.domain.dtos.movie.TrendingMovieResponse;
 import com.mgrunt.movies.domain.dtos.tmdb.TmdbSearchResponse;
+import com.mgrunt.movies.domain.dtos.tmdb.TmdbTrendingMovieResponse;
 import com.mgrunt.movies.domain.entities.Movie;
 import com.mgrunt.movies.exceptions.MovieSearchException;
 import com.mgrunt.movies.mappers.MovieDetailsMapper;
 import com.mgrunt.movies.mappers.MovieSearchMapper;
+import com.mgrunt.movies.mappers.TrendingMovieMapper;
 import com.mgrunt.movies.repositories.MovieRepository;
 import com.mgrunt.movies.services.MovieService;
 import com.mgrunt.movies.services.MovieSyncService;
@@ -30,12 +33,19 @@ public class MovieServiceImpl implements MovieService {
     private final MovieDetailsMapper movieDetailsMapper;
     private final MovieSearchMapper movieSearchMapper;
     private final MovieSyncService movieSyncService;
+    private final TrendingMovieMapper trendingMovieMapper;
 
     @Override
     @Transactional(readOnly = true)
     public List<MovieDetailsResponse> getRandomMovies() {
         List<Movie> movies = movieRepository.findRandomMovies(RANDOM_MOVIES_COUNT);
         return movies.stream().map(movieDetailsMapper::toMovieDetailsResponse).toList();
+    }
+
+    @Override
+    public List<TrendingMovieResponse> getTrendingMovies() {
+        List<TmdbTrendingMovieResponse> trendingMovies = tmdbService.getTrendingMovies();
+        return trendingMovies.stream().map(trendingMovieMapper::toTrendingMovie).toList();
     }
 
     @Override

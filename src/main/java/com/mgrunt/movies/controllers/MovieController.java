@@ -2,6 +2,8 @@ package com.mgrunt.movies.controllers;
 
 import com.mgrunt.movies.domain.dtos.movie.MovieDetailsResponse;
 import com.mgrunt.movies.domain.dtos.movie.MovieSearchPageResponse;
+import com.mgrunt.movies.domain.dtos.movie.TrendingMovieResponse;
+import com.mgrunt.movies.domain.dtos.tmdb.TmdbTrendingMovieResponse;
 import com.mgrunt.movies.services.MovieService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,9 +19,14 @@ public class MovieController {
 
     private final MovieService movieService;
 
-    @GetMapping
+    @GetMapping("/random")
     public ResponseEntity<List<MovieDetailsResponse>> listRandomMovies() {
         return new ResponseEntity<>(movieService.getRandomMovies(), HttpStatus.OK);
+    }
+
+    @GetMapping("/trending")
+    public ResponseEntity<List<TrendingMovieResponse>> listTrendingMovies() {
+        return new ResponseEntity<>(movieService.getTrendingMovies(), HttpStatus.OK);
     }
 
     @GetMapping("/{movieId}/details")
