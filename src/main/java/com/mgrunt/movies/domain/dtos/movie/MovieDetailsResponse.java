@@ -29,7 +29,11 @@ public class MovieDetailsResponse {
     private Double popularity;
     private Integer runtime;
     private List<TmdbGenreResponse> genres;
-//    private TmdbCollectionResponse belongsToCollection;
+    private String originalLanguage;
+    private Boolean adult;
+    private Integer budget;
+    private Integer revenue;
+    private String tagline;
     private String trailerUrl;
     private List<String> backdrops;
     private List<ReviewDto> reviews;

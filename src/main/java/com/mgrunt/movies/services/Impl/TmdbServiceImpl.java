@@ -134,6 +134,11 @@ public class TmdbServiceImpl implements TmdbService {
         movie.setVoteCount(tmdbMovie.getVoteCount());
         movie.setPopularity(tmdbMovie.getPopularity());
         movie.setRuntime(tmdbMovie.getRuntime());
+        movie.setOriginalLanguage(tmdbMovie.getOriginalLanguage());
+        movie.setAdult(tmdbMovie.getAdult());
+        movie.setBudget(tmdbMovie.getBudget());
+        movie.setRevenue(tmdbMovie.getRevenue());
+        movie.setTagline(tmdbMovie.getTagline());
         movie.setTrailerUrl(getTrailerUrl(tmdbId));
 
         movie.getBackdrops().clear();
