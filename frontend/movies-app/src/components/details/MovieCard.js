@@ -105,10 +105,6 @@ const MovieCard = ({ movie, isLoading, showPopup }) => {
               <p className="movie-tagline">&ldquo;{movie.tagline}&rdquo;</p>
           )}
 
-          {movie.overview && (
-              <div className="movie-overview">{movie.overview}</div>
-          )}
-
           <div className="movie-details">
             {movie.voteAverage != null && (
                 <div className="movie-rating">

@@ -104,6 +104,13 @@ const Details = ({ movie, reviews, setReviews, setMovie }) => {
                 <BackdropGallery backdrops={movie.backdrops} title={movie.title} />
             )}
 
+            {movie?.overview && (
+                <div className="movie-synopsis">
+                  <h2 className="movie-synopsis-title">Overview</h2>
+                  <p className="movie-synopsis-text">{movie.overview}</p>
+                </div>
+            )}
+
             <ReviewForm
                 handleSubmit={addReview}
                 revText={revText}

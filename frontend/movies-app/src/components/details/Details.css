@@ -1,3 +1,33 @@
+.movie-synopsis {
+  background-color: #2a2a2a;
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.movie-synopsis-title {
+  color: #f8f9fa;
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin: 0 0 12px 0;
+}
+
+.movie-synopsis-text {
+  color: #e1e7ef;
+  line-height: 1.6;
+  font-size: 0.95rem;
+  margin: 0;
+  padding: 4px 16px;
+  border-left: 3px solid #ffd700;
+  border-right: 3px solid #ffd700;
+}
+
+@media (max-width: 480px) {
+  .movie-synopsis {
+    padding: 16px;
+  }
+}
+
 .reviews-container {
   max-width: 1500px;
   margin: 0 auto;
@@ -161,7 +191,7 @@
 .review-avatar {
   width: 44px;
   height: 44px;
-  background: linear-gradient(135deg, #4f83cc, #6c5ce7);
+  background: linear-gradient(135deg, #e0b32b, #d0980a);
   color: #ffffff;
   border-radius: 50%;
   display: flex;
@@ -171,7 +201,7 @@
   font-size: 1.1rem;
   margin-right: 14px;
   flex-shrink: 0;
-  box-shadow: 0 2px 8px rgba(79, 131, 204, 0.3);
+  box-shadow: 0 2px 8px rgba(224, 179, 43, 0.3);
 }
 
 .review-meta {

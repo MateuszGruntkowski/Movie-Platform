@@ -39,20 +39,6 @@
   font-weight: 400;
 }
 
-/* Nowe style */
-.movie-overview {
-  color: #cccccc;
-  font-size: 0.9rem;
-  line-height: 1.5;
-  margin: 12px 0;
-  text-align: left;
-  padding: 8px;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 8px;
-  border-left: 3px solid #ffd700;
-  /* usunięte: max-height: 120px; overflow-y: auto; */
-}
-
 .movie-details {
   display: flex;
   justify-content: space-between;
@@ -206,12 +192,12 @@
 }
 
 .movie-tagline {
-  color: #ffd700;
-  font-size: 0.9rem;
+  color: #f0d060;
+  font-size: 0.95rem;
+  font-weight: 500;
   font-style: italic;
   text-align: center;
   margin: 0 0 12px 0;
-  opacity: 0.85;
 }
 
 .movie-facts-grid {
@@ -261,11 +247,6 @@
   .movie-details {
     flex-direction: column;
     gap: 8px;
-  }
-
-  .movie-overview {
-    text-align: center;
-    max-height: 100px;
   }
 
   .play-button-icon-container {
