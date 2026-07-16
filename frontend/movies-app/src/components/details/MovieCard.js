@@ -16,6 +16,27 @@ const getYoutubeId = (url) => {
   }
 };
 
+const formatCurrency = (amount) => {
+  if (!amount) return null;
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    notation: "compact",
+    maximumFractionDigits: 1,
+  }).format(amount);
+};
+
+const formatLanguage = (code) => {
+  if (!code) return null;
+  try {
+    const displayNames = new Intl.DisplayNames(["en"], { type: "language" });
+    const name = displayNames.of(code);
+    return name ? name.charAt(0).toUpperCase() + name.slice(1) : code.toUpperCase();
+  } catch {
+    return code.toUpperCase();
+  }
+};
+
 const MovieCard = ({ movie, isLoading, showPopup }) => {
   if (!movie) return null;
 
@@ -56,6 +77,9 @@ const MovieCard = ({ movie, isLoading, showPopup }) => {
   };
 
   const youtubeId = movie.trailerUrl ? getYoutubeId(movie.trailerUrl) : null;
+  const budgetLabel = formatCurrency(movie.budget);
+  const revenueLabel = formatCurrency(movie.revenue);
+  const languageLabel = formatLanguage(movie.originalLanguage);
 
   return (
       <div className="movie-poster-container">
@@ -69,10 +93,16 @@ const MovieCard = ({ movie, isLoading, showPopup }) => {
         />
         <div className="movie-info">
           <h3 className="movie-title">{movie.title}</h3>
-          {movie.releaseDate && (
-              <div className="movie-year">
-                {formatReleaseDate(movie.releaseDate)}
-              </div>
+
+          <div className="movie-meta-row">
+            {movie.releaseDate && (
+                <span className="movie-year">{formatReleaseDate(movie.releaseDate)}</span>
+            )}
+            {movie.adult && <span className="adult-badge">18+</span>}
+          </div>
+
+          {movie.tagline && (
+              <p className="movie-tagline">&ldquo;{movie.tagline}&rdquo;</p>
           )}
 
           {movie.overview && (
@@ -96,6 +126,29 @@ const MovieCard = ({ movie, isLoading, showPopup }) => {
             )}
           </div>
 
+          {(budgetLabel || revenueLabel || languageLabel) && (
+              <div className="movie-facts-grid">
+                {languageLabel && (
+                    <div className="movie-fact">
+                      <span className="movie-fact-label">Language</span>
+                      <span className="movie-fact-value">{languageLabel}</span>
+                    </div>
+                )}
+                {budgetLabel && (
+                    <div className="movie-fact">
+                      <span className="movie-fact-label">Budget</span>
+                      <span className="movie-fact-value">{budgetLabel}</span>
+                    </div>
+                )}
+                {revenueLabel && (
+                    <div className="movie-fact">
+                      <span className="movie-fact-label">Revenue</span>
+                      <span className="movie-fact-value">{revenueLabel}</span>
+                    </div>
+                )}
+              </div>
+          )}
+
           {renderGenres(movie.genres)}
 
           <div className="movie-actions">
@@ -107,14 +160,14 @@ const MovieCard = ({ movie, isLoading, showPopup }) => {
 
             {movie.imdbId && (
                 <a
-                    href={`https://www.imdb.com/title/${movie.imdbId}/`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="imdb-link"
-                >
-                  IMDb
-                </a>
-            )}
+                href={`https://www.imdb.com/title/${movie.imdbId}/`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="imdb-link"
+              >
+              IMDb
+              </a>
+              )}
           </div>
 
           {isLoading ? (

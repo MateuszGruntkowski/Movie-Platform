@@ -261,6 +261,17 @@
   }
 }
 
+@media (max-width: 900px) {
+  .reviews-content {
+    grid-template-columns: 280px 1fr;
+    gap: 22px;
+  }
+
+  .details-hero {
+    height: 260px;
+  }
+}
+
 @media (max-width: 768px) {
   .reviews-container {
     padding: 15px;
@@ -300,6 +311,10 @@
   .review-header {
     margin-bottom: 12px;
   }
+
+  .details-hero-overlay {
+    padding: 20px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -308,7 +323,15 @@
   }
 
   .reviews-title {
-    font-size: 1.8rem;
+    font-size: 1.6rem;
+  }
+
+  .details-hero {
+    height: 180px;
+  }
+
+  .details-hero-overlay {
+    padding: 14px;
   }
 
   .movie-poster-container,

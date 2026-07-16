@@ -187,6 +187,68 @@
   color: #000;
 }
 
+.movie-meta-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 8px 0 12px 0;
+}
+
+.adult-badge {
+  background: #e74c3c;
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+}
+
+.movie-tagline {
+  color: #ffd700;
+  font-size: 0.9rem;
+  font-style: italic;
+  text-align: center;
+  margin: 0 0 12px 0;
+  opacity: 0.85;
+}
+
+.movie-facts-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin: 14px 0;
+}
+
+.movie-fact {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  padding: 8px 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+}
+
+.movie-fact-label {
+  color: #999;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.movie-fact-value {
+  color: #f8f9fa;
+  font-size: 0.85rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
 @media (max-width: 768px) {
   .movie-genres {
     justify-content: center;
@@ -213,5 +275,11 @@
 
   .play-button-icon {
     font-size: 2rem;
+  }
+
+  @media (max-width: 480px) {
+    .movie-facts-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
   }
 }
