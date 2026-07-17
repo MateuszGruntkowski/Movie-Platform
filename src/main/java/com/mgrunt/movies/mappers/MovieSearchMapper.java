@@ -1,8 +1,8 @@
 package com.mgrunt.movies.mappers;
 
-import com.mgrunt.movies.domain.dtos.movie.MovieSearchPageResponse;
 import com.mgrunt.movies.domain.dtos.movie.MovieSearchResponse;
-import com.mgrunt.movies.domain.dtos.tmdb.TmdbMovieSearchResult;
+import com.mgrunt.movies.domain.dtos.movie.MovieSearchItemResponse;
+import com.mgrunt.movies.domain.dtos.tmdb.TmdbMovieSearchItemResponse;
 import com.mgrunt.movies.domain.dtos.tmdb.TmdbSearchResponse;
 import com.mgrunt.movies.mappers.support.TmdbUrlBuilder;
 import org.mapstruct.Mapper;
@@ -18,7 +18,7 @@ public interface MovieSearchMapper {
 
     @Mapping(target = "posterPath", source = "posterPath", qualifiedByName = "buildFullPosterUrl")
     @Mapping(target = "backdropPath", source = "backdropPath", qualifiedByName = "buildFullBackdropUrl")
-    MovieSearchResponse toMovieSearchResponse(TmdbMovieSearchResult searchResult);
+    MovieSearchItemResponse toMovieSearchResponse(TmdbMovieSearchItemResponse searchResult);
 
-    MovieSearchPageResponse toMovieSearchPageResponse(TmdbSearchResponse tmdbSearchResponse);
+    MovieSearchResponse toMovieSearchPageResponse(TmdbSearchResponse tmdbSearchResponse);
 }

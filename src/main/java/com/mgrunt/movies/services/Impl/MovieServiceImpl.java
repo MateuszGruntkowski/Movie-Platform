@@ -1,10 +1,10 @@
 package com.mgrunt.movies.services.Impl;
 
 import com.mgrunt.movies.domain.dtos.movie.MovieDetailsResponse;
-import com.mgrunt.movies.domain.dtos.movie.MovieSearchPageResponse;
+import com.mgrunt.movies.domain.dtos.movie.MovieSearchResponse;
 import com.mgrunt.movies.domain.dtos.movie.TrendingMovieResponse;
 import com.mgrunt.movies.domain.dtos.tmdb.TmdbSearchResponse;
-import com.mgrunt.movies.domain.dtos.tmdb.TmdbTrendingMovieResponse;
+import com.mgrunt.movies.domain.dtos.tmdb.TmdbTrendingMovieItemResponse;
 import com.mgrunt.movies.domain.entities.Movie;
 import com.mgrunt.movies.exceptions.MovieSearchException;
 import com.mgrunt.movies.mappers.MovieDetailsMapper;
@@ -44,7 +44,7 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public List<TrendingMovieResponse> getTrendingMovies() {
-        List<TmdbTrendingMovieResponse> trendingMovies = tmdbService.getTrendingMovies();
+        List<TmdbTrendingMovieItemResponse> trendingMovies = tmdbService.getTrendingMovies();
         return trendingMovies.stream().map(trendingMovieMapper::toTrendingMovie).toList();
     }
 
@@ -55,7 +55,7 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public MovieSearchPageResponse searchMovies(String query, int page) {
+    public MovieSearchResponse searchMovies(String query, int page) {
         try {
             TmdbSearchResponse tmdbResponse = tmdbService.searchResult(query, page);
             return movieSearchMapper.toMovieSearchPageResponse(tmdbResponse);

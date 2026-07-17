@@ -16,7 +16,7 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class TmdbSearchResponse {
     private Integer page;
-    private List<TmdbMovieSearchResult> results;
+    private List<TmdbMovieSearchItemResponse> results;
 
     @JsonProperty("total_pages")
     private Integer totalPages;

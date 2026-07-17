@@ -6,16 +6,19 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class MovieSearchPageResponse {
-    private List<MovieSearchResponse> results;
-    private Integer page;
-    private Integer totalPages;
-    private Integer totalResults;
+public class MovieSearchItemResponse {
+    private Long id;
+    private String title;
+    private String overview;
+    private String releaseDate;
+    private Double voteAverage;
+    private Integer voteCount;
+    private Double popularity;
+    private String posterPath;
+    private String backdropPath;
 }

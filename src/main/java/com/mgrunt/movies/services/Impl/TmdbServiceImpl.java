@@ -15,7 +15,6 @@ import org.springframework.web.client.RestTemplate;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -59,10 +58,10 @@ public class TmdbServiceImpl implements TmdbService {
     }
 
     @Override
-    public List<TmdbVideoResponse> getMovieVideos(Long movieId) {
+    public List<TmdbVideoItemResponse> getMovieVideos(Long movieId) {
         try {
             String url = tmdbBaseUrl + "/movie/" + movieId + "/videos?language=en-US";
-            TmdbVideosWrapperResponse response = fetchFromTmdb(url, TmdbVideosWrapperResponse.class);
+            TmdbVideosResponse response = fetchFromTmdb(url, TmdbVideosResponse.class);
             return response != null ? response.getResults() : Collections.emptyList();
         } catch (Exception e) {
             log.error("Error fetching movie videos for ID: {}", movieId, e);
@@ -73,9 +72,9 @@ public class TmdbServiceImpl implements TmdbService {
     @Override
     public String getTrailerUrl(Long movieId) {
         try {
-            List<TmdbVideoResponse> videos = getMovieVideos(movieId);
+            List<TmdbVideoItemResponse> videos = getMovieVideos(movieId);
 
-            Optional<TmdbVideoResponse> trailer = videos.stream()
+            Optional<TmdbVideoItemResponse> trailer = videos.stream()
                     .filter(v -> "Trailer".equals(v.getType())
                             && "YouTube".equals(v.getSite())
                             && Boolean.TRUE.equals(v.getOfficial()))
@@ -96,23 +95,23 @@ public class TmdbServiceImpl implements TmdbService {
 
     public List<String> getImages(Long movieId, int limit){
         String url = tmdbBaseUrl + "/movie/" + movieId + "/images";
-        TmdbImageWrapperResponse response = fetchFromTmdb(url, TmdbImageWrapperResponse.class);
+        TmdbImagesResponse response = fetchFromTmdb(url, TmdbImagesResponse.class);
 
         return Optional.ofNullable(response)
-                .map(TmdbImageWrapperResponse::getBackdrops)
+                .map(TmdbImagesResponse::getBackdrops)
                 .orElseGet(Collections::emptyList)
                 .stream()
                 .limit(limit)
-                .map(TmdbImageResponse::getFilePath)
+                .map(TmdbImageItemResponse::getFilePath)
                 .toList();
     }
 
-    public List<TmdbTrendingMovieResponse> getTrendingMovies() {
+    public List<TmdbTrendingMovieItemResponse> getTrendingMovies() {
         try {
             String url = tmdbBaseUrl + "/trending/movie/day";
-            TmdbTrendingMoviesResponseWrapper response = fetchFromTmdb(url, TmdbTrendingMoviesResponseWrapper.class);
+            TmdbTrendingMoviesResponse response = fetchFromTmdb(url, TmdbTrendingMoviesResponse.class);
             return Optional.ofNullable(response)
-                    .map(TmdbTrendingMoviesResponseWrapper::getResults)
+                    .map(TmdbTrendingMoviesResponse::getResults)
                     .orElseGet(Collections::emptyList)
                     .stream()
                     .limit(10)

@@ -9,11 +9,11 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 @Data
-@Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class TmdbImageWrapperResponse {
+public class TmdbVideosResponse {
     private Long id;
-    private List<TmdbImageResponse> backdrops;
+    private List<TmdbVideoItemResponse> results;
 }

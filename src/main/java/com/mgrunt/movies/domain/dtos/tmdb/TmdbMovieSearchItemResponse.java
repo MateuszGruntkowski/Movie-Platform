@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class TmdbMovieSearchResult {
+public class TmdbMovieSearchItemResponse {
     private Long id;
     private String title;
     private String overview;

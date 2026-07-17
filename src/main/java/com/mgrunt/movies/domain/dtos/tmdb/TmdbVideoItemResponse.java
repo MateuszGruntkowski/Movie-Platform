@@ -1,6 +1,5 @@
 package com.mgrunt.movies.domain.dtos.tmdb;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -8,21 +7,20 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class TmdbTrendingMoviesResponseWrapper {
-    private Integer page;
+public class TmdbVideoItemResponse {
+    private String id;
+    private String key;
+    private String name;
+    private String site;
+    private String type;
+    private Boolean official;
+    private String size;
 
-    @JsonProperty("total_pages")
-    private Integer totalPages;
-
-    @JsonProperty("total_results")
-    private Integer totalResults;
-
-    private List<TmdbTrendingMovieResponse> results;
+    @JsonProperty("published_at")
+    private String publishedAt;
 }

@@ -8,19 +8,18 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class TmdbVideoResponse {
-    private String id;
-    private String key;
-    private String name;
-    private String site;
-    private String type;
-    private Boolean official;
-    private String size;
+public class TmdbTrendingMovieItemResponse {
+    private Long id;
+    private String title;
 
-    @JsonProperty("published_at")
-    private String publishedAt;
+    @JsonProperty("poster_path")
+    private String posterPath;
+
+    @JsonProperty("backdrop_path")
+    private String backdropPath;
+
 }
