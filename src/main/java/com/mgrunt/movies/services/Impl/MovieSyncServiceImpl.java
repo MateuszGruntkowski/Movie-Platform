@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -20,14 +21,37 @@ public class MovieSyncServiceImpl implements MovieSyncService {
     private final TmdbService tmdbService;
     private final MovieRepository movieRepository;
 
+    @Override
     @Transactional
     public Movie getOrSyncMovie(Long tmdbId) {
-        Movie movie = movieRepository.findByTmdbId(tmdbId)
-                .orElseGet(Movie::new);
+        Movie movie = movieRepository.findByTmdbId(tmdbId).orElseGet(Movie::new);
+        if (!isStale(movie)) {
+            return movie;
+        }
 
+        tmdbService.syncMovieData(movie, tmdbId);
+        movie.setUpdatedAt(LocalDateTime.now());
+        return movieRepository.save(movie);
+    }
+
+    @Override
+    @Transactional
+    public Movie getMovieForView(Long tmdbId) {
+        Optional<Movie> existing = movieRepository.findByTmdbId(tmdbId);
+
+        if (existing.isEmpty()) {
+            // new movie - fetching preview data, not saving anything
+            Movie movie = new Movie();
+            tmdbService.syncMovieData(movie, tmdbId);
+            movie.setUpdatedAt(LocalDateTime.now());
+            return movie;
+        }
+
+        Movie movie = existing.get();
         if (isStale(movie)) {
             tmdbService.syncMovieData(movie, tmdbId);
-            return movieRepository.save(movie);
+            movie.setUpdatedAt(LocalDateTime.now());
+            movieRepository.save(movie); // update an existing movie
         }
         return movie;
     }
