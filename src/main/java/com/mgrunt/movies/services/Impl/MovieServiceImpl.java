@@ -58,7 +58,7 @@ public class MovieServiceImpl implements MovieService {
     public MovieSearchResponse searchMovies(String query, int page) {
         try {
             TmdbSearchResponse tmdbResponse = tmdbService.searchResult(query, page);
-            return movieSearchMapper.toMovieSearchPageResponse(tmdbResponse);
+            return movieSearchMapper.toMovieSearchResponse(tmdbResponse);
         } catch (Exception e) {
             log.error("Error searching movies with query: {}", query, e);
             throw new MovieSearchException("Failed to search movies with query: " + query, e);

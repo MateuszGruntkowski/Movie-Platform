@@ -18,7 +18,7 @@ public interface MovieSearchMapper {
 
     @Mapping(target = "posterPath", source = "posterPath", qualifiedByName = "buildFullPosterUrl")
     @Mapping(target = "backdropPath", source = "backdropPath", qualifiedByName = "buildFullBackdropUrl")
-    MovieSearchItemResponse toMovieSearchResponse(TmdbMovieSearchItemResponse searchResult);
+    MovieSearchItemResponse toMovieSearchItemResponse(TmdbMovieSearchItemResponse searchResult);
 
-    MovieSearchResponse toMovieSearchPageResponse(TmdbSearchResponse tmdbSearchResponse);
+    MovieSearchResponse toMovieSearchResponse(TmdbSearchResponse tmdbSearchResponse);
 }
