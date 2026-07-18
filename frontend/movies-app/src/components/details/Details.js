@@ -6,6 +6,7 @@ import ReviewForm from "./ReviewForm";
 import MovieCard from "./MovieCard";
 import ReviewList from "./ReviewList";
 import BackdropGallery from "./BackdropGallery";
+import MovieRating from "./MovieRating";
 import { usePopup } from "../../hooks/usePopup";
 import "./Details.css";
 
@@ -97,6 +98,7 @@ const Details = ({ movie, reviews, setReviews, setMovie }) => {
         <div className="reviews-content">
           <div className="movie-section">
             <MovieCard movie={movie} isLoading={isLoading} showPopup={showPopup} />
+            <MovieRating movieId={movieId} showPopup={showPopup} />
           </div>
 
           <div className="reviews-section">

@@ -1,0 +1,80 @@
+.movie-rating-widget {
+    background-color: #2a2a2a;
+    border-radius: 16px;
+    padding: 14px 20px;
+    margin-top: 20px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.rating-header-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.movie-rating-title {
+    color: #f8f9fa;
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.rating-loading {
+    color: #8b949e;
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.rating-value-label {
+    color: #f8f9fa;
+    font-size: 0.8rem;
+    font-weight: 600;
+    min-width: 34px;
+    text-align: right;
+}
+
+.rating-stars-picker {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.rating-star-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 2px;
+    font-size: 1.4rem;
+    line-height: 1;
+    transition: transform 0.15s ease;
+}
+
+.rating-star-button:hover {
+    transform: scale(1.15);
+}
+
+.rating-star-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.star-filled {
+    color: #ffd700;
+}
+
+.star-empty {
+    color: #494949;
+}
+
+@media (max-width: 480px) {
+    .movie-rating-widget {
+        padding: 16px;
+    }
+
+    .rating-star-button {
+        font-size: 1.2rem;
+    }
+}

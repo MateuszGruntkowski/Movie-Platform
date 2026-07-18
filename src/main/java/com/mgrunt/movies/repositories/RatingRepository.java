@@ -9,5 +9,5 @@ import java.util.UUID;
 
 @Repository
 public interface RatingRepository extends JpaRepository<Rating, UUID> {
-    Optional<Rating> findByTmdbIdAndAuthorId(Long tmdbId, UUID authorId);
+    Optional<Rating> findByMovie_TmdbIdAndAuthorId(Long tmdbId, UUID authorId);
 }

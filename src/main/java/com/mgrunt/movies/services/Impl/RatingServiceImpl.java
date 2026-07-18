@@ -32,7 +32,7 @@ public class RatingServiceImpl implements RatingService {
 
     @Override
     public Optional<RatingResponse> getUserRatingForMovie(Long tmdbId, UUID authorId) {
-        return ratingRepository.findByTmdbIdAndAuthorId(tmdbId, authorId)
+        return ratingRepository.findByMovie_TmdbIdAndAuthorId(tmdbId, authorId)
                 .map(ratingMapper::toRatingResponse);
     }
 
@@ -40,7 +40,7 @@ public class RatingServiceImpl implements RatingService {
     @Transactional
     public RatingResponse rateMovie(Long tmdbId, UUID authorId, Integer ratingValue) {
 
-        Optional<Rating> existingRatingOpt = ratingRepository.findByTmdbIdAndAuthorId(tmdbId, authorId);
+        Optional<Rating> existingRatingOpt = ratingRepository.findByMovie_TmdbIdAndAuthorId(tmdbId, authorId);
 
         Rating rating;
 
