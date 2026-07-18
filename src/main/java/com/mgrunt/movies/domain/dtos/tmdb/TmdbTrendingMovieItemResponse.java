@@ -7,20 +7,19 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class TmdbSearchResponse {
-    private Integer page;
-    private List<TmdbMovieSearchItemResponse> results;
+public class TmdbTrendingMovieItemResponse {
+    private Long id;
+    private String title;
 
-    @JsonProperty("total_pages")
-    private Integer totalPages;
+    @JsonProperty("poster_path")
+    private String posterPath;
 
-    @JsonProperty("total_results")
-    private Integer totalResults;
+    @JsonProperty("backdrop_path")
+    private String backdropPath;
+
 }

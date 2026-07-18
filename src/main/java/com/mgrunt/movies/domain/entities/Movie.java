@@ -56,6 +56,21 @@ public class Movie {
     @Column
     private Integer runtime;
 
+    @Column(name = "original_language")
+    private String originalLanguage;
+
+    @Column
+    private Boolean adult;
+
+    @Column
+    private Integer budget;
+
+    @Column
+    private Integer revenue;
+
+    @Column
+    private String tagline;
+
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 

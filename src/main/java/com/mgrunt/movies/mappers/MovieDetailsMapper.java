@@ -21,7 +21,6 @@ public interface MovieDetailsMapper {
 
     @Mapping(target = "backdrops", source = "backdrops", qualifiedByName = "buildFullBackdropUrl")
     @Mapping(target = "genres", source = "genres", qualifiedByName = "mapGenres")
-    @Mapping(target = "belongsToCollection", ignore = true)
     @Mapping(target = "posterPath", source = "posterPath", qualifiedByName = "buildFullPosterUrl")
     @Mapping(target = "backdropPath", source = "backdropPath", qualifiedByName = "buildFullBackdropUrl")
     MovieDetailsResponse toMovieDetailsResponse(Movie movie);

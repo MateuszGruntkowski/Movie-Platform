@@ -13,8 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class TmdbCollectionImagesResponse {
+public class TmdbVideosResponse {
     private Long id;
-    private List<TmdbImageResponse> backdrops;
-    private List<TmdbImageResponse> posters;
+    private List<TmdbVideoItemResponse> results;
 }

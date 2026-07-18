@@ -1,9 +1,7 @@
 package com.mgrunt.movies.mappers;
 
-import com.mgrunt.movies.domain.dtos.movie.MovieSearchResponse;
-import com.mgrunt.movies.domain.dtos.movie.MovieSearchItemResponse;
-import com.mgrunt.movies.domain.dtos.tmdb.TmdbMovieSearchItemResponse;
-import com.mgrunt.movies.domain.dtos.tmdb.TmdbSearchResponse;
+import com.mgrunt.movies.domain.dtos.movie.TrendingMovieResponse;
+import com.mgrunt.movies.domain.dtos.tmdb.TmdbTrendingMovieItemResponse;
 import com.mgrunt.movies.mappers.support.TmdbUrlBuilder;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -14,11 +12,10 @@ import org.mapstruct.ReportingPolicy;
         unmappedTargetPolicy = ReportingPolicy.IGNORE,
         uses = {TmdbUrlBuilder.class}
 )
-public interface MovieSearchMapper {
-
+public interface TrendingMovieMapper {
     @Mapping(target = "posterPath", source = "posterPath", qualifiedByName = "buildFullPosterUrl")
     @Mapping(target = "backdropPath", source = "backdropPath", qualifiedByName = "buildFullBackdropUrl")
-    MovieSearchItemResponse toMovieSearchItemResponse(TmdbMovieSearchItemResponse searchResult);
+    @Mapping(target = "tmdbId", source = "id")
+    TrendingMovieResponse toTrendingMovie(TmdbTrendingMovieItemResponse movie);
 
-    MovieSearchResponse toMovieSearchResponse(TmdbSearchResponse tmdbSearchResponse);
 }

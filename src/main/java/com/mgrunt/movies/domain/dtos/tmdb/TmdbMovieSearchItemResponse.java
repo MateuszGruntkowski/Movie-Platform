@@ -7,25 +7,18 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-import java.util.List;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class TmdbMovieDetailsResponse {
+public class TmdbMovieSearchItemResponse {
     private Long id;
-
-    @JsonProperty("imdb_id")
-    private String imdbId;
-
     private String title;
     private String overview;
 
     @JsonProperty("release_date")
-    private LocalDate releaseDate;
+    private String releaseDate;
 
     @JsonProperty("poster_path")
     private String posterPath;
@@ -40,15 +33,4 @@ public class TmdbMovieDetailsResponse {
     private Integer voteCount;
 
     private Double popularity;
-    private Integer runtime;
-
-    private List<TmdbGenreResponse> genres;
-
-    @JsonProperty("original_language")
-    private String originalLanguage;
-
-    private Boolean adult;
-    private Integer budget;
-    private Integer revenue;
-    private String tagline;
 }

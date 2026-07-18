@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Form } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faVideoSlash, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faVideoSlash, faTimes, faStar } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import { movieSearchService } from "../../Services/movieSearchService";
 import "./MovieSearchBar.css";
@@ -148,7 +148,7 @@ const MovieSearchBar = () => {
                                     : "N/A"}
                               </p>
                               <div className="result-rating">
-                                ⭐{" "}
+                                <FontAwesomeIcon icon={faStar}/>{" "}
                                 {movie.voteAverage
                                     ? movie.voteAverage.toFixed(1)
                                     : "N/A"}
