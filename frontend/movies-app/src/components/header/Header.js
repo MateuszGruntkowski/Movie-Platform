@@ -33,6 +33,11 @@ const Header = () => {
               <NavLink className="nav-link app-nav-link" to="/watchList">
                 Watch list
               </NavLink>
+              {user && (
+                  <NavLink className="nav-link app-nav-link" to="/profile">
+                    Profile
+                  </NavLink>
+              )}
             </Nav>
 
             <div className="mx-auto">
