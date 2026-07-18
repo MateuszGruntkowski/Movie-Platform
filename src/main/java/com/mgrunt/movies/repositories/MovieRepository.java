@@ -15,8 +15,6 @@ import java.util.UUID;
 @Repository
 public interface MovieRepository extends JpaRepository<Movie, UUID> {
 
-    Optional<Movie> findByImdbId(String imdbId);
-
     // Znajdź film z recenzjami i autorami (rozwiąże Twój główny problem!)
     @Query("SELECT m FROM Movie m " +
             "LEFT JOIN FETCH m.reviews r " +
@@ -30,8 +28,6 @@ public interface MovieRepository extends JpaRepository<Movie, UUID> {
 
     @Query(value = "SELECT * FROM Movies ORDER BY RANDOM() LIMIT :limit", nativeQuery = true)
     List<Movie> findRandomMovies(@Param("limit") int limit);
-
-    boolean existsByImdbId(String imdbId);
 
 //    Optional<Movie> findByTmdbId(String movieId);
     Optional<Movie> findByTmdbId(Long tmdbId);
