@@ -1,4 +1,4 @@
-package com.mgrunt.movies.domain.dtos.movie;
+package com.mgrunt.movies.loader;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;

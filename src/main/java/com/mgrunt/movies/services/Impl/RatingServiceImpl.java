@@ -1,8 +1,6 @@
 package com.mgrunt.movies.services.Impl;
 
-import com.mgrunt.movies.Security.CustomUserDetails;
-import com.mgrunt.movies.domain.dtos.rating.RatingRequest;
-import com.mgrunt.movies.domain.dtos.rating.RatingResponse;
+import com.mgrunt.movies.domain.dtos.rating.RatingDto;
 import com.mgrunt.movies.domain.entities.Movie;
 import com.mgrunt.movies.domain.entities.Rating;
 import com.mgrunt.movies.domain.entities.User;
@@ -11,7 +9,6 @@ import com.mgrunt.movies.repositories.RatingRepository;
 import com.mgrunt.movies.repositories.UserRepository;
 import com.mgrunt.movies.services.MovieService;
 import com.mgrunt.movies.services.RatingService;
-import jakarta.persistence.Table;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -31,14 +28,14 @@ public class RatingServiceImpl implements RatingService {
     private final UserRepository userRepository;
 
     @Override
-    public Optional<RatingResponse> getUserRatingForMovie(Long tmdbId, UUID authorId) {
+    public Optional<RatingDto> getUserRatingForMovie(Long tmdbId, UUID authorId) {
         return ratingRepository.findByMovie_TmdbIdAndAuthorId(tmdbId, authorId)
-                .map(ratingMapper::toRatingResponse);
+                .map(ratingMapper::toRatingDto);
     }
 
     @Override
     @Transactional
-    public RatingResponse rateMovie(Long tmdbId, UUID authorId, Integer ratingValue) {
+    public RatingDto rateMovie(Long tmdbId, UUID authorId, Integer ratingValue) {
 
         Optional<Rating> existingRatingOpt = ratingRepository.findByMovie_TmdbIdAndAuthorId(tmdbId, authorId);
 
@@ -59,6 +56,6 @@ public class RatingServiceImpl implements RatingService {
         }
 
         Rating saved = ratingRepository.save(rating);
-        return ratingMapper.toRatingResponse(saved);
+        return ratingMapper.toRatingDto(saved);
     }
 }

@@ -1,4 +1,4 @@
-package com.mgrunt.movies.domain.dtos.user;
+package com.mgrunt.movies.domain.dtos.watchlist;
 
 import com.mgrunt.movies.domain.dtos.movie.MovieDetailsResponse;
 import lombok.AllArgsConstructor;

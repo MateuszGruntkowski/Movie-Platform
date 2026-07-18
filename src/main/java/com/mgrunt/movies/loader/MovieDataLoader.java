@@ -1,8 +1,7 @@
-package com.mgrunt.movies;
+package com.mgrunt.movies.loader;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mgrunt.movies.domain.dtos.movie.MovieSeedDto;
 import com.mgrunt.movies.domain.entities.Movie;
 import com.mgrunt.movies.repositories.MovieRepository;
 import jakarta.annotation.PostConstruct;

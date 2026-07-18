@@ -1,7 +1,10 @@
 package com.mgrunt.movies.mappers;
 
-import com.mgrunt.movies.domain.dtos.movie.MovieDetailsResponse;
+import com.mgrunt.movies.domain.dtos.movie.*;
 import com.mgrunt.movies.domain.dtos.tmdb.TmdbGenreResponse;
+import com.mgrunt.movies.domain.dtos.tmdb.TmdbMovieSearchItemResponse;
+import com.mgrunt.movies.domain.dtos.tmdb.TmdbSearchResponse;
+import com.mgrunt.movies.domain.dtos.tmdb.TmdbTrendingMovieItemResponse;
 import com.mgrunt.movies.domain.entities.Movie;
 import com.mgrunt.movies.mappers.support.TmdbUrlBuilder;
 import org.mapstruct.Mapper;
@@ -17,13 +20,24 @@ import java.util.List;
         unmappedTargetPolicy = ReportingPolicy.IGNORE,
         uses = {ReviewMapper.class, TmdbUrlBuilder.class}
 )
-public interface MovieDetailsMapper {
+public interface MovieMapper {
 
     @Mapping(target = "backdrops", source = "backdrops", qualifiedByName = "buildFullBackdropUrl")
     @Mapping(target = "genres", source = "genres", qualifiedByName = "mapGenres")
     @Mapping(target = "posterPath", source = "posterPath", qualifiedByName = "buildFullPosterUrl")
     @Mapping(target = "backdropPath", source = "backdropPath", qualifiedByName = "buildFullBackdropUrl")
     MovieDetailsResponse toMovieDetailsResponse(Movie movie);
+
+    @Mapping(target = "posterPath", source = "posterPath", qualifiedByName = "buildFullPosterUrl")
+    @Mapping(target = "backdropPath", source = "backdropPath", qualifiedByName = "buildFullBackdropUrl")
+    MovieSearchItemResponse toMovieSearchItemResponse(TmdbMovieSearchItemResponse searchResult);
+
+    MovieSearchResponse toMovieSearchResponse(TmdbSearchResponse tmdbSearchResponse);
+
+    @Mapping(target = "posterPath", source = "posterPath", qualifiedByName = "buildFullPosterUrl")
+    @Mapping(target = "backdropPath", source = "backdropPath", qualifiedByName = "buildFullBackdropUrl")
+    @Mapping(target = "tmdbId", source = "id")
+    TrendingMovieResponse toTrendingMovie(TmdbTrendingMovieItemResponse movie);
 
     @Named("mapGenres")
     default List<TmdbGenreResponse> mapGenres(List<String> genres) {
