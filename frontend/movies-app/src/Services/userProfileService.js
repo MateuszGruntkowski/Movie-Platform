@@ -10,4 +10,14 @@ export const userProfileService = {
             throw error;
         }
     },
+
+    async updateAvatar(avatarPath) {
+        try {
+            const response = await api.put("/v1/users/me/avatar", { avatarPath });
+            return response.data;
+        } catch (error) {
+            console.error("Error updating avatar:", error);
+            throw error;
+        }
+    },
 };

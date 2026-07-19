@@ -3,12 +3,15 @@ import { userProfileService } from "../../Services/userProfileService";
 import ProfileStats from "./ProfileStats";
 import ProfileReviews from "./ProfileReviews";
 import ProfileRatings from "./ProfileRatings";
+import AvatarPicker from "./AvatarPicker";
+import { getAvatarUrl } from "../../utils/avatarUtils";
 import "./Profile.css";
 
 const Profile = () => {
     const [profile, setProfile] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [isPickerOpen, setIsPickerOpen] = useState(false);
 
     useEffect(() => {
         setIsLoading(true);
@@ -23,6 +26,16 @@ const Profile = () => {
             })
             .finally(() => setIsLoading(false));
     }, []);
+
+    const handleAvatarSelect = async (avatarPath) => {
+        try {
+            const updated = await userProfileService.updateAvatar(avatarPath);
+            setProfile(updated);
+            setIsPickerOpen(false);
+        } catch (err) {
+            console.error("Error updating avatar:", err);
+        }
+    };
 
     if (isLoading) {
         return (
@@ -42,14 +55,38 @@ const Profile = () => {
 
     if (!profile) return null;
 
+    const avatarUrl = getAvatarUrl(profile.avatarPath);
+
     return (
         <div className="profile-container">
             <div className="profile-header">
-                <div className="profile-avatar">
-                    {profile.username?.charAt(0).toUpperCase()}
-                </div>
+                <button
+                    className="profile-avatar-button"
+                    onClick={() => setIsPickerOpen(true)}
+                    aria-label="Change Avatar"
+                >
+                    {avatarUrl ? (
+                        <img
+                            src={avatarUrl}
+                            alt="avatar"
+                            className="profile-avatar-img"
+                        />
+                    ) : (
+                        <div className="profile-avatar">
+                            {profile.username?.charAt(0).toUpperCase()}
+                        </div>
+                    )}
+                </button>
                 <h1 className="profile-username">{profile.username}</h1>
             </div>
+
+            {isPickerOpen && (
+                <AvatarPicker
+                    currentAvatarPath={profile.avatarPath}
+                    onSelect={handleAvatarSelect}
+                    onClose={() => setIsPickerOpen(false)}
+                />
+            )}
 
             <ProfileStats profile={profile} />
 
