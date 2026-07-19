@@ -16,6 +16,7 @@ public interface ReviewMapper {
 
     @Mapping(target = "authorId", source = "author.id")
     @Mapping(target = "authorUsername", source = "author.username")
+    @Mapping(target = "authorAvatarPath", source = "author.avatarPath")
     @Mapping(target = "createdAt", expression = "java(review.getCreatedAt().format(java.time.format.DateTimeFormatter.ofPattern(\"yyyy-MM-dd\")))")
     ReviewDto toDto(Review review);
 

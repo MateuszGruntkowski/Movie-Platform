@@ -39,7 +39,8 @@ public class UserServiceImpl implements UserService {
     private final RatingMapper ratingMapper;
 
     private static final Set<String> ALLOWED_AVATARS = Set.of(
-            "/avatars/avatar1.png"
+            "/avatars/avatar1.png",
+            "/avatars/avatar2.png"
     );
 
     @Transactional

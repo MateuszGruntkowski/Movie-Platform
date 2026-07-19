@@ -204,6 +204,16 @@
   box-shadow: 0 2px 8px rgba(224, 179, 43, 0.3);
 }
 
+.review-avatar-img {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 14px;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(224, 179, 43, 0.3);
+}
+
 .review-meta {
   flex: 1;
 }
@@ -381,10 +391,14 @@
     font-size: 1rem;
   }
 
-  .review-avatar {
+  .review-avatar,
+  .review-avatar-img {
     width: 40px;
     height: 40px;
-    font-size: 1rem;
     margin-right: 12px;
+  }
+
+  .review-avatar {
+    font-size: 1rem;
   }
 }

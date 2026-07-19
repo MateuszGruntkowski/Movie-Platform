@@ -2,7 +2,7 @@ import { getAvatarUrl } from "../../utils/avatarUtils";
 
 const AVAILABLE_AVATARS = [
     "/avatars/avatar1.png",
-    // kolejne dodasz tutaj
+    "/avatars/avatar2.png"
 ];
 
 const AvatarPicker = ({ currentAvatarPath, onSelect, onClose }) => {
