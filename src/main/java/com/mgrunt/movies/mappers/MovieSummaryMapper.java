@@ -8,6 +8,6 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring", uses = {TmdbUrlBuilder.class})
 public interface MovieSummaryMapper {
-    @Mapping(target = "posterPath", source = "posterPath", qualifiedByName = "buildFullPosterUrl")
+    @Mapping(target = "posterPath", source = "posterPath", qualifiedByName = "buildPosterUrl")
     MovieSummaryDto toMovieSummaryDto(Movie movie);
 }

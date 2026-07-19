@@ -21,7 +21,7 @@ function App() {
 
   const getMovies = async () => {
     try {
-      const response = await api.get("v1/trending");
+      const response = await api.get("v1/movies/trending");
       setMovies(response.data);
       console.log("Movies fetched:", response.data);
     } catch (error) {

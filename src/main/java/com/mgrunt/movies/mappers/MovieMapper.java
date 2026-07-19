@@ -22,20 +22,20 @@ import java.util.List;
 )
 public interface MovieMapper {
 
-    @Mapping(target = "backdrops", source = "backdrops", qualifiedByName = "buildFullBackdropUrl")
+    @Mapping(target = "backdrops", source = "backdrops", qualifiedByName = "buildBackdropUrl")
     @Mapping(target = "genres", source = "genres", qualifiedByName = "mapGenres")
-    @Mapping(target = "posterPath", source = "posterPath", qualifiedByName = "buildFullPosterUrl")
-    @Mapping(target = "backdropPath", source = "backdropPath", qualifiedByName = "buildFullBackdropUrl")
+    @Mapping(target = "posterPath", source = "posterPath", qualifiedByName = "buildPosterUrl")
+    @Mapping(target = "backdropPath", source = "backdropPath", qualifiedByName = "buildBackdropUrl")
     MovieDetailsResponse toMovieDetailsResponse(Movie movie);
 
-    @Mapping(target = "posterPath", source = "posterPath", qualifiedByName = "buildFullPosterUrl")
-    @Mapping(target = "backdropPath", source = "backdropPath", qualifiedByName = "buildFullBackdropUrl")
+    @Mapping(target = "posterPath", source = "posterPath", qualifiedByName = "buildPosterUrl")
+    @Mapping(target = "backdropPath", source = "backdropPath", qualifiedByName = "buildBackdropUrl")
     MovieSearchItemResponse toMovieSearchItemResponse(TmdbMovieSearchItemResponse searchResult);
 
     MovieSearchResponse toMovieSearchResponse(TmdbSearchResponse tmdbSearchResponse);
 
-    @Mapping(target = "posterPath", source = "posterPath", qualifiedByName = "buildFullPosterUrl")
-    @Mapping(target = "backdropPath", source = "backdropPath", qualifiedByName = "buildFullBackdropUrl")
+    @Mapping(target = "posterPath", source = "posterPath", qualifiedByName = "buildPosterUrl")
+    @Mapping(target = "backdropPath", source = "backdropPath", qualifiedByName = "buildFullTrendingMovieBackdropUrl")
     @Mapping(target = "tmdbId", source = "id")
     TrendingMovieResponse toTrendingMovie(TmdbTrendingMovieItemResponse movie);
 
