@@ -1,6 +1,6 @@
 package com.mgrunt.movies.services;
 
-import com.mgrunt.movies.domain.dtos.user.UserWatchListResponse;
+import com.mgrunt.movies.domain.dtos.watchlist.UserWatchListResponse;
 import org.springframework.security.core.Authentication;
 
 public interface WatchlistService {

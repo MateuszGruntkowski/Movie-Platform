@@ -39,21 +39,6 @@
   font-weight: 400;
 }
 
-/* Nowe style */
-.movie-overview {
-  color: #cccccc;
-  font-size: 0.9rem;
-  line-height: 1.5;
-  margin: 12px 0;
-  text-align: left;
-  max-height: 120px;
-  overflow-y: auto;
-  padding: 8px;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 8px;
-  border-left: 3px solid #ffd700;
-}
-
 .movie-details {
   display: flex;
   justify-content: space-between;
@@ -161,6 +146,95 @@
   margin-top: 0.5rem;
 }
 
+.movie-actions {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+}
+
+.imdb-link {
+  display: inline-flex;
+  align-items: center;
+  background: #f5c518;
+  color: #000;
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 8px 14px;
+  border-radius: 6px;
+  text-decoration: none;
+  letter-spacing: 0.5px;
+  transition: transform 0.2s ease;
+}
+
+.imdb-link:hover {
+  transform: translateY(-1px);
+  color: #000;
+}
+
+.movie-meta-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 8px 0 12px 0;
+}
+
+.adult-badge {
+  background: #e74c3c;
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+}
+
+.movie-tagline {
+  color: #f0d060;
+  font-size: 0.95rem;
+  font-weight: 500;
+  font-style: italic;
+  text-align: center;
+  margin: 0 0 12px 0;
+}
+
+.movie-facts-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin: 14px 0;
+}
+
+.movie-fact {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  padding: 8px 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+}
+
+.movie-fact-label {
+  color: #999;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.movie-fact-value {
+  color: #f8f9fa;
+  font-size: 0.85rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
 @media (max-width: 768px) {
   .movie-genres {
     justify-content: center;
@@ -175,11 +249,6 @@
     gap: 8px;
   }
 
-  .movie-overview {
-    text-align: center;
-    max-height: 100px;
-  }
-
   .play-button-icon-container {
     width: 60px;
     height: 60px;
@@ -187,5 +256,11 @@
 
   .play-button-icon {
     font-size: 2rem;
+  }
+
+  @media (max-width: 480px) {
+    .movie-facts-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
   }
 }

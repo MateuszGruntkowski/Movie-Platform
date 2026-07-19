@@ -44,6 +44,11 @@ public class TmdbMovieDetailsResponse {
 
     private List<TmdbGenreResponse> genres;
 
-    @JsonProperty("belongs_to_collection")
-    private TmdbCollectionResponse belongsToCollection;
+    @JsonProperty("original_language")
+    private String originalLanguage;
+
+    private Boolean adult;
+    private Integer budget;
+    private Integer revenue;
+    private String tagline;
 }

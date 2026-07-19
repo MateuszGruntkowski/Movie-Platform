@@ -16,5 +16,6 @@ public class ReviewDto {
     private String body;
     private String createdAt;
     private String authorUsername;
+    private String authorAvatarPath;
     private String authorId;
 }

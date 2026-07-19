@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -58,10 +57,10 @@ public class TmdbServiceImpl implements TmdbService {
     }
 
     @Override
-    public List<TmdbVideoResponse> getMovieVideos(Long movieId) {
+    public List<TmdbVideoItemResponse> getMovieVideos(Long movieId) {
         try {
             String url = tmdbBaseUrl + "/movie/" + movieId + "/videos?language=en-US";
-            TmdbVideosWrapperResponse response = fetchFromTmdb(url, TmdbVideosWrapperResponse.class);
+            TmdbVideosResponse response = fetchFromTmdb(url, TmdbVideosResponse.class);
             return response != null ? response.getResults() : Collections.emptyList();
         } catch (Exception e) {
             log.error("Error fetching movie videos for ID: {}", movieId, e);
@@ -72,9 +71,9 @@ public class TmdbServiceImpl implements TmdbService {
     @Override
     public String getTrailerUrl(Long movieId) {
         try {
-            List<TmdbVideoResponse> videos = getMovieVideos(movieId);
+            List<TmdbVideoItemResponse> videos = getMovieVideos(movieId);
 
-            Optional<TmdbVideoResponse> trailer = videos.stream()
+            Optional<TmdbVideoItemResponse> trailer = videos.stream()
                     .filter(v -> "Trailer".equals(v.getType())
                             && "YouTube".equals(v.getSite())
                             && Boolean.TRUE.equals(v.getOfficial()))
@@ -93,44 +92,31 @@ public class TmdbServiceImpl implements TmdbService {
         }
     }
 
-    @Override
-    public List<String> getMovieBackdrops(Long movieId, int limit) {
-        try {
-            List<String> backdrops = new ArrayList<>();
-            TmdbMovieDetailsResponse movieDetails = fetchRawMovieDetails(movieId);
+    public List<String> getImages(Long movieId, int limit){
+        String url = tmdbBaseUrl + "/movie/" + movieId + "/images";
+        TmdbImagesResponse response = fetchFromTmdb(url, TmdbImagesResponse.class);
 
-            if (movieDetails.getBackdropPath() != null) {
-                backdrops.add(movieDetails.getBackdropPath());
-            }
-
-            if (movieDetails.getBelongsToCollection() != null
-                    && movieDetails.getBelongsToCollection().getId() != null) {
-
-                getCollectionBackdrops(movieDetails.getBelongsToCollection().getId()).stream()
-                        .filter(backdrop -> !backdrops.contains(backdrop))
-                        .forEach(backdrops::add);
-            }
-
-            return backdrops.stream().limit(limit).toList();
-        } catch (Exception e) {
-            log.error("Error fetching movie backdrops for ID: {}", movieId, e);
-            return Collections.emptyList();
-        }
+        return Optional.ofNullable(response)
+                .map(TmdbImagesResponse::getBackdrops)
+                .orElseGet(Collections::emptyList)
+                .stream()
+                .limit(limit)
+                .map(TmdbImageItemResponse::getFilePath)
+                .toList();
     }
 
-    @Override
-    public List<String> getCollectionBackdrops(Long collectionId) {
+    public List<TmdbTrendingMovieItemResponse> getTrendingMovies() {
         try {
-            String url = tmdbBaseUrl + "/collection/" + collectionId + "/images";
-            TmdbCollectionImagesResponse response = fetchFromTmdb(url, TmdbCollectionImagesResponse.class);
-
-            return response != null && response.getBackdrops() != null
-                    ? response.getBackdrops().stream()
-                    .map(TmdbImageResponse::getFilePath)
-                    .toList()
-                    : Collections.emptyList();
+            String url = tmdbBaseUrl + "/trending/movie/day";
+            TmdbTrendingMoviesResponse response = fetchFromTmdb(url, TmdbTrendingMoviesResponse.class);
+            return Optional.ofNullable(response)
+                    .map(TmdbTrendingMoviesResponse::getResults)
+                    .orElseGet(Collections::emptyList)
+                    .stream()
+                    .limit(10)
+                    .toList();
         } catch (Exception e) {
-            log.error("Error fetching collection backdrops for ID: {}", collectionId, e);
+            log.error("Error fetching trending movies", e);
             return Collections.emptyList();
         }
     }
@@ -162,10 +148,15 @@ public class TmdbServiceImpl implements TmdbService {
         movie.setVoteCount(tmdbMovie.getVoteCount());
         movie.setPopularity(tmdbMovie.getPopularity());
         movie.setRuntime(tmdbMovie.getRuntime());
+        movie.setOriginalLanguage(tmdbMovie.getOriginalLanguage());
+        movie.setAdult(tmdbMovie.getAdult());
+        movie.setBudget(tmdbMovie.getBudget());
+        movie.setRevenue(tmdbMovie.getRevenue());
+        movie.setTagline(tmdbMovie.getTagline());
         movie.setTrailerUrl(getTrailerUrl(tmdbId));
 
         movie.getBackdrops().clear();
-        movie.getBackdrops().addAll(getMovieBackdrops(tmdbId, DEFAULT_BACKDROPS_LIMIT));
+        movie.getBackdrops().addAll(getImages(tmdbId, DEFAULT_BACKDROPS_LIMIT));
 
         List<String> genreNames = Optional.ofNullable(tmdbMovie.getGenres())
                 .orElse(Collections.emptyList())

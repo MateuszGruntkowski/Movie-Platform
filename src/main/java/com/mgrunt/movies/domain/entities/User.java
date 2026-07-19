@@ -26,6 +26,8 @@ public class User {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
+    private String avatarPath;
+
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Review> reviews = new ArrayList<>();
 

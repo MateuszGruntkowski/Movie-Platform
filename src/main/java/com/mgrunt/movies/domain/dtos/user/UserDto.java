@@ -13,6 +13,7 @@ import java.util.UUID;
 public class UserDto {
 
     private String username;
+    private String avatarPath;
     private Set<Long> moviesToWatchIds;
     private Set<Long> moviesWatchedIds;
     private List<UUID> reviewIds;

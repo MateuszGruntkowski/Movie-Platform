@@ -7,16 +7,22 @@ public class TmdbUrlBuilder {
 
     private static final String BASE_URL = "https://image.tmdb.org/t/p/";
     private static final String POSTER_SIZE = "w500";
-    private static final String BACKDROP_SIZE = "original";
+    private static final String NORMAL_BACKDROP_SIZE = "w1280";
+    private static final String TRENDING_MOVIE_BACKDROP_SIZE = "original";
 
-    @Named("buildFullPosterUrl")
-    public String buildFullPosterUrl(String path) {
+    @Named("buildPosterUrl")
+    public String buildPosterUrl(String path) {
         return buildUrl(path, POSTER_SIZE);
     }
 
-    @Named("buildFullBackdropUrl")
-    public String buildFullBackdropUrl(String path) {
-        return buildUrl(path, BACKDROP_SIZE);
+    @Named("buildBackdropUrl")
+    public String buildBackdropUrl(String path) {
+        return buildUrl(path, NORMAL_BACKDROP_SIZE);
+    }
+
+    @Named("buildFullTrendingMovieBackdropUrl")
+    public String buildTrendingMovieBackdropUrl(String path) {
+        return buildUrl(path, TRENDING_MOVIE_BACKDROP_SIZE);
     }
 
     private String buildUrl(String path, String size) {

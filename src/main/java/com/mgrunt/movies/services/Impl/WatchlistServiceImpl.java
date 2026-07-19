@@ -1,10 +1,10 @@
 package com.mgrunt.movies.services.Impl;
 
 import com.mgrunt.movies.domain.dtos.movie.MovieDetailsResponse;
-import com.mgrunt.movies.domain.dtos.user.UserWatchListResponse;
+import com.mgrunt.movies.domain.dtos.watchlist.UserWatchListResponse;
 import com.mgrunt.movies.domain.entities.Movie;
 import com.mgrunt.movies.domain.entities.User;
-import com.mgrunt.movies.mappers.MovieDetailsMapper;
+import com.mgrunt.movies.mappers.MovieMapper;
 import com.mgrunt.movies.repositories.UserRepository;
 import com.mgrunt.movies.services.MovieService;
 import com.mgrunt.movies.services.WatchlistService;
@@ -23,7 +23,7 @@ public class WatchlistServiceImpl implements WatchlistService {
 
     private final UserRepository userRepository;
     private final MovieService movieService;
-    private final MovieDetailsMapper movieDetailsMapper;
+    private final MovieMapper movieMapper;
 
     @Override
     public UserWatchListResponse getWatchlist(Authentication authentication) {
@@ -33,11 +33,11 @@ public class WatchlistServiceImpl implements WatchlistService {
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
         Set<MovieDetailsResponse> moviesWatched = user.getMoviesWatched().stream()
-                .map(movieDetailsMapper::toMovieDetailsResponse)
+                .map(movieMapper::toMovieDetailsResponse)
                 .collect(Collectors.toSet());
 
         Set<MovieDetailsResponse> moviesToWatch = user.getMoviesToWatch().stream()
-                .map(movieDetailsMapper::toMovieDetailsResponse)
+                .map(movieMapper::toMovieDetailsResponse)
                 .collect(Collectors.toSet());
 
         return UserWatchListResponse.builder()

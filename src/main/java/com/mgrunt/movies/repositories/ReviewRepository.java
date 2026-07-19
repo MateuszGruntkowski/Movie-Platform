@@ -14,11 +14,14 @@ public interface ReviewRepository extends JpaRepository<Review, UUID> {
 
     List<Review> findByMovieId(UUID movieId);
 
-    List<Review> findByMovieTmdbId(Long tmdbId);
+    @Query("SELECT r FROM Review r " +
+            "JOIN FETCH r.author " +
+            "WHERE r.movie.tmdbId = :tmdbId")
+    List<Review> findByMovieTmdbId(@Param("tmdbId") Long tmdbId);
 
     List<Review> getReviewsByMovie(Movie movie);
-
     List<Review> findByAuthorId(UUID authorId);
+    Integer findReviewCountByAuthorId(UUID authorId);
 
     // Znajdź recenzje z autorami i filmami
     @Query("SELECT r FROM Review r " +

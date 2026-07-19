@@ -1,6 +1,6 @@
 package com.mgrunt.movies.controllers;
 
-import com.mgrunt.movies.domain.dtos.user.UserWatchListResponse;
+import com.mgrunt.movies.domain.dtos.watchlist.UserWatchListResponse;
 import com.mgrunt.movies.services.WatchlistService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

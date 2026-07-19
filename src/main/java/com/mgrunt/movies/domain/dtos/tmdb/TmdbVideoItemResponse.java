@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class TmdbVideoResponse {
+public class TmdbVideoItemResponse {
     private String id;
     private String key;
     private String name;

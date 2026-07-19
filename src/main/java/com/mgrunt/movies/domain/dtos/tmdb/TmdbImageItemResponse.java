@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class TmdbImageResponse {
+public class TmdbImageItemResponse {
     @JsonProperty("aspect_ratio")
     private Double aspectRatio;
 
