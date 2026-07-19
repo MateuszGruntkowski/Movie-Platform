@@ -10,4 +10,6 @@ public interface UserService {
     UserDto getUser(Authentication authentication);
 
     UserProfileResponse getUserProfile(UUID id);
+
+    UserDto updateAvatar(UUID id, String avatarPath);
 }

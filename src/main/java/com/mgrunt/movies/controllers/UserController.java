@@ -1,6 +1,7 @@
 package com.mgrunt.movies.controllers;
 
 import com.mgrunt.movies.Security.CustomUserDetails;
+import com.mgrunt.movies.domain.dtos.profile.UpdateAvatarRequest;
 import com.mgrunt.movies.domain.dtos.user.UserDto;
 import com.mgrunt.movies.domain.dtos.profile.UserProfileResponse;
 import com.mgrunt.movies.services.UserService;
@@ -32,6 +33,15 @@ public class UserController {
             @AuthenticationPrincipal CustomUserDetails userDetails
     ){
         return ResponseEntity.ok(userService.getUserProfile(userDetails.getId()));
+    }
+
+    @PutMapping("/me/avatar")
+    public ResponseEntity<UserDto> updateAvatar(
+            @RequestBody UpdateAvatarRequest request,
+            @AuthenticationPrincipal CustomUserDetails userDetails
+    ){
+        UserDto userDto = userService.updateAvatar(userDetails.getId(), request.avatarPath());
+        return ResponseEntity.ok(userDto);
     }
 
 }
