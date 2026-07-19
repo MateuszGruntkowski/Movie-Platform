@@ -36,12 +36,12 @@ public class UserController {
     }
 
     @PutMapping("/me/avatar")
-    public ResponseEntity<UserDto> updateAvatar(
+    public ResponseEntity<UserProfileResponse> updateAvatar(
             @RequestBody UpdateAvatarRequest request,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ){
-        UserDto userDto = userService.updateAvatar(userDetails.getId(), request.avatarPath());
-        return ResponseEntity.ok(userDto);
+        UserProfileResponse response = userService.updateAvatar(userDetails.getId(), request.avatarPath());
+        return ResponseEntity.ok(response);
     }
 
 }

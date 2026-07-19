@@ -11,5 +11,5 @@ public interface UserService {
 
     UserProfileResponse getUserProfile(UUID id);
 
-    UserDto updateAvatar(UUID id, String avatarPath);
+    UserProfileResponse updateAvatar(UUID id, String avatarPath);
 }

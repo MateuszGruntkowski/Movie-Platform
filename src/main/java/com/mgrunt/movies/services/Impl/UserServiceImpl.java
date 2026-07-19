@@ -39,7 +39,7 @@ public class UserServiceImpl implements UserService {
     private final RatingMapper ratingMapper;
 
     private static final Set<String> ALLOWED_AVATARS = Set.of(
-            "avatar1.png"
+            "/avatars/avatar1.png"
     );
 
     @Transactional
@@ -57,6 +57,27 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     public UserProfileResponse getUserProfile(UUID id) {
         User user = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User not found"));
+        return buildUserProfileResponse(user);
+    }
+
+    @Override
+    @Transactional
+    public UserProfileResponse updateAvatar(UUID id, String avatarPath) {
+        if (!ALLOWED_AVATARS.contains(avatarPath)) {
+            throw new IllegalArgumentException("Avatar path does not exist");
+        }
+
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        user.setAvatarPath(avatarPath);
+        userRepository.save(user);
+
+        return buildUserProfileResponse(user);
+    }
+
+    private UserProfileResponse buildUserProfileResponse(User user) {
+        UUID id = user.getId();
 
         List<ProfileReviewDto> reviews = reviewRepository.findByAuthorId(id).stream()
                 .map(reviewMapper::toProfileReviewDto)
@@ -66,36 +87,20 @@ public class UserServiceImpl implements UserService {
                 .map(ratingMapper::toProfileRatingDto)
                 .toList();
 
-        int reviewCount = reviews.size();
-        int ratingCount = ratings.size();
-
         double avgRating = Optional.ofNullable(ratingRepository.findAverageRatingByAuthorId(id)).orElse(0.0);
-
         int moviesWatchedCount = userRepository.countMoviesWatched(id);
         int moviesToWatchCount = userRepository.countMoviesToWatch(id);
+
         return UserProfileResponse.builder()
                 .username(user.getUsername())
                 .avatarPath(user.getAvatarPath())
                 .avgRating(avgRating)
-                .ratingsCount(ratingCount)
-                .reviewsCount(reviewCount)
+                .ratingsCount(ratings.size())
+                .reviewsCount(reviews.size())
                 .moviesWatchedCount(moviesWatchedCount)
                 .moviesToWatchCount(moviesToWatchCount)
                 .reviews(reviews)
                 .ratings(ratings)
                 .build();
-    }
-
-    @Override
-    public UserDto updateAvatar(UUID id, String avatarPath) {
-        User user = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User not found"));
-
-        if(!ALLOWED_AVATARS.contains(user.getAvatarPath())){
-            throw new IllegalArgumentException("Invalid avatar path");
-        }
-
-        user.setAvatarPath(avatarPath);
-        userRepository.save(user);
-        return userMapper.toDto(user);
     }
 }
