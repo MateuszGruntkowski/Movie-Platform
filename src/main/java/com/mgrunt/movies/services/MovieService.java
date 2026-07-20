@@ -8,7 +8,6 @@ import com.mgrunt.movies.domain.entities.Movie;
 import java.util.List;
 
 public interface MovieService {
-    List<MovieDetailsResponse> getRandomMovies();
     List<TrendingMovieResponse> getTrendingMovies();
     MovieDetailsResponse getMovieDetails(Long tmdbId);
     MovieSearchResponse searchMovies(String query, int page);

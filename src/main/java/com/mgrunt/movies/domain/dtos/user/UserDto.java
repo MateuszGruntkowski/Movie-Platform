@@ -16,6 +16,4 @@ public class UserDto {
     private String avatarPath;
     private Set<Long> moviesToWatchIds;
     private Set<Long> moviesWatchedIds;
-    private List<UUID> reviewIds;
-
 }

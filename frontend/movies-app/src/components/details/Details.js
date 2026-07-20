@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import api from "../../api/axiosConfig";
 import { useParams } from "react-router-dom";
 import { useUser } from "../context/UserContext";
 import ReviewForm from "./ReviewForm";
@@ -12,6 +11,9 @@ import "./Details.css";
 
 import React from "react";
 import { movieDetailsService } from "../../Services/movieDetailsService";
+import { reviewsService } from "../../Services/reviewsService";
+
+const REVIEWS_PAGE_SIZE = 10;
 
 const Details = ({ movie, reviews, setReviews, setMovie }) => {
   const revText = useRef();
@@ -21,7 +23,20 @@ const Details = ({ movie, reviews, setReviews, setMovie }) => {
   const [error, setError] = useState(null);
   const { popup, showPopup } = usePopup();
 
-  // Movie details (reviews come bundled with this response — no need for a second fetch)
+  const [reviewsPage, setReviewsPage] = useState(0);
+  const [totalReviews, setTotalReviews] = useState(0);
+  const [hasMoreReviews, setHasMoreReviews] = useState(false);
+  const [isLoadingReviews, setIsLoadingReviews] = useState(false);
+  const [isLoadingMoreReviews, setIsLoadingMoreReviews] = useState(false);
+
+  const fetchReviews = async (page) => {
+    return reviewsService.getReviewsForMovie(movieId, {
+      page,
+      size: REVIEWS_PAGE_SIZE,
+      sort: "createdAt,desc",
+    });
+  };
+
   useEffect(() => {
     if (!movieId) return;
 
@@ -32,16 +47,52 @@ const Details = ({ movie, reviews, setReviews, setMovie }) => {
         .getMovieDetails(movieId)
         .then((data) => {
           setMovie(data);
-          setReviews(data.reviews || []);
         })
         .catch((err) => {
           console.error("Error fetching movie details:", err);
-          setError("Nie udało się załadować szczegółów filmu.");
+          setError("Failed to load movie details.");
         })
         .finally(() => {
           setIsLoading(false);
         });
-  }, [movieId, setMovie, setReviews]);
+  }, [movieId, setMovie]);
+
+  useEffect(() => {
+    if (!movieId) return;
+
+    setIsLoadingReviews(true);
+    setReviewsPage(0);
+
+    fetchReviews(0)
+        .then((data) => {
+          setReviews(data.content);
+          setTotalReviews(data.totalElements);
+          setHasMoreReviews(!data.last);
+        })
+        .catch((err) => {
+          console.error("Error fetching reviews:", err);
+          showPopup?.("Failed to load review.", "error");
+        })
+        .finally(() => {
+          setIsLoadingReviews(false);
+        });
+  }, [movieId]);
+
+  const loadMoreReviews = async () => {
+    const nextPage = reviewsPage + 1;
+    setIsLoadingMoreReviews(true);
+    try {
+      const data = await fetchReviews(nextPage);
+      setReviews((prev) => [...prev, ...data.content]);
+      setReviewsPage(nextPage);
+      setHasMoreReviews(!data.last);
+    } catch (err) {
+      console.error("Error loading more reviews:", err);
+      showPopup?.("Could not load more reviews.", "error");
+    } finally {
+      setIsLoadingMoreReviews(false);
+    }
+  };
 
   const addReview = async (e) => {
     e.preventDefault();
@@ -49,14 +100,12 @@ const Details = ({ movie, reviews, setReviews, setMovie }) => {
     if (!rev.value.trim()) return;
 
     try {
-      const response = await api.post(`/v1/reviews/create/${movieId}`, {
-        reviewBody: rev.value,
-      });
-      setReviews((prev) => [...prev, response.data]);
+      const newReview = await reviewsService.createReview(movieId, rev.value);
+      setReviews((prev) => [newReview, ...prev]);
+      setTotalReviews((prev) => prev + 1);
       rev.value = "";
       showPopup?.("Review added!", "success");
     } catch (err) {
-      console.error("Error adding review:", err);
       showPopup?.("Could not add review.", "error");
     }
   };
@@ -77,7 +126,6 @@ const Details = ({ movie, reviews, setReviews, setMovie }) => {
             </div>
         )}
 
-        {/* Backdrop hero */}
         {movie?.backdropPath && (
             <div
                 className="details-hero"
@@ -119,7 +167,14 @@ const Details = ({ movie, reviews, setReviews, setMovie }) => {
                 labelText="Write your review:"
             />
 
-            <ReviewList reviews={reviews} />
+            <ReviewList
+                reviews={reviews}
+                totalReviews={totalReviews}
+                isLoading={isLoadingReviews}
+                hasMore={hasMoreReviews}
+                isLoadingMore={isLoadingMoreReviews}
+                onLoadMore={loadMoreReviews}
+            />
           </div>
         </div>
       </div>

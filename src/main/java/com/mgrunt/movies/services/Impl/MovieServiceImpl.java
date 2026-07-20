@@ -32,13 +32,6 @@ public class MovieServiceImpl implements MovieService {
     private final MovieSyncService movieSyncService;
 
     @Override
-    @Transactional(readOnly = true)
-    public List<MovieDetailsResponse> getRandomMovies() {
-        List<Movie> movies = movieRepository.findRandomMovies(RANDOM_MOVIES_COUNT);
-        return movies.stream().map(movieMapper::toMovieDetailsResponse).toList();
-    }
-
-    @Override
     public List<TrendingMovieResponse> getTrendingMovies() {
         List<TmdbTrendingMovieItemResponse> trendingMovies = tmdbService.getTrendingMovies();
         return trendingMovies.stream().map(movieMapper::toTrendingMovie).toList();

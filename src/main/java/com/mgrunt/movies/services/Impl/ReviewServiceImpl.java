@@ -13,6 +13,8 @@ import com.mgrunt.movies.services.MovieService;
 import com.mgrunt.movies.services.ReviewService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,12 +32,11 @@ public class ReviewServiceImpl implements ReviewService {
     private final MovieService movieService;
 
     @Override
-    public List<ReviewDto> getReviewsForMovie(Long tmdbId) {
-        List<Review> reviews = reviewRepository.findByMovieTmdbId(tmdbId);
+    @Transactional(readOnly = true)
+    public Page<ReviewDto> getReviewsForMovie(Long tmdbId, Pageable pageable) {
+        Page<Review> reviews = reviewRepository.findByMovieTmdbId(tmdbId, pageable);
 
-        return reviews.stream()
-                .map(reviewMapper::toDto)
-                .toList();
+        return reviews.map(reviewMapper::toDto);
     }
 
     @Override

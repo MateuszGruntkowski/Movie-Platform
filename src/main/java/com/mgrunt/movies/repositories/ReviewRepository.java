@@ -2,10 +2,13 @@ package com.mgrunt.movies.repositories;
 
 import com.mgrunt.movies.domain.entities.Movie;
 import com.mgrunt.movies.domain.entities.Review;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -17,7 +20,7 @@ public interface ReviewRepository extends JpaRepository<Review, UUID> {
     @Query("SELECT r FROM Review r " +
             "JOIN FETCH r.author " +
             "WHERE r.movie.tmdbId = :tmdbId")
-    List<Review> findByMovieTmdbId(@Param("tmdbId") Long tmdbId);
+    Page<Review> findByMovieTmdbId(@Param("tmdbId") Long tmdbId, Pageable pageable);
 
     List<Review> getReviewsByMovie(Movie movie);
     List<Review> findByAuthorId(UUID authorId);

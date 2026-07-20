@@ -23,9 +23,6 @@ public interface MovieRepository extends JpaRepository<Movie, UUID> {
     @Query("SELECT DISTINCT m FROM Movie m JOIN m.genres g WHERE g = :genre")
     List<Movie> findByGenre(@Param("genre") String genre);
 
-    @Query(value = "SELECT * FROM Movies ORDER BY RANDOM() LIMIT :limit", nativeQuery = true)
-    List<Movie> findRandomMovies(@Param("limit") int limit);
-
 //    Optional<Movie> findByTmdbId(String movieId);
     Optional<Movie> findByTmdbId(Long tmdbId);
 

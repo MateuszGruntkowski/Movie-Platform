@@ -18,11 +18,6 @@ public class MovieController {
 
     private final MovieService movieService;
 
-    @GetMapping("/random")
-    public ResponseEntity<List<MovieDetailsResponse>> listRandomMovies() {
-        return new ResponseEntity<>(movieService.getRandomMovies(), HttpStatus.OK);
-    }
-
     @GetMapping("/trending")
     public ResponseEntity<List<TrendingMovieResponse>> listTrendingMovies() {
         return new ResponseEntity<>(movieService.getTrendingMovies(), HttpStatus.OK);

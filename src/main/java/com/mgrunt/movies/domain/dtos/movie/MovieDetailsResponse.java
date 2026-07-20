@@ -36,5 +36,4 @@ public class MovieDetailsResponse {
     private String tagline;
     private String trailerUrl;
     private List<String> backdrops;
-    private List<ReviewDto> reviews;
 }
