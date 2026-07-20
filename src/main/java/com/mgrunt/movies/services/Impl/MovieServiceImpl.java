@@ -15,7 +15,6 @@ import com.mgrunt.movies.services.TmdbService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -24,10 +23,7 @@ import java.util.List;
 @Slf4j
 public class MovieServiceImpl implements MovieService {
 
-    private static final int RANDOM_MOVIES_COUNT = 8;
-
     private final TmdbService tmdbService;
-    private final MovieRepository movieRepository;
     private final MovieMapper movieMapper;
     private final MovieSyncService movieSyncService;
 

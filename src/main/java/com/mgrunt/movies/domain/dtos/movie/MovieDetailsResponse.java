@@ -1,7 +1,6 @@
 package com.mgrunt.movies.domain.dtos.movie;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.mgrunt.movies.domain.dtos.review.ReviewDto;
 import com.mgrunt.movies.domain.dtos.tmdb.TmdbGenreResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

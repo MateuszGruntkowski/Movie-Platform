@@ -1,6 +1,5 @@
 package com.mgrunt.movies.services;
 
-import com.mgrunt.movies.Security.CustomUserDetails;
 import com.mgrunt.movies.domain.dtos.review.ReviewDto;
 import com.mgrunt.movies.domain.dtos.review.ReviewRequest;
 import org.springframework.data.domain.Page;
