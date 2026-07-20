@@ -24,4 +24,14 @@ export const reviewsService = {
             throw error;
         }
     },
+
+
+    async deleteReview(reviewId) {
+        try {
+            await api.delete(`/v1/reviews/${reviewId}`);
+        } catch (error) {
+            console.error("Error deleting review:", error);
+            throw error;
+        }
+    },
 };

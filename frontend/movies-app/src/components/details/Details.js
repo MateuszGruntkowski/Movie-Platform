@@ -19,6 +19,7 @@ const Details = ({ movie, reviews, setReviews, setMovie }) => {
   const revText = useRef();
   const params = useParams();
   const movieId = params.movieId;
+  const { user } = useUser();
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const { popup, showPopup } = usePopup();
@@ -110,6 +111,17 @@ const Details = ({ movie, reviews, setReviews, setMovie }) => {
     }
   };
 
+  const deleteReview = async (reviewId) => {
+    try {
+      await reviewsService.deleteReview(reviewId);
+      setReviews((prev) => prev.filter((r) => r.id !== reviewId));
+      setTotalReviews((prev) => Math.max(prev - 1, 0));
+      showPopup?.("Review deleted!", "success");
+    } catch (err) {
+      showPopup?.("Could not delete review.", "error");
+    }
+  };
+
   if (error) {
     return (
         <div className="reviews-container">
@@ -174,6 +186,8 @@ const Details = ({ movie, reviews, setReviews, setMovie }) => {
                 hasMore={hasMoreReviews}
                 isLoadingMore={isLoadingMoreReviews}
                 onLoadMore={loadMoreReviews}
+                currentUsername={user?.username}
+                onDelete={deleteReview}
             />
           </div>
         </div>

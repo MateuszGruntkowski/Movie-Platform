@@ -1,5 +1,6 @@
 package com.mgrunt.movies.controllers;
 
+import com.mgrunt.movies.Security.CustomUserDetails;
 import com.mgrunt.movies.domain.dtos.review.ReviewDto;
 import com.mgrunt.movies.domain.dtos.review.ReviewRequest;
 import com.mgrunt.movies.services.ReviewService;
@@ -11,8 +12,10 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -37,5 +40,13 @@ public class ReviewController {
             @PathVariable Long tmdbId) {
 
         return new ResponseEntity<>(reviewService.getReviewsForMovie(tmdbId, pageable), HttpStatus.OK);
+    }
+
+    @DeleteMapping(path="/{reviewId}")
+    public ResponseEntity<Void> deleteReview(
+            @PathVariable UUID reviewId,
+            @AuthenticationPrincipal CustomUserDetails userDetails){
+        reviewService.deleteReview(reviewId, userDetails.getId());
+        return ResponseEntity.noContent().build();
     }
 }

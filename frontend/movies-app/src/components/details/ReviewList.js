@@ -8,6 +8,8 @@ const ReviewList = ({
                         hasMore = false,
                         isLoadingMore = false,
                         onLoadMore,
+                        currentUsername,
+                        onDelete,
                     }) => {
     return (
         <div className="reviews-list">
@@ -27,6 +29,9 @@ const ReviewList = ({
 
             {reviews?.map((review, index) => {
                 const avatarUrl = getAvatarUrl(review.authorAvatarPath);
+                const isOwnReview =
+                    currentUsername && review.authorUsername === currentUsername;
+
                 return (
                     <div key={review.id || index} className="review-item">
                         <div className="review-header">
@@ -47,6 +52,17 @@ const ReviewList = ({
                                         : new Date().toLocaleDateString("pl-PL")}
                                 </div>
                             </div>
+
+                            {isOwnReview && (
+                                <button
+                                    type="button"
+                                    className="review-delete-btn"
+                                    onClick={() => onDelete(review.id)}
+                                    aria-label="Delete review"
+                                >
+                                    Usuń
+                                </button>
+                            )}
                         </div>
                         <div className="review-body">{review.body}</div>
                     </div>

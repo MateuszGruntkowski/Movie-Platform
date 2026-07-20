@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -66,6 +67,18 @@ public class ReviewServiceImpl implements ReviewService {
         movie.getReviews().add(review);
         return reviewMapper.toDto(review);
 
+    }
+
+    @Override
+    @Transactional
+    public void deleteReview(UUID reviewId, UUID authorId) {
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new EntityNotFoundException("Review not found"));
+
+        if(!review.getAuthor().getId().equals(authorId)){
+            throw new SecurityException("You are not authorized to delete this review");
+        }
+        reviewRepository.delete(review);
     }
 
 }

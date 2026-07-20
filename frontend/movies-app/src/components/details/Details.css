@@ -41,6 +41,24 @@
   text-align: center;
 }
 
+.review-delete-btn {
+  margin-left: auto;
+  background: transparent;
+  color: #e15759;
+  border: 1px solid #e15759;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.review-delete-btn:hover {
+  background-color: #e15759;
+  color: #ffffff;
+}
+
 .reviews-title {
   color: #f8f9fa;
   font-size: 2.8rem;
