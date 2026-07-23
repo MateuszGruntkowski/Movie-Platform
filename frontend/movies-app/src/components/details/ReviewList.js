@@ -60,7 +60,7 @@ const ReviewList = ({
                                     onClick={() => onDelete(review.id)}
                                     aria-label="Delete review"
                                 >
-                                    Usuń
+                                    Delete
                                 </button>
                             )}
                         </div>
