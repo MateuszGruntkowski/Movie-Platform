@@ -16,6 +16,10 @@ import com.mgrunt.movies.repositories.UserRepository;
 import com.mgrunt.movies.services.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,12 +58,13 @@ public class UserServiceImpl implements UserService {
         return userMapper.toDto(user);
     }
 
-    @Override
-    @Transactional(readOnly = true)
-    public UserProfileResponse getUserProfile(UUID id) {
-        User user = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User not found"));
-        return buildUserProfileResponse(user);
-    }
+//    @Override
+//    @Transactional(readOnly = true)
+//    public UserProfileResponse getUserProfile(UUID id) {
+//        User user = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User not found"));
+//        return buildUserProfileResponse(user);
+//    }
+
 
     @Override
     @Transactional
@@ -77,31 +82,66 @@ public class UserServiceImpl implements UserService {
         return buildUserProfileResponse(user);
     }
 
+    @Override
+    public UserProfileResponse getUserProfile(String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+        return buildUserProfileResponse(user);
+    }
+
+    @Override
+    public Page<ProfileReviewDto> getUserReviews(String username, Pageable pageable, String sort) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        Sort sortOrder = switch (sort) {
+            case "newest" -> Sort.by(Sort.Direction.DESC, "createdAt");
+            case "oldest" -> Sort.by(Sort.Direction.ASC, "createdAt");
+            default -> throw new IllegalArgumentException("Invalid sort parameter: " + sort);
+        };
+
+        Pageable pageableWithSort = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sortOrder);
+
+        return reviewRepository.findByAuthorId(user.getId(), pageableWithSort)
+                .map(reviewMapper::toProfileReviewDto);
+    }
+
+    @Override
+    public Page<ProfileRatingDto> getUserRatings(String username, Pageable pageable, String sort) {
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        Sort sortOrder = switch (sort) {
+            case "newest" -> Sort.by(Sort.Direction.DESC, "createdAt");
+            case "oldest" -> Sort.by(Sort.Direction.ASC, "createdAt");
+            case "highest" -> Sort.by(Sort.Direction.DESC, "rating");
+            case "lowest" -> Sort.by(Sort.Direction.ASC, "rating");
+            default -> throw new IllegalArgumentException("Invalid sort parameter: " + sort);
+        };
+
+        Pageable pageableWithSort = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sortOrder);
+
+        return ratingRepository.findByAuthorId(user.getId(), pageableWithSort)
+                .map(ratingMapper::toProfileRatingDto);
+
+    }
+
     private UserProfileResponse buildUserProfileResponse(User user) {
         UUID id = user.getId();
-
-        List<ProfileReviewDto> reviews = reviewRepository.findByAuthorId(id).stream()
-                .map(reviewMapper::toProfileReviewDto)
-                .toList();
-
-        List<ProfileRatingDto> ratings = ratingRepository.findByAuthorId(id).stream()
-                .map(ratingMapper::toProfileRatingDto)
-                .toList();
 
         double avgRating = Optional.ofNullable(ratingRepository.findAverageRatingByAuthorId(id)).orElse(0.0);
         int moviesWatchedCount = userRepository.countMoviesWatched(id);
         int moviesToWatchCount = userRepository.countMoviesToWatch(id);
+        int ratingsCount = ratingRepository.countByAuthorId(id);
+        int reviewsCount = reviewRepository.countByAuthorId(id);
 
         return UserProfileResponse.builder()
                 .username(user.getUsername())
                 .avatarPath(user.getAvatarPath())
                 .avgRating(avgRating)
-                .ratingsCount(ratings.size())
-                .reviewsCount(reviews.size())
+                .ratingsCount(ratingsCount)
+                .reviewsCount(reviewsCount)
                 .moviesWatchedCount(moviesWatchedCount)
                 .moviesToWatchCount(moviesToWatchCount)
-                .reviews(reviews)
-                .ratings(ratings)
                 .build();
     }
 }
