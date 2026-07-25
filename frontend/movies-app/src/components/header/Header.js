@@ -34,7 +34,7 @@ const Header = () => {
                 Watch list
               </NavLink>
               {user && (
-                  <NavLink className="nav-link app-nav-link" to="/profile">
+                  <NavLink className="nav-link app-nav-link" to={`/profile/${user.username}`}>
                     Profile
                   </NavLink>
               )}

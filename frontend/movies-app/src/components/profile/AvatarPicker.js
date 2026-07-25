@@ -9,7 +9,7 @@ const AvatarPicker = ({ currentAvatarPath, onSelect, onClose }) => {
     return (
         <div className="avatar-picker-overlay" onClick={onClose}>
             <div className="avatar-picker-modal" onClick={(e) => e.stopPropagation()}>
-                <h2 className="avatar-picker-title">Wybierz avatar</h2>
+                <h2 className="avatar-picker-title">Choose avatar</h2>
                 <div className="avatar-picker-grid">
                     {AVAILABLE_AVATARS.map((path) => (
                         <button
@@ -24,7 +24,7 @@ const AvatarPicker = ({ currentAvatarPath, onSelect, onClose }) => {
                     ))}
                 </div>
                 <button className="avatar-picker-close" onClick={onClose}>
-                    Anuluj
+                    Cancel
                 </button>
             </div>
         </div>

@@ -55,7 +55,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/search" element={<SearchResults />} />
           <Route path="/watchlist" element={<WatchList />} />
-          <Route path="/profile" element={<Profile />} />
+          <Route path="/profile/:username" element={<Profile />} />
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>

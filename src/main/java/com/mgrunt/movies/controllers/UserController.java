@@ -33,13 +33,6 @@ public class UserController {
         );
     }
 
-//    @GetMapping("/me/profile")
-//    public ResponseEntity<UserProfileResponse> getMyProfile(
-//            @AuthenticationPrincipal CustomUserDetails userDetails
-//    ){
-//        return ResponseEntity.ok(userService.getUserProfile(userDetails.getId()));
-//    }
-
     @PutMapping("/me/avatar")
     public ResponseEntity<UserProfileResponse> updateAvatar(
             @RequestBody UpdateAvatarRequest request,
@@ -61,7 +54,7 @@ public class UserController {
     @GetMapping("/{username}/ratings")
     public ResponseEntity<Page<ProfileRatingDto>> getUserRatings(
             @PathVariable String username,
-            @PageableDefault(size = 10) Pageable pageable,
+            @PageableDefault(size = 5) Pageable pageable,
             @RequestParam(defaultValue = "newest") String sort
     ){
         return ResponseEntity.ok(userService.getUserRatings(username, pageable, sort));
@@ -70,7 +63,7 @@ public class UserController {
     @GetMapping("/{username}/reviews")
     public ResponseEntity<Page<ProfileReviewDto>> getUserReviews(
             @PathVariable String username,
-            @PageableDefault(size = 10) Pageable pageable,
+            @PageableDefault(size = 5) Pageable pageable,
             @RequestParam(defaultValue = "newest") String sort
 
     ){

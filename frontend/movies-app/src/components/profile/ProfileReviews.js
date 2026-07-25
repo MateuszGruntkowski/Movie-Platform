@@ -1,6 +1,16 @@
 import { Link } from "react-router-dom";
 
-const ProfileReviews = ({ reviews }) => {
+const ProfileReviews = ({
+                            reviews,
+                            isLoading = false,
+                            hasMore = false,
+                            isLoadingMore = false,
+                            onLoadMore,
+                        }) => {
+    if (isLoading && (!reviews || reviews.length === 0)) {
+        return <p className="profile-loading">Loading reviews...</p>;
+    }
+
     if (!reviews || reviews.length === 0) {
         return (
             <div className="profile-empty">
@@ -34,6 +44,17 @@ const ProfileReviews = ({ reviews }) => {
                     </div>
                 </Link>
             ))}
+
+            {hasMore && (
+                <button
+                    type="button"
+                    className="submit-btn"
+                    onClick={onLoadMore}
+                    disabled={isLoadingMore}
+                >
+                    {isLoadingMore ? "Loading..." : "Show more"}
+                </button>
+            )}
         </div>
     );
 };

@@ -2,7 +2,17 @@ import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 
-const ProfileRatings = ({ ratings }) => {
+const ProfileRatings = ({
+                            ratings,
+                            isLoading = false,
+                            hasMore = false,
+                            isLoadingMore = false,
+                            onLoadMore,
+                        }) => {
+    if (isLoading && (!ratings || ratings.length === 0)) {
+        return <p className="profile-loading">Loading ratings...</p>;
+    }
+
     if (!ratings || ratings.length === 0) {
         return (
             <div className="profile-empty">
@@ -36,6 +46,17 @@ const ProfileRatings = ({ ratings }) => {
                     </div>
                 </Link>
             ))}
+
+            {hasMore && (
+                <button
+                    type="button"
+                    className="submit-btn"
+                    onClick={onLoadMore}
+                    disabled={isLoadingMore}
+                >
+                    {isLoadingMore ? "Loading..." : "Show more"}
+                </button>
+            )}
         </div>
     );
 };
