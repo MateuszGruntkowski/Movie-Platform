@@ -9,6 +9,7 @@ import java.util.UUID;
 public record ProfileRatingDto(
         UUID id,
         int rating,
+        String createdAt,
         MovieSummaryDto movie
 ) {
 }

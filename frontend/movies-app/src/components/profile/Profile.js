@@ -7,6 +7,7 @@ import ProfileReviews from "./ProfileReviews";
 import ProfileRatings from "./ProfileRatings";
 import AvatarPicker from "./AvatarPicker";
 import { getAvatarUrl } from "../../utils/avatarUtils";
+import { reviewsService } from "../../Services/reviewsService";
 import "./Profile.css";
 
 const REVIEWS_PAGE_SIZE = 5;
@@ -111,6 +112,18 @@ const Profile = () => {
             console.error("Error loading more reviews:", err);
         } finally {
             setIsLoadingMoreReviews(false);
+        }
+    };
+
+    const deleteReview = async (reviewId) => {
+        try {
+            await reviewsService.deleteReview(reviewId);
+            setReviews((prev) => prev.filter((r) => r.id !== reviewId));
+            setProfile((prev) =>
+                prev ? { ...prev, reviewsCount: Math.max(prev.reviewsCount - 1, 0) } : prev
+            );
+        } catch (err) {
+            console.error("Error deleting review:", err);
         }
     };
 
@@ -228,6 +241,8 @@ const Profile = () => {
                     hasMore={hasMoreReviews}
                     isLoadingMore={isLoadingMoreReviews}
                     onLoadMore={loadMoreReviews}
+                    isOwnProfile={isOwnProfile}
+                    onDelete={deleteReview}
                 />
             </div>
 

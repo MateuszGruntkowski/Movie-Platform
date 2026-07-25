@@ -13,6 +13,8 @@
     padding: 60px 20px;
 }
 
+/* Header (avatar + username) */
+
 .profile-header {
     display: flex;
     align-items: center;
@@ -53,6 +55,15 @@
     object-fit: cover;
     flex-shrink: 0;
 }
+
+.profile-username {
+    color: #f8f9fa;
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+/* Avatar picker modal */
 
 .avatar-picker-overlay {
     position: fixed;
@@ -115,12 +126,7 @@
     cursor: pointer;
 }
 
-.profile-username {
-    color: #f8f9fa;
-    font-size: 1.8rem;
-    font-weight: 700;
-    margin: 0;
-}
+/* Stats grid */
 
 .profile-stats-grid {
     display: grid;
@@ -154,6 +160,8 @@
     text-align: center;
 }
 
+/* Sections (Reviews / Ratings) */
+
 .profile-section {
     margin-bottom: 40px;
 }
@@ -167,7 +175,6 @@
     border-bottom: 2px solid #494949;
 }
 
-/* Nagłówek sekcji z sortowaniem (reviews / ratings) */
 .profile-section-header {
     display: flex;
     align-items: center;
@@ -211,6 +218,8 @@
     color: #8b949e;
 }
 
+/* List items (reviews / ratings) */
+
 .profile-list {
     display: flex;
     flex-direction: column;
@@ -225,6 +234,7 @@
     padding: 14px;
     text-decoration: none;
     color: inherit;
+    cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
@@ -249,6 +259,19 @@
     justify-content: center;
     gap: 6px;
     min-width: 0;
+    flex: 1;
+}
+
+.profile-list-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.profile-list-header .profile-list-title {
+    flex: 1;
+    min-width: 0;
+    margin: 0;
 }
 
 .profile-list-title {
@@ -285,7 +308,28 @@
     color: #ffd700;
 }
 
-/* Przycisk "Załaduj więcej" pod listą recenzji/ocen */
+/* Delete button (matches Details.css .review-delete-btn) */
+
+.review-delete-btn {
+    margin-left: auto;
+    background: transparent;
+    color: #e15759;
+    border: 1px solid #e15759;
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.review-delete-btn:hover {
+    background-color: #e15759;
+    color: #ffffff;
+}
+
+/* Load more button */
+
 .profile-load-more-btn {
     background: linear-gradient(135deg, #e0b32b, #d0980a);
     color: #ffffff;
@@ -311,6 +355,8 @@
     cursor: not-allowed;
 }
 
+/* Responsive */
+
 @media (max-width: 768px) {
     .profile-stats-grid {
         grid-template-columns: repeat(3, 1fr);
@@ -331,7 +377,7 @@
     }
 
     .profile-avatar,
-    .profile-avatar-img{
+    .profile-avatar-img {
         width: 56px;
         height: 56px;
         font-size: 1.4rem;

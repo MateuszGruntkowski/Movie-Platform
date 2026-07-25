@@ -40,9 +40,12 @@ const ProfileRatings = ({
                     <div className="profile-list-content">
                         <h4 className="profile-list-title">{rating.movie.title}</h4>
                         <span className="profile-list-rating">
-              <FontAwesomeIcon icon={faStar} className="profile-rating-star" />{" "}
+                            <FontAwesomeIcon icon={faStar} className="profile-rating-star" />{" "}
                             {rating.rating}/10
-            </span>
+                        </span>
+                        <span className="profile-list-date">
+                            {new Date(rating.createdAt).toLocaleDateString()}
+                        </span>
                     </div>
                 </Link>
             ))}
