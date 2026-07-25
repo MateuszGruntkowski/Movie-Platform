@@ -45,11 +45,11 @@ public class Rating {
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
     }
-//
-//    @PreUpdate
-//    protected void onUpdate() {
-//        this.createdAt = LocalDateTime.now();
-//    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.createdAt = LocalDateTime.now();
+    }
 
     @Override
     public boolean equals(Object o) {
