@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { getAvatarUrl } from "../../utils/avatarUtils";
 
 const ReviewList = ({
@@ -35,17 +36,25 @@ const ReviewList = ({
                 return (
                     <div key={review.id || index} className="review-item">
                         <div className="review-header">
-                            {avatarUrl ? (
-                                <img src={avatarUrl} alt="avatar" className="review-avatar-img" />
-                            ) : (
-                                <div className="review-avatar">
-                                    {review.authorUsername?.charAt(0).toUpperCase() || "?"}
-                                </div>
-                            )}
+                            <Link
+                                to={`/profile/${review.authorUsername}`}
+                                className="review-author-link"
+                            >
+                                {avatarUrl ? (
+                                    <img src={avatarUrl} alt="avatar" className="review-avatar-img" />
+                                ) : (
+                                    <div className="review-avatar">
+                                        {review.authorUsername?.charAt(0).toUpperCase() || "?"}
+                                    </div>
+                                )}
+                            </Link>
                             <div className="review-meta">
-                                <div className="review-author">
+                                <Link
+                                    to={`/profile/${review.authorUsername}`}
+                                    className="review-author review-author-link"
+                                >
                                     {review.authorUsername || "Anonim"}
-                                </div>
+                                </Link>
                                 <div className="review-date">
                                     {review.createdAt
                                         ? new Date(review.createdAt).toLocaleDateString("pl-PL")

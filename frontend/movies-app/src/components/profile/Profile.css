@@ -47,10 +47,11 @@
 }
 
 .profile-avatar-img {
-    width: 100%;
-    height: 100%;
+    width: 72px;
+    height: 72px;
     border-radius: 50%;
     object-fit: cover;
+    flex-shrink: 0;
 }
 
 .avatar-picker-overlay {
@@ -329,7 +330,8 @@
         gap: 14px;
     }
 
-    .profile-avatar {
+    .profile-avatar,
+    .profile-avatar-img{
         width: 56px;
         height: 56px;
         font-size: 1.4rem;
