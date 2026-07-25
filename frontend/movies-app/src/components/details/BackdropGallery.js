@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./BackdropGallery.css";
 
 const BackdropGallery = ({ backdrops, title }) => {
-    const [active, setActive] = useState(0);
+    const [active, setActive] = useState(1);
 
     if (!backdrops?.length) return null;
 

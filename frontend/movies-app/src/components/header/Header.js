@@ -40,11 +40,11 @@ const Header = () => {
               )}
             </Nav>
 
-            <div className="mx-auto">
+            <div className="header-search-center">
               <MovieSearchBar />
             </div>
 
-            <div className="d-flex">
+            <div className="d-flex ms-auto">
               {user ? (
                   <Button variant="outline-warning" onClick={logout}>
                     Logout
