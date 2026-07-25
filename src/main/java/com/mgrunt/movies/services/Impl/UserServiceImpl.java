@@ -1,5 +1,6 @@
 package com.mgrunt.movies.services.Impl;
 
+import com.mgrunt.movies.constants.AvatarConstants;
 import com.mgrunt.movies.domain.dtos.profile.ProfileRatingDto;
 import com.mgrunt.movies.domain.dtos.profile.ProfileReviewDto;
 import com.mgrunt.movies.domain.dtos.rating.RatingDto;
@@ -42,11 +43,6 @@ public class UserServiceImpl implements UserService {
     private final RatingRepository ratingRepository;
     private final RatingMapper ratingMapper;
 
-    private static final Set<String> ALLOWED_AVATARS = Set.of(
-            "/avatars/avatar1.png",
-            "/avatars/avatar2.png"
-    );
-
     @Transactional
     @Override
     public UserDto getUser(Authentication authentication) {
@@ -58,18 +54,10 @@ public class UserServiceImpl implements UserService {
         return userMapper.toDto(user);
     }
 
-//    @Override
-//    @Transactional(readOnly = true)
-//    public UserProfileResponse getUserProfile(UUID id) {
-//        User user = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User not found"));
-//        return buildUserProfileResponse(user);
-//    }
-
-
     @Override
     @Transactional
     public UserProfileResponse updateAvatar(UUID id, String avatarPath) {
-        if (!ALLOWED_AVATARS.contains(avatarPath)) {
+        if (!AvatarConstants.ALLOWED_AVATARS.contains(avatarPath)) {
             throw new IllegalArgumentException("Avatar path does not exist");
         }
 
