@@ -7,6 +7,7 @@ import com.mgrunt.movies.domain.entities.User;
 import com.mgrunt.movies.mappers.MovieMapper;
 import com.mgrunt.movies.repositories.UserRepository;
 import com.mgrunt.movies.services.MovieService;
+import com.mgrunt.movies.testsupport.TestFixtures;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -19,12 +20,10 @@ import org.springframework.security.core.Authentication;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
-import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 /**
@@ -37,7 +36,6 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class WatchlistServiceImplTest {
 
-    private static final String USERNAME = "mateusz";
     private static final Long TMDB_ID = 550L;
 
     @Mock
@@ -68,23 +66,16 @@ class WatchlistServiceImplTest {
 
         @Test
         void returnsMappedWatchedAndToWatchMovies() {
-            // Movie.equals() compares by id, so distinct ids are required here -
-            // otherwise two movies with a null id would be considered equal and
-            // the mapper stubs below would become ambiguous.
-            Movie watchedMovie = new Movie();
-            watchedMovie.setId(UUID.randomUUID());
-            Movie toWatchMovie = new Movie();
-            toWatchMovie.setId(UUID.randomUUID());
+            Movie watchedMovie = TestFixtures.aMovie();
+            Movie toWatchMovie = TestFixtures.aMovie();
 
-            User user = new User();
-            user.setMoviesWatched(Set.of(watchedMovie));
-            user.setMoviesToWatch(Set.of(toWatchMovie));
+            User user = userWith(Set.of(watchedMovie), Set.of(toWatchMovie));
 
             MovieDetailsResponse watchedResponse = mock(MovieDetailsResponse.class);
             MovieDetailsResponse toWatchResponse = mock(MovieDetailsResponse.class);
 
-            when(authentication.getName()).thenReturn(USERNAME);
-            when(userRepository.findByUsername(USERNAME)).thenReturn(Optional.of(user));
+            when(authentication.getName()).thenReturn(TestFixtures.USERNAME);
+            when(userRepository.findByUsername(TestFixtures.USERNAME)).thenReturn(Optional.of(user));
             when(movieMapper.toMovieDetailsResponse(watchedMovie)).thenReturn(watchedResponse);
             when(movieMapper.toMovieDetailsResponse(toWatchMovie)).thenReturn(toWatchResponse);
 
@@ -96,8 +87,8 @@ class WatchlistServiceImplTest {
 
         @Test
         void throwsEntityNotFoundException_whenUserDoesNotExist() {
-            when(authentication.getName()).thenReturn(USERNAME);
-            when(userRepository.findByUsername(USERNAME)).thenReturn(Optional.empty());
+            when(authentication.getName()).thenReturn(TestFixtures.USERNAME);
+            when(userRepository.findByUsername(TestFixtures.USERNAME)).thenReturn(Optional.empty());
 
             assertThatThrownBy(() -> watchlistService.getWatchlist(authentication))
                     .isInstanceOf(EntityNotFoundException.class)
@@ -116,7 +107,7 @@ class WatchlistServiceImplTest {
 
         @Test
         void addsMovieToWatched_whenNotPresentInEitherList() {
-            Movie movie = new Movie();
+            Movie movie = TestFixtures.aMovie();
             User user = userWith(new HashSet<>(), new HashSet<>());
             stubUserAndMovie(user, movie);
 
@@ -129,7 +120,7 @@ class WatchlistServiceImplTest {
 
         @Test
         void removesMovieFromWatched_whenAlreadyPresent() {
-            Movie movie = new Movie();
+            Movie movie = TestFixtures.aMovie();
             User user = userWith(new HashSet<>(Set.of(movie)), new HashSet<>());
             stubUserAndMovie(user, movie);
 
@@ -141,7 +132,7 @@ class WatchlistServiceImplTest {
 
         @Test
         void movesMovieFromToWatchToWatched() {
-            Movie movie = new Movie();
+            Movie movie = TestFixtures.aMovie();
             User user = userWith(new HashSet<>(), new HashSet<>(Set.of(movie)));
             stubUserAndMovie(user, movie);
 
@@ -154,7 +145,7 @@ class WatchlistServiceImplTest {
 
         @Test
         void addsMovieToToWatch_whenNotPresentInEitherList() {
-            Movie movie = new Movie();
+            Movie movie = TestFixtures.aMovie();
             User user = userWith(new HashSet<>(), new HashSet<>());
             stubUserAndMovie(user, movie);
 
@@ -167,7 +158,7 @@ class WatchlistServiceImplTest {
 
         @Test
         void removesMovieFromToWatch_whenAlreadyPresent() {
-            Movie movie = new Movie();
+            Movie movie = TestFixtures.aMovie();
             User user = userWith(new HashSet<>(), new HashSet<>(Set.of(movie)));
             stubUserAndMovie(user, movie);
 
@@ -179,7 +170,7 @@ class WatchlistServiceImplTest {
 
         @Test
         void movesMovieFromWatchedToToWatch() {
-            Movie movie = new Movie();
+            Movie movie = TestFixtures.aMovie();
             User user = userWith(new HashSet<>(Set.of(movie)), new HashSet<>());
             stubUserAndMovie(user, movie);
 
@@ -192,7 +183,7 @@ class WatchlistServiceImplTest {
 
         @Test
         void listTypeIsCaseInsensitive() {
-            Movie movie = new Movie();
+            Movie movie = TestFixtures.aMovie();
             User user = userWith(new HashSet<>(), new HashSet<>());
             stubUserAndMovie(user, movie);
 
@@ -204,11 +195,9 @@ class WatchlistServiceImplTest {
 
         @Test
         void throwsIllegalArgumentException_forInvalidListType() {
-            Movie movie = new Movie();
+            Movie movie = TestFixtures.aMovie();
             User user = userWith(new HashSet<>(), new HashSet<>());
-            when(authentication.getName()).thenReturn(USERNAME);
-            when(userRepository.findByUsername(USERNAME)).thenReturn(Optional.of(user));
-            when(movieService.getMovie(TMDB_ID)).thenReturn(movie);
+            stubUserAndMovie(user, movie);
 
             assertThatThrownBy(() -> watchlistService.toggleMovie(TMDB_ID, "invalid", authentication))
                     .isInstanceOf(IllegalArgumentException.class)
@@ -219,8 +208,8 @@ class WatchlistServiceImplTest {
 
         @Test
         void throwsEntityNotFoundException_whenUserDoesNotExist() {
-            when(authentication.getName()).thenReturn(USERNAME);
-            when(userRepository.findByUsername(USERNAME)).thenReturn(Optional.empty());
+            when(authentication.getName()).thenReturn(TestFixtures.USERNAME);
+            when(userRepository.findByUsername(TestFixtures.USERNAME)).thenReturn(Optional.empty());
 
             assertThatThrownBy(() -> watchlistService.toggleMovie(TMDB_ID, "watched", authentication))
                     .isInstanceOf(EntityNotFoundException.class)
@@ -230,17 +219,26 @@ class WatchlistServiceImplTest {
             verify(userRepository, never()).save(any(User.class));
         }
 
-        private User userWith(Set<Movie> watched, Set<Movie> toWatch) {
-            User user = new User();
-            user.setMoviesWatched(watched);
-            user.setMoviesToWatch(toWatch);
-            return user;
-        }
-
+        /**
+         * Stubs authentication + repository lookup so that {@code user} is
+         * returned for the logged-in user, and {@code movie} is returned for
+         * TMDB_ID.
+         */
         private void stubUserAndMovie(User user, Movie movie) {
-            when(authentication.getName()).thenReturn(USERNAME);
-            when(userRepository.findByUsername(USERNAME)).thenReturn(Optional.of(user));
+            when(authentication.getName()).thenReturn(TestFixtures.USERNAME);
+            when(userRepository.findByUsername(TestFixtures.USERNAME)).thenReturn(Optional.of(user));
             when(movieService.getMovie(TMDB_ID)).thenReturn(movie);
         }
+    }
+
+    /**
+     * A user built on top of {@link TestFixtures#aUser()}, with its
+     * watched/to-watch collections overridden for the scenario under test.
+     */
+    private static User userWith(Set<Movie> watched, Set<Movie> toWatch) {
+        User user = TestFixtures.aUser();
+        user.setMoviesWatched(watched);
+        user.setMoviesToWatch(toWatch);
+        return user;
     }
 }
