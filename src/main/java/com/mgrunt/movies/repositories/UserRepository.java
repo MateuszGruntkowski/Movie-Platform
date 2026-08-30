@@ -5,7 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-
 import java.util.Optional;
 import java.util.UUID;
 
@@ -34,4 +33,10 @@ public interface UserRepository extends JpaRepository<User, UUID> {
             "LEFT JOIN FETCH r.movie " +
             "WHERE u.id = :userId")
     Optional<User> findByIdWithReviews(@Param("userId") UUID userId);
+
+    @Query("SELECT COUNT(m) FROM User u JOIN u.moviesWatched m WHERE u.id = :userId")
+    int countMoviesWatched(@Param("userId") UUID userId);
+
+    @Query("SELECT COUNT(m) FROM User u JOIN u.moviesToWatch m WHERE u.id = :userId")
+    int countMoviesToWatch(@Param("userId") UUID userId);
 }

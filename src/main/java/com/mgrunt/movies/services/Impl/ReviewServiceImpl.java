@@ -1,8 +1,8 @@
 package com.mgrunt.movies.services.Impl;
 
 import com.mgrunt.movies.Security.CustomUserDetails;
-import com.mgrunt.movies.domain.dtos.ReviewDto;
-import com.mgrunt.movies.domain.dtos.ReviewRequest;
+import com.mgrunt.movies.domain.dtos.review.ReviewDto;
+import com.mgrunt.movies.domain.dtos.review.ReviewRequest;
 import com.mgrunt.movies.domain.entities.Movie;
 import com.mgrunt.movies.domain.entities.Review;
 import com.mgrunt.movies.domain.entities.User;
@@ -13,10 +13,12 @@ import com.mgrunt.movies.services.MovieService;
 import com.mgrunt.movies.services.ReviewService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -29,18 +31,15 @@ public class ReviewServiceImpl implements ReviewService {
     private final MovieService movieService;
 
     @Override
-    public List<ReviewDto> getReviewsForMovie(Long tmdbId) {
-//        Movie movie = movieRepository.findById(movieId)
-//                .orElseThrow(() -> new EntityNotFoundException("Movie not found"));
+    @Transactional(readOnly = true)
+    public Page<ReviewDto> getReviewsForMovie(Long tmdbId, Pageable pageable) {
+        Page<Review> reviews = reviewRepository.findByMovieTmdbId(tmdbId, pageable);
 
-        List<Review> reviews = reviewRepository.findByMovieTmdbId(Long.valueOf(tmdbId));
-
-        return reviews.stream()
-                .map(reviewMapper::toDto)
-                .toList();
+        return reviews.map(reviewMapper::toDto);
     }
 
     @Override
+    @Transactional
     public ReviewDto createReview(Long tmdbId, ReviewRequest reviewRequest, Authentication authentication) {
         String reviewBody = reviewRequest.getReviewBody();
 
@@ -54,7 +53,7 @@ public class ReviewServiceImpl implements ReviewService {
         User currentUser = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
-        Movie movie = movieService.findOrCreateMovie(tmdbId);
+        Movie movie = movieService.getMovie(tmdbId);
 
         Review review = Review.builder()
                 .movie(movie)
@@ -66,6 +65,18 @@ public class ReviewServiceImpl implements ReviewService {
         movie.getReviews().add(review);
         return reviewMapper.toDto(review);
 
+    }
+
+    @Override
+    @Transactional
+    public void deleteReview(UUID reviewId, UUID authorId) {
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new EntityNotFoundException("Review not found"));
+
+        if(!review.getAuthor().getId().equals(authorId)){
+            throw new SecurityException("You are not authorized to delete this review");
+        }
+        reviewRepository.delete(review);
     }
 
 }

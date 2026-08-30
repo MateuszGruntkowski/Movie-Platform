@@ -1,8 +1,6 @@
 package com.mgrunt.movies.domain.entities;
-
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -27,6 +25,8 @@ public class User {
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
+
+    private String avatarPath;
 
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Review> reviews = new ArrayList<>();

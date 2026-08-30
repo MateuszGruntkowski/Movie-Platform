@@ -1,0 +1,39 @@
+.app-navbar {
+    background-color: #1a1a1a;
+    border-bottom: 1px solid #333;
+    padding-top: 12px;
+    padding-bottom: 12px;
+}
+
+.app-navbar .container-fluid {
+    position: relative;
+}
+
+.app-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #ffd700 !important;
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+.app-nav-link {
+    color: rgba(255, 255, 255, 0.75) !important;
+    transition: color 0.2s ease;
+}
+
+.app-nav-link:hover,
+.app-nav-link.active {
+    color: #ffd700 !important;
+}
+
+@media (min-width: 992px) {
+    .header-search-center {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 5;
+    }
+}

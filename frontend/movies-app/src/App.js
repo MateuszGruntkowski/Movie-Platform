@@ -12,6 +12,7 @@ import Login from "./components/auth/login/Login";
 import Register from "./components/auth/register/Register";
 import WatchList from "./components/watchList/WatchList";
 import SearchResults from "./components/searchResults/SearchResults";
+import Profile from "./components/profile/Profile";
 
 function App() {
   const [movies, setMovies] = useState([]);
@@ -20,7 +21,7 @@ function App() {
 
   const getMovies = async () => {
     try {
-      const response = await api.get("v1/movies");
+      const response = await api.get("v1/movies/trending");
       setMovies(response.data);
       console.log("Movies fetched:", response.data);
     } catch (error) {
@@ -54,6 +55,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/search" element={<SearchResults />} />
           <Route path="/watchlist" element={<WatchList />} />
+          <Route path="/profile/:username" element={<Profile />} />
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>

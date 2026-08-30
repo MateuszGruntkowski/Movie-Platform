@@ -1,13 +1,10 @@
 package com.mgrunt.movies.services.Impl;
 
-import com.mgrunt.movies.domain.dtos.MovieDetailsResponse;
-import com.mgrunt.movies.domain.dtos.MovieDto;
-import com.mgrunt.movies.domain.dtos.UserWatchListResponse;
+import com.mgrunt.movies.domain.dtos.movie.MovieDetailsResponse;
+import com.mgrunt.movies.domain.dtos.watchlist.UserWatchListResponse;
 import com.mgrunt.movies.domain.entities.Movie;
 import com.mgrunt.movies.domain.entities.User;
-import com.mgrunt.movies.mappers.MovieDetailsMapper;
 import com.mgrunt.movies.mappers.MovieMapper;
-import com.mgrunt.movies.repositories.MovieRepository;
 import com.mgrunt.movies.repositories.UserRepository;
 import com.mgrunt.movies.services.MovieService;
 import com.mgrunt.movies.services.WatchlistService;
@@ -18,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,7 +23,7 @@ public class WatchlistServiceImpl implements WatchlistService {
 
     private final UserRepository userRepository;
     private final MovieService movieService;
-    private final MovieDetailsMapper movieDetailsMapper;
+    private final MovieMapper movieMapper;
 
     @Override
     public UserWatchListResponse getWatchlist(Authentication authentication) {
@@ -37,11 +33,11 @@ public class WatchlistServiceImpl implements WatchlistService {
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
         Set<MovieDetailsResponse> moviesWatched = user.getMoviesWatched().stream()
-                .map(movieDetailsMapper::toMovieDetailsResponse)
+                .map(movieMapper::toMovieDetailsResponse)
                 .collect(Collectors.toSet());
 
         Set<MovieDetailsResponse> moviesToWatch = user.getMoviesToWatch().stream()
-                .map(movieDetailsMapper::toMovieDetailsResponse)
+                .map(movieMapper::toMovieDetailsResponse)
                 .collect(Collectors.toSet());
 
         return UserWatchListResponse.builder()
@@ -56,8 +52,8 @@ public class WatchlistServiceImpl implements WatchlistService {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
-        // Znajdź lub utwórz film
-        Movie movie = movieService.findOrCreateMovie(tmdbId);
+        // find movie
+        Movie movie = movieService.getMovie(tmdbId);
 
         Set<Movie> moviesToWatch = user.getMoviesToWatch();
         Set<Movie> moviesWatched = user.getMoviesWatched();
