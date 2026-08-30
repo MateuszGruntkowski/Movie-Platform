@@ -11,7 +11,7 @@ import org.springframework.security.core.Authentication;
 import java.util.UUID;
 
 public interface UserService {
-    UserDto getUser(Authentication authentication);
+    UserDto getUser(String username);
 
 //    UserProfileResponse getUserProfile(UUID id);
 

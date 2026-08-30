@@ -45,9 +45,7 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public UserDto getUser(Authentication authentication) {
-        String username = authentication.getName();
-
+    public UserDto getUser(String username) {
         User user = userRepository.findByUsernameWithDetails(username)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
 

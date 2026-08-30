@@ -30,7 +30,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.core.Authentication;
 
 import java.util.List;
 import java.util.Optional;
@@ -45,7 +44,6 @@ import static org.mockito.Mockito.*;
  * Unit tests for {@link UserServiceImpl}.
  * <p>
  * All repositories and mappers are mocked, so no database access happens.
- * Authentication is mocked to simulate the currently logged-in user.
  */
 @ExtendWith(MockitoExtension.class)
 class UserServiceImplTest {
@@ -68,9 +66,6 @@ class UserServiceImplTest {
     @Mock
     private RatingMapper ratingMapper;
 
-    @Mock
-    private Authentication authentication;
-
     private UserServiceImpl userService;
 
     @BeforeEach
@@ -90,21 +85,19 @@ class UserServiceImplTest {
             User user = TestFixtures.aUser();
             UserDto userDto = mock(UserDto.class);
 
-            when(authentication.getName()).thenReturn(TestFixtures.USERNAME);
             when(userRepository.findByUsernameWithDetails(TestFixtures.USERNAME)).thenReturn(Optional.of(user));
             when(userMapper.toDto(user)).thenReturn(userDto);
 
-            UserDto result = userService.getUser(authentication);
+            UserDto result = userService.getUser(TestFixtures.USERNAME);
 
             assertThat(result).isSameAs(userDto);
         }
 
         @Test
         void throwsEntityNotFoundException_whenUserDoesNotExist() {
-            when(authentication.getName()).thenReturn(TestFixtures.USERNAME);
             when(userRepository.findByUsernameWithDetails(TestFixtures.USERNAME)).thenReturn(Optional.empty());
 
-            assertThatThrownBy(() -> userService.getUser(authentication))
+            assertThatThrownBy(() -> userService.getUser(TestFixtures.USERNAME))
                     .isInstanceOf(EntityNotFoundException.class)
                     .hasMessageContaining("User not found");
 
