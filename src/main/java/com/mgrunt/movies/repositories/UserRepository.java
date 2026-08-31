@@ -18,6 +18,13 @@ public interface UserRepository extends JpaRepository<User, UUID> {
             "LEFT JOIN FETCH u.reviews " +
             "LEFT JOIN FETCH u.moviesToWatch " +
             "LEFT JOIN FETCH u.moviesWatched " +
+            "WHERE u.id = :id")
+    Optional<User> findByIdWithDetails(@Param("id") UUID id);
+
+    @Query("SELECT u FROM User u " +
+            "LEFT JOIN FETCH u.reviews " +
+            "LEFT JOIN FETCH u.moviesToWatch " +
+            "LEFT JOIN FETCH u.moviesWatched " +
             "WHERE u.username = :username")
     Optional<User> findByUsernameWithDetails(@Param("username") String username);
 

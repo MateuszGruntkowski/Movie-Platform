@@ -30,7 +30,7 @@ public class UserController {
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
         return new ResponseEntity<>(
-                userService.getUser(userDetails.getUsername()),
+                userService.getUser(userDetails.getId()),
                 HttpStatus.OK
         );
     }

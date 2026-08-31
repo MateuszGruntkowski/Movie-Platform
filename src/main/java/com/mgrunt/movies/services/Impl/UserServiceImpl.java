@@ -3,8 +3,6 @@ package com.mgrunt.movies.services.Impl;
 import com.mgrunt.movies.constants.AvatarConstants;
 import com.mgrunt.movies.domain.dtos.profile.ProfileRatingDto;
 import com.mgrunt.movies.domain.dtos.profile.ProfileReviewDto;
-import com.mgrunt.movies.domain.dtos.rating.RatingDto;
-import com.mgrunt.movies.domain.dtos.review.ReviewDto;
 import com.mgrunt.movies.domain.dtos.user.UserDto;
 import com.mgrunt.movies.domain.dtos.profile.UserProfileResponse;
 import com.mgrunt.movies.domain.entities.User;
@@ -21,15 +19,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -45,8 +38,8 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public UserDto getUser(String username) {
-        User user = userRepository.findByUsernameWithDetails(username)
+    public UserDto getUser(UUID userId) {
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
         return userMapper.toDto(user);

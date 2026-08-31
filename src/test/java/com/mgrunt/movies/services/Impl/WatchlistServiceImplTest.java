@@ -79,7 +79,7 @@ class WatchlistServiceImplTest {
             when(movieMapper.toMovieDetailsResponse(watchedMovie)).thenReturn(watchedResponse);
             when(movieMapper.toMovieDetailsResponse(toWatchMovie)).thenReturn(toWatchResponse);
 
-            UserWatchListResponse result = watchlistService.getWatchlist(authentication);
+            UserWatchListResponse result = watchlistService.getWatchlistByUserId(authentication);
 
             assertThat(result.getMoviesWatched()).containsExactly(watchedResponse);
             assertThat(result.getMoviesToWatch()).containsExactly(toWatchResponse);
@@ -90,7 +90,7 @@ class WatchlistServiceImplTest {
             when(authentication.getName()).thenReturn(TestFixtures.USERNAME);
             when(userRepository.findByUsername(TestFixtures.USERNAME)).thenReturn(Optional.empty());
 
-            assertThatThrownBy(() -> watchlistService.getWatchlist(authentication))
+            assertThatThrownBy(() -> watchlistService.getWatchlistByUserId(authentication))
                     .isInstanceOf(EntityNotFoundException.class)
                     .hasMessageContaining("User not found");
 

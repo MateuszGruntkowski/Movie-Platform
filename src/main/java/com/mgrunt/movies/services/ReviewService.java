@@ -13,7 +13,7 @@ public interface ReviewService {
 
     Page<ReviewDto> getReviewsForMovie(Long tmdbId, Pageable pageable);
 
-    ReviewDto createReview(Long tmdbId, ReviewRequest reviewRequest, Authentication authentication);
+    ReviewDto createReview(Long tmdbId, ReviewRequest reviewRequest, UUID authorID);
 
     void deleteReview(UUID reviewId, UUID authorId);
 }

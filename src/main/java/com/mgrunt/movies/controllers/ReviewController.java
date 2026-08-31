@@ -27,8 +27,8 @@ public class ReviewController {
     public ResponseEntity<ReviewDto> createReview(
             @RequestBody ReviewRequest reviewRequest,
             @PathVariable Long tmdbId,
-            Authentication authentication){
-        ReviewDto review = reviewService.createReview(tmdbId, reviewRequest, authentication);
+            @AuthenticationPrincipal CustomUserDetails userDetails){
+        ReviewDto review = reviewService.createReview(tmdbId, reviewRequest, userDetails.getId());
         return new ResponseEntity<>(review, HttpStatus.CREATED);
     }
 

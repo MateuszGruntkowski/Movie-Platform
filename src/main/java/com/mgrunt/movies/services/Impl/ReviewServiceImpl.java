@@ -40,17 +40,14 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     @Transactional
-    public ReviewDto createReview(Long tmdbId, ReviewRequest reviewRequest, Authentication authentication) {
+    public ReviewDto createReview(Long tmdbId, ReviewRequest reviewRequest, UUID authorId) {
         String reviewBody = reviewRequest.getReviewBody();
 
         if(reviewBody == null || reviewBody.trim().isEmpty()){
             throw new IllegalArgumentException("Review body cannot be null");
         }
 
-        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-        UUID userId = userDetails.getId();
-
-        User currentUser = userRepository.findById(userId)
+        User currentUser = userRepository.findById(authorId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
         Movie movie = movieService.getMovie(tmdbId);
@@ -64,7 +61,6 @@ public class ReviewServiceImpl implements ReviewService {
 
         movie.getReviews().add(review);
         return reviewMapper.toDto(review);
-
     }
 
     @Override

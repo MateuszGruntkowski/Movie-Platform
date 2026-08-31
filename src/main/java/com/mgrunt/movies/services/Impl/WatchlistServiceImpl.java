@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,10 +27,8 @@ public class WatchlistServiceImpl implements WatchlistService {
     private final MovieMapper movieMapper;
 
     @Override
-    public UserWatchListResponse getWatchlist(Authentication authentication) {
-        String username = authentication.getName();
-
-        User user = userRepository.findByUsername(username)
+    public UserWatchListResponse getWatchlistByUserId(UUID userId) {
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
         Set<MovieDetailsResponse> moviesWatched = user.getMoviesWatched().stream()
@@ -46,10 +45,10 @@ public class WatchlistServiceImpl implements WatchlistService {
                 .build();
     }
 
+    @Override
     @Transactional
-    public void toggleMovie(Long tmdbId, String listType, Authentication authentication) {
-        String username = authentication.getName();
-        User user = userRepository.findByUsername(username)
+    public void toggleMovie(Long tmdbId, String listType, UUID userId) {
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
         // find movie
