@@ -1,9 +1,13 @@
 package com.mgrunt.movies.controllers;
 
 import com.mgrunt.movies.Security.CustomUserDetails;
+import com.mgrunt.movies.domain.dtos.movie.WatchlistMovieResponse;
 import com.mgrunt.movies.domain.dtos.watchlist.UserWatchListResponse;
 import com.mgrunt.movies.services.WatchlistService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -17,13 +21,33 @@ public class WatchlistController {
 
     private final WatchlistService watchlistService;
 
-    @GetMapping
-    public ResponseEntity<UserWatchListResponse> getWatchlist(
-            @AuthenticationPrincipal CustomUserDetails userDetails
-            ) {
-        return new ResponseEntity<>(
-                watchlistService.getWatchlistByUserId(userDetails.getId()),
-                HttpStatus.OK
+//    @GetMapping
+//    public ResponseEntity<UserWatchListResponse> getWatchlist(
+//            @AuthenticationPrincipal CustomUserDetails userDetails
+//            ) {
+//        return new ResponseEntity<>(
+//                watchlistService.getWatchlistByUserId(userDetails.getId()),
+//                HttpStatus.OK
+//        );
+//    }
+
+    @GetMapping("/to-watch")
+    public ResponseEntity<Page<WatchlistMovieResponse>> getMoviesToWatch(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @PageableDefault(size = 10, sort = "title") Pageable pageable
+    ) {
+        return ResponseEntity.ok(
+                watchlistService.getMoviesToWatch(userDetails.getId(), pageable)
+        );
+    }
+
+    @GetMapping("/watched")
+    public ResponseEntity<Page<WatchlistMovieResponse>> getMoviesWatched(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @PageableDefault(size = 10, sort = "title") Pageable pageable
+    ) {
+        return ResponseEntity.ok(
+                watchlistService.getMoviesWatched(userDetails.getId(), pageable)
         );
     }
 

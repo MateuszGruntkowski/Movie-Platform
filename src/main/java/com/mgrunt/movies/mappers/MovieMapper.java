@@ -39,6 +39,10 @@ public interface MovieMapper {
     @Mapping(target = "tmdbId", source = "id")
     TrendingMovieResponse toTrendingMovie(TmdbTrendingMovieItemResponse movie);
 
+    @Mapping(target = "posterPath", source = "posterPath", qualifiedByName = "buildPosterUrl")
+    @Mapping(target = "genres", source = "genres", qualifiedByName = "mapGenres")
+    WatchlistMovieResponse toWatchlistMovieResponse(Movie movie);
+
     @Named("mapGenres")
     default List<TmdbGenreResponse> mapGenres(List<String> genres) {
         if (genres == null) return new ArrayList<>();

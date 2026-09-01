@@ -1,15 +1,19 @@
 package com.mgrunt.movies.services.Impl;
 
 import com.mgrunt.movies.domain.dtos.movie.MovieDetailsResponse;
+import com.mgrunt.movies.domain.dtos.movie.WatchlistMovieResponse;
 import com.mgrunt.movies.domain.dtos.watchlist.UserWatchListResponse;
 import com.mgrunt.movies.domain.entities.Movie;
 import com.mgrunt.movies.domain.entities.User;
 import com.mgrunt.movies.mappers.MovieMapper;
+import com.mgrunt.movies.repositories.MovieRepository;
 import com.mgrunt.movies.repositories.UserRepository;
 import com.mgrunt.movies.services.MovieService;
 import com.mgrunt.movies.services.WatchlistService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,24 +29,43 @@ public class WatchlistServiceImpl implements WatchlistService {
     private final UserRepository userRepository;
     private final MovieService movieService;
     private final MovieMapper movieMapper;
+    private final MovieRepository movieRepository;
+
+//    @Override
+//    public UserWatchListResponse getWatchlistByUserId(UUID userId) {
+//        User user = userRepository.findById(userId)
+//                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+//
+//        Set<MovieDetailsResponse> moviesWatched = user.getMoviesWatched().stream()
+//                .map(movieMapper::toMovieDetailsResponse)
+//                .collect(Collectors.toSet());
+//
+//        Set<MovieDetailsResponse> moviesToWatch = user.getMoviesToWatch().stream()
+//                .map(movieMapper::toMovieDetailsResponse)
+//                .collect(Collectors.toSet());
+//
+//        return UserWatchListResponse.builder()
+//                .moviesToWatch(moviesToWatch)
+//                .moviesWatched(moviesWatched)
+//                .build();
+//    }
 
     @Override
-    public UserWatchListResponse getWatchlistByUserId(UUID userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+    public Page<WatchlistMovieResponse> getMoviesToWatch(UUID userId, Pageable pageable) {
+        if (!userRepository.existsById(userId)) {
+            throw new EntityNotFoundException("User not found");
+        }
+        return movieRepository.findMoviesToWatchByUserId(userId, pageable)
+                .map(movieMapper::toWatchlistMovieResponse);
+    }
 
-        Set<MovieDetailsResponse> moviesWatched = user.getMoviesWatched().stream()
-                .map(movieMapper::toMovieDetailsResponse)
-                .collect(Collectors.toSet());
-
-        Set<MovieDetailsResponse> moviesToWatch = user.getMoviesToWatch().stream()
-                .map(movieMapper::toMovieDetailsResponse)
-                .collect(Collectors.toSet());
-
-        return UserWatchListResponse.builder()
-                .moviesToWatch(moviesToWatch)
-                .moviesWatched(moviesWatched)
-                .build();
+    @Override
+    public Page<WatchlistMovieResponse> getMoviesWatched(UUID userId, Pageable pageable) {
+        if (!userRepository.existsById(userId)) {
+            throw new EntityNotFoundException("User not found");
+        }
+        return movieRepository.findMoviesWatchedByUserId(userId, pageable)
+                .map(movieMapper::toWatchlistMovieResponse);
     }
 
     @Override
