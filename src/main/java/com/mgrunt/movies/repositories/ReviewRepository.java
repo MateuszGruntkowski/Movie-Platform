@@ -15,8 +15,6 @@ import java.util.UUID;
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, UUID> {
 
-    List<Review> findByMovieId(UUID movieId);
-
     @Query("SELECT r FROM Review r " +
             "JOIN FETCH r.author " +
             "WHERE r.movie.tmdbId = :tmdbId")
@@ -29,18 +27,4 @@ public interface ReviewRepository extends JpaRepository<Review, UUID> {
 
     int countByAuthorId(UUID authorId);
 
-
-    List<Review> getReviewsByMovie(Movie movie);
-    List<Review> findByAuthorId(UUID authorId);
-    Integer findReviewCountByAuthorId(UUID authorId);
-
-    // Znajdź recenzje z autorami i filmami
-    @Query("SELECT r FROM Review r " +
-            "JOIN FETCH r.author " +
-            "JOIN FETCH r.movie " +
-            "WHERE r.movie.id = :movieId")
-    List<Review> findByMovieIdWithAuthorAndMovie(@Param("movieId") UUID movieId);
-
-    // Sprawdź czy user już napisał recenzję dla filmu
-    boolean existsByAuthorIdAndMovieId(UUID authorId, UUID movieId);
 }

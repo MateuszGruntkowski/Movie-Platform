@@ -15,7 +15,6 @@ import java.util.UUID;
 @Repository
 public interface RatingRepository extends JpaRepository<Rating, UUID> {
     Optional<Rating> findByMovie_TmdbIdAndAuthorId(Long tmdbId, UUID authorId);
-    Set<Rating> findByAuthorId(UUID authorId);
 
     @Query("SELECT AVG(r.rating) FROM Rating r WHERE r.author.id = :authorId")
     Double findAverageRatingByAuthorId(@Param("authorId") UUID authorId);
@@ -27,5 +26,4 @@ public interface RatingRepository extends JpaRepository<Rating, UUID> {
 
     int countByAuthorId(UUID authorId);
 
-    Integer findRatingsCountByAuthorId(UUID authorId);
 }

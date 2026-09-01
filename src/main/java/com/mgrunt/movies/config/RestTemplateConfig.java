@@ -12,23 +12,6 @@ public class RestTemplateConfig {
     public RestTemplate restTemplate() {
         RestTemplate restTemplate = new RestTemplate();
 
-//        restTemplate.setErrorHandler(new ResponseErrorHandler() {
-//            @Override
-//            public boolean hasError(ClientHttpResponse response) throws IOException {
-//                return response.getStatusCode().series() == HttpStatus.Series.CLIENT_ERROR ||
-//                        response.getStatusCode().series() == HttpStatus.Series.SERVER_ERROR;
-//            }
-//
-//            @Override
-//            public void handleError(ClientHttpResponse response) throws IOException {
-//                if (response.getStatusCode().series() == HttpStatus.Series.SERVER_ERROR) {
-//                    throw new ExternalApiException("TMDB API server error: " + response.getStatusCode());
-//                } else if (response.getStatusCode().series() == HttpStatus.Series.CLIENT_ERROR) {
-//                    throw new ExternalApiException("TMDB API client error: " + response.getStatusCode());
-//                }
-//            }
-//        });
-
         // Ustaw timeout
         HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
         factory.setConnectTimeout(5000); // 5 sekund

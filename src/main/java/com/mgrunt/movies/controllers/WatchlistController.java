@@ -21,16 +21,6 @@ public class WatchlistController {
 
     private final WatchlistService watchlistService;
 
-//    @GetMapping
-//    public ResponseEntity<UserWatchListResponse> getWatchlist(
-//            @AuthenticationPrincipal CustomUserDetails userDetails
-//            ) {
-//        return new ResponseEntity<>(
-//                watchlistService.getWatchlistByUserId(userDetails.getId()),
-//                HttpStatus.OK
-//        );
-//    }
-
     @GetMapping("/to-watch")
     public ResponseEntity<Page<WatchlistMovieResponse>> getMoviesToWatch(
             @AuthenticationPrincipal CustomUserDetails userDetails,

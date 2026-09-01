@@ -16,5 +16,4 @@ public class TrendingMovieResponse{
     private String title;
     private String posterPath;
     private String backdropPath;
-
 }

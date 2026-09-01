@@ -15,7 +15,5 @@ public record UserProfileResponse(
         int reviewsCount,
         int moviesWatchedCount,
         int moviesToWatchCount
-//        List<ProfileReviewDto> reviews,
-//        List<ProfileRatingDto> ratings
 ) {
 }

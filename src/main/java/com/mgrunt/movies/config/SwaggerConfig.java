@@ -19,7 +19,7 @@ public class SwaggerConfig {
                 .info(new Info()
                         .title("Mateusz API")
                         .version("1.0")
-                        .description("Dokumentacja API ze wsparciem JWT"))
+                        .description("API documentation with JWT support"))
                 .addSecurityItem(new SecurityRequirement().addList(securitySchemeName))
                 .components(new Components()
                         .addSecuritySchemes(securitySchemeName,
