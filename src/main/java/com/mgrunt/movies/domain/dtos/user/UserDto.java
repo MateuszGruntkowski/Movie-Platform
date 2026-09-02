@@ -1,17 +1,11 @@
 package com.mgrunt.movies.domain.dtos.user;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import java.util.Set;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class UserDto {
-
-    private String username;
-    private String avatarPath;
-    private Set<Long> moviesToWatchIds;
-    private Set<Long> moviesWatchedIds;
+public record UserDto(
+        String username,
+        String avatarPath,
+        Set<Long> moviesToWatchIds,
+        Set<Long> moviesWatchedIds
+) {
 }

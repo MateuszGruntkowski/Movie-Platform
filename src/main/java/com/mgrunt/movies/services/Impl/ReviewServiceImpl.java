@@ -39,7 +39,7 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     @Transactional
     public ReviewDto createReview(Long tmdbId, ReviewRequest reviewRequest, UUID authorId) {
-        String reviewBody = reviewRequest.getReviewBody();
+        String reviewBody = reviewRequest.reviewBody();
 
         if(reviewBody == null || reviewBody.trim().isEmpty()){
             throw new IllegalArgumentException("Review body cannot be null");
