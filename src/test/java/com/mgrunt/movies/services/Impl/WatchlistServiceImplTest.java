@@ -1,10 +1,10 @@
 package com.mgrunt.movies.services.Impl;
 
-import com.mgrunt.movies.domain.dtos.movie.MovieDetailsResponse;
-import com.mgrunt.movies.domain.dtos.watchlist.UserWatchListResponse;
+import com.mgrunt.movies.domain.dtos.movie.WatchlistMovieResponse;
 import com.mgrunt.movies.domain.entities.Movie;
 import com.mgrunt.movies.domain.entities.User;
 import com.mgrunt.movies.mappers.MovieMapper;
+import com.mgrunt.movies.repositories.MovieRepository;
 import com.mgrunt.movies.repositories.UserRepository;
 import com.mgrunt.movies.services.MovieService;
 import com.mgrunt.movies.testsupport.TestFixtures;
@@ -15,23 +15,27 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.core.Authentication;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 /**
  * Unit tests for {@link WatchlistServiceImpl}.
  * <p>
- * UserRepository, MovieService and MovieMapper are mocked, so no database
- * or external service is touched. Authentication is mocked to simulate the
- * currently logged-in user.
+ * UserRepository, MovieRepository, MovieService and MovieMapper are mocked,
+ * so no database or external service is touched.
  */
 @ExtendWith(MockitoExtension.class)
 class WatchlistServiceImplTest {
@@ -48,53 +52,84 @@ class WatchlistServiceImplTest {
     private MovieMapper movieMapper;
 
     @Mock
-    private Authentication authentication;
+    private MovieRepository movieRepository;
 
     private WatchlistServiceImpl watchlistService;
 
     @BeforeEach
     void setUp() {
-        watchlistService = new WatchlistServiceImpl(userRepository, movieService, movieMapper);
+        watchlistService = new WatchlistServiceImpl(userRepository, movieService, movieMapper, movieRepository);
     }
 
     // ---------------------------------------------------------------
-    // getWatchlist
+    // getMoviesToWatch
     // ---------------------------------------------------------------
 
     @Nested
-    class GetWatchlist {
+    class GetMoviesToWatch {
+
+        private final Pageable pageable = PageRequest.of(0, 10);
 
         @Test
-        void returnsMappedWatchedAndToWatchMovies() {
-            Movie watchedMovie = TestFixtures.aMovie();
-            Movie toWatchMovie = TestFixtures.aMovie();
+        void returnsMappedPage_whenUserExists() {
+            Movie movie = TestFixtures.aMovie();
+            WatchlistMovieResponse response = mock(WatchlistMovieResponse.class);
+            Page<Movie> moviePage = new PageImpl<>(List.of(movie));
 
-            User user = userWith(Set.of(watchedMovie), Set.of(toWatchMovie));
+            when(userRepository.existsById(TestFixtures.USER_ID)).thenReturn(true);
+            when(movieRepository.findMoviesToWatchByUserId(TestFixtures.USER_ID, pageable)).thenReturn(moviePage);
+            when(movieMapper.toWatchlistMovieResponse(movie)).thenReturn(response);
 
-            MovieDetailsResponse watchedResponse = mock(MovieDetailsResponse.class);
-            MovieDetailsResponse toWatchResponse = mock(MovieDetailsResponse.class);
+            Page<WatchlistMovieResponse> result = watchlistService.getMoviesToWatch(TestFixtures.USER_ID, pageable);
 
-            when(authentication.getName()).thenReturn(TestFixtures.USERNAME);
-            when(userRepository.findByUsername(TestFixtures.USERNAME)).thenReturn(Optional.of(user));
-            when(movieMapper.toMovieDetailsResponse(watchedMovie)).thenReturn(watchedResponse);
-            when(movieMapper.toMovieDetailsResponse(toWatchMovie)).thenReturn(toWatchResponse);
-
-            UserWatchListResponse result = watchlistService.getWatchlistByUserId(authentication);
-
-            assertThat(result.getMoviesWatched()).containsExactly(watchedResponse);
-            assertThat(result.getMoviesToWatch()).containsExactly(toWatchResponse);
+            assertThat(result.getContent()).containsExactly(response);
         }
 
         @Test
         void throwsEntityNotFoundException_whenUserDoesNotExist() {
-            when(authentication.getName()).thenReturn(TestFixtures.USERNAME);
-            when(userRepository.findByUsername(TestFixtures.USERNAME)).thenReturn(Optional.empty());
+            when(userRepository.existsById(TestFixtures.USER_ID)).thenReturn(false);
 
-            assertThatThrownBy(() -> watchlistService.getWatchlistByUserId(authentication))
+            assertThatThrownBy(() -> watchlistService.getMoviesToWatch(TestFixtures.USER_ID, pageable))
                     .isInstanceOf(EntityNotFoundException.class)
                     .hasMessageContaining("User not found");
 
-            verifyNoInteractions(movieMapper);
+            verifyNoInteractions(movieRepository, movieMapper);
+        }
+    }
+
+    // ---------------------------------------------------------------
+    // getMoviesWatched
+    // ---------------------------------------------------------------
+
+    @Nested
+    class GetMoviesWatched {
+
+        private final Pageable pageable = PageRequest.of(0, 10);
+
+        @Test
+        void returnsMappedPage_whenUserExists() {
+            Movie movie = TestFixtures.aMovie();
+            WatchlistMovieResponse response = mock(WatchlistMovieResponse.class);
+            Page<Movie> moviePage = new PageImpl<>(List.of(movie));
+
+            when(userRepository.existsById(TestFixtures.USER_ID)).thenReturn(true);
+            when(movieRepository.findMoviesWatchedByUserId(TestFixtures.USER_ID, pageable)).thenReturn(moviePage);
+            when(movieMapper.toWatchlistMovieResponse(movie)).thenReturn(response);
+
+            Page<WatchlistMovieResponse> result = watchlistService.getMoviesWatched(TestFixtures.USER_ID, pageable);
+
+            assertThat(result.getContent()).containsExactly(response);
+        }
+
+        @Test
+        void throwsEntityNotFoundException_whenUserDoesNotExist() {
+            when(userRepository.existsById(TestFixtures.USER_ID)).thenReturn(false);
+
+            assertThatThrownBy(() -> watchlistService.getMoviesWatched(TestFixtures.USER_ID, pageable))
+                    .isInstanceOf(EntityNotFoundException.class)
+                    .hasMessageContaining("User not found");
+
+            verifyNoInteractions(movieRepository, movieMapper);
         }
     }
 
@@ -111,7 +146,7 @@ class WatchlistServiceImplTest {
             User user = userWith(new HashSet<>(), new HashSet<>());
             stubUserAndMovie(user, movie);
 
-            watchlistService.toggleMovie(TMDB_ID, "watched", authentication);
+            watchlistService.toggleMovie(TMDB_ID, "watched", TestFixtures.USER_ID);
 
             assertThat(user.getMoviesWatched()).containsExactly(movie);
             assertThat(user.getMoviesToWatch()).isEmpty();
@@ -124,7 +159,7 @@ class WatchlistServiceImplTest {
             User user = userWith(new HashSet<>(Set.of(movie)), new HashSet<>());
             stubUserAndMovie(user, movie);
 
-            watchlistService.toggleMovie(TMDB_ID, "watched", authentication);
+            watchlistService.toggleMovie(TMDB_ID, "watched", TestFixtures.USER_ID);
 
             assertThat(user.getMoviesWatched()).isEmpty();
             verify(userRepository).save(user);
@@ -136,7 +171,7 @@ class WatchlistServiceImplTest {
             User user = userWith(new HashSet<>(), new HashSet<>(Set.of(movie)));
             stubUserAndMovie(user, movie);
 
-            watchlistService.toggleMovie(TMDB_ID, "watched", authentication);
+            watchlistService.toggleMovie(TMDB_ID, "watched", TestFixtures.USER_ID);
 
             assertThat(user.getMoviesWatched()).containsExactly(movie);
             assertThat(user.getMoviesToWatch()).isEmpty();
@@ -149,7 +184,7 @@ class WatchlistServiceImplTest {
             User user = userWith(new HashSet<>(), new HashSet<>());
             stubUserAndMovie(user, movie);
 
-            watchlistService.toggleMovie(TMDB_ID, "toWatch", authentication);
+            watchlistService.toggleMovie(TMDB_ID, "toWatch", TestFixtures.USER_ID);
 
             assertThat(user.getMoviesToWatch()).containsExactly(movie);
             assertThat(user.getMoviesWatched()).isEmpty();
@@ -162,7 +197,7 @@ class WatchlistServiceImplTest {
             User user = userWith(new HashSet<>(), new HashSet<>(Set.of(movie)));
             stubUserAndMovie(user, movie);
 
-            watchlistService.toggleMovie(TMDB_ID, "toWatch", authentication);
+            watchlistService.toggleMovie(TMDB_ID, "toWatch", TestFixtures.USER_ID);
 
             assertThat(user.getMoviesToWatch()).isEmpty();
             verify(userRepository).save(user);
@@ -174,7 +209,7 @@ class WatchlistServiceImplTest {
             User user = userWith(new HashSet<>(Set.of(movie)), new HashSet<>());
             stubUserAndMovie(user, movie);
 
-            watchlistService.toggleMovie(TMDB_ID, "toWatch", authentication);
+            watchlistService.toggleMovie(TMDB_ID, "toWatch", TestFixtures.USER_ID);
 
             assertThat(user.getMoviesToWatch()).containsExactly(movie);
             assertThat(user.getMoviesWatched()).isEmpty();
@@ -187,7 +222,7 @@ class WatchlistServiceImplTest {
             User user = userWith(new HashSet<>(), new HashSet<>());
             stubUserAndMovie(user, movie);
 
-            watchlistService.toggleMovie(TMDB_ID, "WaTcHeD", authentication);
+            watchlistService.toggleMovie(TMDB_ID, "WaTcHeD", TestFixtures.USER_ID);
 
             assertThat(user.getMoviesWatched()).containsExactly(movie);
             verify(userRepository).save(user);
@@ -199,7 +234,7 @@ class WatchlistServiceImplTest {
             User user = userWith(new HashSet<>(), new HashSet<>());
             stubUserAndMovie(user, movie);
 
-            assertThatThrownBy(() -> watchlistService.toggleMovie(TMDB_ID, "invalid", authentication))
+            assertThatThrownBy(() -> watchlistService.toggleMovie(TMDB_ID, "invalid", TestFixtures.USER_ID))
                     .isInstanceOf(IllegalArgumentException.class)
                     .hasMessageContaining("Invalid listType: invalid");
 
@@ -208,10 +243,9 @@ class WatchlistServiceImplTest {
 
         @Test
         void throwsEntityNotFoundException_whenUserDoesNotExist() {
-            when(authentication.getName()).thenReturn(TestFixtures.USERNAME);
-            when(userRepository.findByUsername(TestFixtures.USERNAME)).thenReturn(Optional.empty());
+            when(userRepository.findById(TestFixtures.USER_ID)).thenReturn(Optional.empty());
 
-            assertThatThrownBy(() -> watchlistService.toggleMovie(TMDB_ID, "watched", authentication))
+            assertThatThrownBy(() -> watchlistService.toggleMovie(TMDB_ID, "watched", TestFixtures.USER_ID))
                     .isInstanceOf(EntityNotFoundException.class)
                     .hasMessageContaining("User not found");
 
@@ -220,13 +254,11 @@ class WatchlistServiceImplTest {
         }
 
         /**
-         * Stubs authentication + repository lookup so that {@code user} is
-         * returned for the logged-in user, and {@code movie} is returned for
-         * TMDB_ID.
+         * Stubs the repository lookup so that {@code user} is returned for
+         * TestFixtures.USER_ID, and {@code movie} is returned for TMDB_ID.
          */
         private void stubUserAndMovie(User user, Movie movie) {
-            when(authentication.getName()).thenReturn(TestFixtures.USERNAME);
-            when(userRepository.findByUsername(TestFixtures.USERNAME)).thenReturn(Optional.of(user));
+            when(userRepository.findById(TestFixtures.USER_ID)).thenReturn(Optional.of(user));
             when(movieService.getMovie(TMDB_ID)).thenReturn(movie);
         }
     }

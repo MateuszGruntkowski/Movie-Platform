@@ -85,19 +85,19 @@ class UserServiceImplTest {
             User user = TestFixtures.aUser();
             UserDto userDto = mock(UserDto.class);
 
-            when(userRepository.findByUsernameWithDetails(TestFixtures.USERNAME)).thenReturn(Optional.of(user));
+            when(userRepository.findById(TestFixtures.USER_ID)).thenReturn(Optional.of(user));
             when(userMapper.toDto(user)).thenReturn(userDto);
 
-            UserDto result = userService.getUser(TestFixtures.USERNAME);
+            UserDto result = userService.getUser(TestFixtures.USER_ID);
 
             assertThat(result).isSameAs(userDto);
         }
 
         @Test
         void throwsEntityNotFoundException_whenUserDoesNotExist() {
-            when(userRepository.findByUsernameWithDetails(TestFixtures.USERNAME)).thenReturn(Optional.empty());
+            when(userRepository.findById(TestFixtures.USER_ID)).thenReturn(Optional.empty());
 
-            assertThatThrownBy(() -> userService.getUser(TestFixtures.USERNAME))
+            assertThatThrownBy(() -> userService.getUser(TestFixtures.USER_ID))
                     .isInstanceOf(EntityNotFoundException.class)
                     .hasMessageContaining("User not found");
 
