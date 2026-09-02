@@ -6,14 +6,11 @@ import com.mgrunt.movies.domain.dtos.user.UserDto;
 import com.mgrunt.movies.domain.dtos.profile.UserProfileResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.Authentication;
 
 import java.util.UUID;
 
 public interface UserService {
     UserDto getUser(UUID userId);
-
-//    UserProfileResponse getUserProfile(UUID id);
 
     UserProfileResponse updateAvatar(UUID id, String avatarPath);
 

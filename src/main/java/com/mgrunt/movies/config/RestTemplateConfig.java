@@ -12,10 +12,9 @@ public class RestTemplateConfig {
     public RestTemplate restTemplate() {
         RestTemplate restTemplate = new RestTemplate();
 
-        // Ustaw timeout
         HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
-        factory.setConnectTimeout(5000); // 5 sekund
-        factory.setReadTimeout(10000);   // 10 sekund
+        factory.setConnectTimeout(5000); // 5 seconds
+        factory.setReadTimeout(10000);   // 10 seconds
         restTemplate.setRequestFactory(factory);
 
         return restTemplate;

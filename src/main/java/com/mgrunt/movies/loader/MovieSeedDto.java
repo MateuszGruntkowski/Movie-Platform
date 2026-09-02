@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * The data structure of the seed file (src/main/resources/data/movies.json),
  * used exclusively by MovieDataLoader to pre-populate the database.
- * Not to be confused with API response DTOs (MovieDetailsResponse, MovieSearchResponse).
+ * Not to be confused with API response DTOs (MovieDetailsResponse, MovieSearchResponse etc.).
  */
 @Data
 @NoArgsConstructor

@@ -35,13 +35,6 @@ public class Review {
     @JoinColumn(name = "movie_id", nullable = false)
     private Movie movie;
 
-    @Builder
-    public Review(String body, User author, Movie movie) {
-        this.body = body;
-        this.author = author;
-        this.movie = movie;
-    }
-
     @PrePersist
     protected void onCreate() {
         LocalDateTime now = LocalDateTime.now();

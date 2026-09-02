@@ -1,6 +1,5 @@
 package com.mgrunt.movies.services.Impl;
 
-import com.mgrunt.movies.Security.CustomUserDetails;
 import com.mgrunt.movies.domain.dtos.review.ReviewDto;
 import com.mgrunt.movies.domain.dtos.review.ReviewRequest;
 import com.mgrunt.movies.domain.entities.Movie;
@@ -15,7 +14,6 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

@@ -8,7 +8,6 @@ import com.mgrunt.movies.domain.dtos.tmdb.TmdbTrendingMovieItemResponse;
 import com.mgrunt.movies.domain.entities.Movie;
 import com.mgrunt.movies.exceptions.MovieSearchException;
 import com.mgrunt.movies.mappers.MovieMapper;
-import com.mgrunt.movies.repositories.MovieRepository;
 import com.mgrunt.movies.services.MovieService;
 import com.mgrunt.movies.services.MovieSyncService;
 import com.mgrunt.movies.services.TmdbService;
