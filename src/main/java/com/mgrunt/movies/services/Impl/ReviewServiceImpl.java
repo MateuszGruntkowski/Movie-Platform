@@ -57,7 +57,6 @@ public class ReviewServiceImpl implements ReviewService {
                 .build();
         reviewRepository.save(review);
 
-        movie.getReviews().add(review);
         return reviewMapper.toDto(review);
     }
 
