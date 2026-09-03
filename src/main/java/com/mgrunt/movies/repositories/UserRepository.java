@@ -21,19 +21,6 @@ public interface UserRepository extends JpaRepository<User, UUID> {
             "WHERE u.username = :username")
     Optional<User> findByUsernameWithDetails(@Param("username") String username);
 
-    // Znajdź użytkownika z watchlistą
-    @Query("SELECT u FROM User u " +
-            "LEFT JOIN FETCH u.moviesToWatch " +
-            "WHERE u.id = :userId")
-    Optional<User> findByIdWithWatchlist(@Param("userId") UUID userId);
-
-    // Znajdź użytkownika z recenzjami
-    @Query("SELECT u FROM User u " +
-            "LEFT JOIN FETCH u.reviews r " +
-            "LEFT JOIN FETCH r.movie " +
-            "WHERE u.id = :userId")
-    Optional<User> findByIdWithReviews(@Param("userId") UUID userId);
-
     @Query("SELECT COUNT(m) FROM User u JOIN u.moviesWatched m WHERE u.id = :userId")
     int countMoviesWatched(@Param("userId") UUID userId);
 

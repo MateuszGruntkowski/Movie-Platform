@@ -10,7 +10,7 @@ import org.mapstruct.ReportingPolicy;
 @Mapper(
         componentModel = "spring",
         unmappedTargetPolicy = ReportingPolicy.IGNORE,
-        uses = {MovieSummaryMapper.class}
+        uses = {UserProfileMovieMapper.class}
 )
 public interface ReviewMapper {
 

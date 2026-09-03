@@ -5,7 +5,7 @@ import lombok.Builder;
 import java.util.UUID;
 
 @Builder
-public record MovieSummaryDto(
+public record UserProfileMovieDto(
         UUID id,
         Long tmdbId,
         String title,

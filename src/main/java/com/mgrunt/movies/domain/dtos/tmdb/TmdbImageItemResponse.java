@@ -2,29 +2,23 @@ package com.mgrunt.movies.domain.dtos.tmdb;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class TmdbImageItemResponse {
-    @JsonProperty("aspect_ratio")
-    private Double aspectRatio;
+public record TmdbImageItemResponse(
 
-    private Integer height;
-    private Integer width;
+        @JsonProperty("aspect_ratio")
+        Double aspectRatio,
 
-    @JsonProperty("file_path")
-    private String filePath;
+        Integer height,
+        Integer width,
 
-    @JsonProperty("vote_average")
-    private Double voteAverage;
+        @JsonProperty("file_path")
+        String filePath,
 
-    @JsonProperty("vote_count")
-    private Integer voteCount;
+        @JsonProperty("vote_average")
+        Double voteAverage,
+
+        @JsonProperty("vote_count")
+        Integer voteCount
+) {
 }

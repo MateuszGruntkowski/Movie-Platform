@@ -11,7 +11,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
@@ -27,8 +26,8 @@ public class ReviewController {
     public ResponseEntity<ReviewDto> createReview(
             @RequestBody ReviewRequest reviewRequest,
             @PathVariable Long tmdbId,
-            Authentication authentication){
-        ReviewDto review = reviewService.createReview(tmdbId, reviewRequest, authentication);
+            @AuthenticationPrincipal CustomUserDetails userDetails){
+        ReviewDto review = reviewService.createReview(tmdbId, reviewRequest, userDetails.getId());
         return new ResponseEntity<>(review, HttpStatus.CREATED);
     }
 

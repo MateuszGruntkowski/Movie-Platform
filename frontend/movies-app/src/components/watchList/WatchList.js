@@ -1,141 +1,207 @@
-import React, { useState, useEffect } from "react";
-import { Eye, EyeOff, Clock } from "lucide-react";
-import api from "../../api/axiosConfig";
-import MovieCard from "./MovieCard";
+import React, { useState, useEffect, useCallback } from "react";
+import { Eye, Clock } from "lucide-react";
 import "./WatchList.css";
 import { useUser } from "../context/UserContext";
 import { usePopup } from "../../hooks/usePopup";
 import { Navigate } from "react-router-dom";
+import WatchlistSection from "./WatchlistSection";
+import { watchlistService } from "../../Services/watchlistService";
+
+const PAGE_SIZE = 10;
+
+const emptyListState = {
+    movies: [],
+    total: 0,
+    page: 0,
+    isLast: true,
+    isLoading: false,
+};
+
+const FETCHERS = {
+    moviesToWatch: watchlistService.getMoviesToWatch,
+    moviesWatched: watchlistService.getMoviesWatched,
+};
 
 const WatchList = () => {
-  const { user, loading, toggleMovieStatus } = useUser();
-  const { popup, showPopup } = usePopup();
-  const [moviesToWatch, setMoviesToWatch] = useState([]);
-  const [moviesWatched, setMoviesWatched] = useState([]);
+    const { user, loading, toggleMovieStatus } = useUser();
+    const { popup, showPopup } = usePopup();
 
-  const fetchWatchlistData = async () => {
-    try {
-      const response = await api.get("/v1/users/watchlist");
-      setMoviesToWatch(response.data.moviesToWatch);
-      setMoviesWatched(response.data.moviesWatched);
-    } catch (error) {
-      console.error("Error fetching watchlist data:", error);
+    const [toWatch, setToWatch] = useState(emptyListState);
+    const [watched, setWatched] = useState(emptyListState);
+
+    const getState = (listType) =>
+        listType === "moviesToWatch" ? [toWatch, setToWatch] : [watched, setWatched];
+
+    const loadInitialPage = useCallback(async (listType) => {
+        const [, setState] = getState(listType);
+        setState((prev) => ({ ...prev, isLoading: true }));
+        try {
+            const data = await FETCHERS[listType]({ page: 0, size: PAGE_SIZE });
+            setState({
+                movies: data.content,
+                total: data.totalElements,
+                page: 0,
+                isLast: data.last,
+                isLoading: false,
+            });
+        } catch (error) {
+            console.error(`Error loading ${listType}:`, error);
+            setState((prev) => ({ ...prev, isLoading: false }));
+        }
+    }, []);
+
+    useEffect(() => {
+        if (user) {
+            loadInitialPage("moviesToWatch");
+            loadInitialPage("moviesWatched");
+        }
+    }, [user, loadInitialPage]);
+
+    const handleLoadMore = async (listType) => {
+        const [state, setState] = getState(listType);
+        const nextPage = state.page + 1;
+        setState((prev) => ({ ...prev, isLoading: true }));
+        try {
+            const data = await FETCHERS[listType]({ page: nextPage, size: PAGE_SIZE });
+            setState((prev) => ({
+                movies: [...prev.movies, ...data.content],
+                total: data.totalElements,
+                page: nextPage,
+                isLast: data.last,
+                isLoading: false,
+            }));
+        } catch (error) {
+            console.error(`Error loading more ${listType}:`, error);
+            setState((prev) => ({ ...prev, isLoading: false }));
+        }
+    };
+
+    // Optimistyczne przeniesienie karty między listami - UI reaguje natychmiast,
+    // request do API leci w tle. W razie błędu cofamy zmianę.
+    const handleToggle = async (movie, sourceListType, targetListType) => {
+        const [, setSource] = getState(sourceListType);
+        const [, setTarget] = getState(targetListType);
+
+        setSource((prev) => ({
+            ...prev,
+            movies: prev.movies.filter((m) => m.tmdbId !== movie.tmdbId),
+            total: Math.max(0, prev.total - 1),
+        }));
+        setTarget((prev) => ({
+            ...prev,
+            movies: [movie, ...prev.movies],
+            total: prev.total + 1,
+        }));
+
+        try {
+            await toggleMovieStatus(
+                movie.tmdbId,
+                targetListType === "moviesWatched" ? "watched" : "toWatch",
+                showPopup
+            );
+        } catch (error) {
+            console.error("Error toggling movie status:", error);
+            // Rollback przy błędzie
+            setSource((prev) => ({
+                ...prev,
+                movies: [movie, ...prev.movies],
+                total: prev.total + 1,
+            }));
+            setTarget((prev) => ({
+                ...prev,
+                movies: prev.movies.filter((m) => m.tmdbId !== movie.tmdbId),
+                total: Math.max(0, prev.total - 1),
+            }));
+        }
+    };
+
+    // Usunięcie z listy bez przenoszenia (np. przycisk X)
+    const handleRemove = async (movie, sourceListType) => {
+        const [, setSource] = getState(sourceListType);
+
+        setSource((prev) => ({
+            ...prev,
+            movies: prev.movies.filter((m) => m.tmdbId !== movie.tmdbId),
+            total: Math.max(0, prev.total - 1),
+        }));
+
+        try {
+            await toggleMovieStatus(
+                movie.tmdbId,
+                sourceListType === "moviesWatched" ? "watched" : "toWatch",
+                showPopup
+            );
+        } catch (error) {
+            console.error("Error removing movie:", error);
+            setSource((prev) => ({
+                ...prev,
+                movies: [movie, ...prev.movies],
+                total: prev.total + 1,
+            }));
+        }
+    };
+
+    if (loading) {
+        return <div>Loading...</div>;
     }
-  };
 
-  useEffect(() => {
-    if (user) {
-      fetchWatchlistData();
+    if (!user) {
+        return <Navigate to="/login" replace />;
     }
-  }, [user]);
 
-  // Jedna funkcja do obsługi wszystkich akcji - używa tylko toggle endpoint
-  const handleWatchlistAction = async (movieId, targetListType) => {
-    await toggleMovieStatus(movieId, targetListType, showPopup);
-    // Zawsze odświeżamy dane - nawet jeśli był błąd, żeby mieć aktualny stan
-    await fetchWatchlistData();
-  };
+    return (
+        <div className="wl-container">
+            {popup.show && (
+                <div className={`popup-notification ${popup.type}`}>
+                    {popup.message}
+                </div>
+            )}
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+            <header className="wl-header">
+                <h1>My Movie List</h1>
+                <div className="wl-stats">
+                    <span className="wl-stat">
+                        <Clock size={16} />
+                        To watch: {toWatch.total}
+                    </span>
+                    <span className="wl-stat">
+                        <Eye size={16} />
+                        Already watched: {watched.total}
+                    </span>
+                </div>
+            </header>
 
-  if (!user) {
-    return <Navigate to="/login" replace />;
-  }
+            <div className="wl-content">
+                <WatchlistSection
+                    title="To Watch"
+                    icon={<Clock size={24} />}
+                    listType="moviesToWatch"
+                    state={toWatch}
+                    onLoadMore={() => handleLoadMore("moviesToWatch")}
+                    onMarkAsWatched={(movie) =>
+                        handleToggle(movie, "moviesToWatch", "moviesWatched")
+                    }
+                    onRemove={(movie) => handleRemove(movie, "moviesToWatch")}
+                    emptyMessage="No movies to watch"
+                    emptySubMessage="Add movies to your list!"
+                />
 
-  const renderMoviesSection = (
-    title,
-    icon,
-    movies,
-    listType,
-    emptyMessage,
-    emptySubMessage
-  ) => (
-    <section className="wl-movies-section">
-      <div className="wl-section-header">
-        <h2>
-          {icon}
-          {title}
-        </h2>
-        <span className="wl-count">{movies.length}</span>
-      </div>
-      <div className="wl-movies-grid">
-        {movies.length > 0 ? (
-          movies.map((movie) => (
-            <MovieCard
-              key={movie.id}
-              movie={movie}
-              listType={listType}
-              // Przekazujemy odpowiedni listType do toggle
-              onMarkAsWatched={() =>
-                handleWatchlistAction(movie.tmdbId, "watched")
-              }
-              onMarkAsToWatch={() =>
-                handleWatchlistAction(movie.tmdbId, "toWatch")
-              }
-              onRemove={() =>
-                handleWatchlistAction(
-                  movie.tmdbId,
-                  listType === "moviesToWatch" ? "toWatch" : "watched"
-                )
-              }
-            />
-          ))
-        ) : (
-          <div className="wl-empty-state">
-            {icon}
-            <p>{emptyMessage}</p>
-            <small>{emptySubMessage}</small>
-          </div>
-        )}
-      </div>
-    </section>
-  );
-
-  return (
-    <div className="wl-container">
-      {popup.show && (
-        <div className={`popup-notification ${popup.type}`}>
-          {popup.message}
+                <WatchlistSection
+                    title="Already Watched"
+                    icon={<Eye size={24} />}
+                    listType="moviesWatched"
+                    state={watched}
+                    onLoadMore={() => handleLoadMore("moviesWatched")}
+                    onMarkAsToWatch={(movie) =>
+                        handleToggle(movie, "moviesWatched", "moviesToWatch")
+                    }
+                    onRemove={(movie) => handleRemove(movie, "moviesWatched")}
+                    emptyMessage="You haven't watched any movies yet"
+                    emptySubMessage="Mark movies as watched!"
+                />
+            </div>
         </div>
-      )}
-
-      <header className="wl-header">
-        <h1>My movie list</h1>
-        <div className="wl-stats">
-          <span className="wl-stat">
-            <Clock size={16} />
-            To watch: {moviesToWatch.length}
-          </span>
-          <span className="wl-stat">
-            <Eye size={16} />
-            Already Watched: {moviesWatched.length}
-          </span>
-        </div>
-      </header>
-
-      <div className="wl-content">
-        {renderMoviesSection(
-          "To watch",
-          <Clock size={24} />,
-          moviesToWatch,
-          "moviesToWatch",
-          "No videos to watch",
-          "Add movies to your list!"
-        )}
-
-        {renderMoviesSection(
-          "Already watched",
-          <Eye size={24} />,
-          moviesWatched,
-          "moviesWatched",
-          "You haven't watched any films yet",
-          "Mark films as watched!"
-        )}
-      </div>
-    </div>
-  );
+    );
 };
 
 export default WatchList;

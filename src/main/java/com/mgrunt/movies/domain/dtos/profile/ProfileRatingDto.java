@@ -1,6 +1,6 @@
 package com.mgrunt.movies.domain.dtos.profile;
 
-import com.mgrunt.movies.domain.dtos.movie.MovieSummaryDto;
+import com.mgrunt.movies.domain.dtos.movie.UserProfileMovieDto;
 import lombok.Builder;
 
 import java.util.UUID;
@@ -10,6 +10,6 @@ public record ProfileRatingDto(
         UUID id,
         int rating,
         String createdAt,
-        MovieSummaryDto movie
+        UserProfileMovieDto movie
 ) {
 }

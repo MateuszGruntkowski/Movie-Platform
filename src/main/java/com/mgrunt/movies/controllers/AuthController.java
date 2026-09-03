@@ -25,8 +25,8 @@ public class AuthController {
     @PostMapping(path = "/login")
      public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest loginRequest) {
          UserDetails userDetails = authService.authenticate(
-                 loginRequest.getUsername(),
-                 loginRequest.getPassword());
+                 loginRequest.username(),
+                 loginRequest.password());
 
          String token = jwtUtil.generateToken(userDetails);
          AuthResponse authResponse = AuthResponse.builder()
@@ -40,8 +40,8 @@ public class AuthController {
          public ResponseEntity<AuthResponse> register(
                  @Valid @RequestBody RegisterRequest registerRequest) {
              UserDetails userDetails = authService.register(
-                     registerRequest.getUsername(),
-                     registerRequest.getPassword());
+                     registerRequest.username(),
+                     registerRequest.password());
 
              String token = jwtUtil.generateToken(userDetails);
              AuthResponse authResponse = AuthResponse.builder()

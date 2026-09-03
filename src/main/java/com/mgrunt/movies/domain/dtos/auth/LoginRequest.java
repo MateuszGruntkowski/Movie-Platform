@@ -1,13 +1,7 @@
 package com.mgrunt.movies.domain.dtos.auth;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-@NoArgsConstructor
-@AllArgsConstructor
-@Data
-public class LoginRequest {
-    private String username;
-    private String password;
+public record LoginRequest(
+        String username,
+        String password
+) {
 }
