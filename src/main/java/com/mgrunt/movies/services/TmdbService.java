@@ -14,6 +14,4 @@ public interface TmdbService {
     String getTrailerUrl(Long movieId);
     List<String> getImages(Long movieId, int limit);
     TmdbSearchResponse searchResult(String query, int page);
-    /** Overwrites the {@code movie} fields with the current data from the TMDB for the given tmdbId. Works the same for new and existing entities. */
-    void syncMovieData(Movie movie, Long tmdbId);
 }

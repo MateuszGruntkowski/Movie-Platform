@@ -48,7 +48,7 @@ public class ReviewServiceImpl implements ReviewService {
         User currentUser = userRepository.findById(authorId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
-        Movie movie = movieService.getMovie(tmdbId);
+        Movie movie = movieService.getOrCreatePersistedMovie(tmdbId);
 
         Review review = Review.builder()
                 .movie(movie)

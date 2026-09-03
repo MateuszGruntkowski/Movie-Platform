@@ -133,39 +133,4 @@ public class TmdbServiceImpl implements TmdbService {
         }
     }
 
-    @Override
-    public void syncMovieData(Movie movie, Long tmdbId) {
-        TmdbMovieDetailsResponse tmdbMovie = fetchRawMovieDetails(tmdbId);
-
-        movie.setTmdbId(tmdbId);
-        movie.setImdbId(tmdbMovie.imdbId());
-        movie.setTitle(tmdbMovie.title());
-        movie.setOverview(tmdbMovie.overview());
-        movie.setReleaseDate(tmdbMovie.releaseDate());
-        movie.setPosterPath(tmdbMovie.posterPath());
-        movie.setBackdropPath(tmdbMovie.backdropPath());
-        movie.setVoteAverage(tmdbMovie.voteAverage());
-        movie.setVoteCount(tmdbMovie.voteCount());
-        movie.setPopularity(tmdbMovie.popularity());
-        movie.setRuntime(tmdbMovie.runtime());
-        movie.setOriginalLanguage(tmdbMovie.originalLanguage());
-        movie.setAdult(tmdbMovie.adult());
-        movie.setBudget(tmdbMovie.budget());
-        movie.setRevenue(tmdbMovie.revenue());
-        movie.setTagline(tmdbMovie.tagline());
-        movie.setTrailerUrl(getTrailerUrl(tmdbId));
-
-        movie.getBackdrops().clear();
-        movie.getBackdrops().addAll(getImages(tmdbId, DEFAULT_BACKDROPS_LIMIT));
-
-        List<String> genreNames = Optional.ofNullable(tmdbMovie.genres())
-                .orElse(Collections.emptyList())
-                .stream()
-                .map(TmdbGenreResponse::name)
-                .distinct()
-                .toList();
-
-        movie.getGenres().clear();
-        movie.getGenres().addAll(genreNames);
-    }
 }

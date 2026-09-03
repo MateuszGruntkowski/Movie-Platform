@@ -18,40 +18,35 @@ import java.util.Optional;
 public class MovieSyncServiceImpl implements MovieSyncService {
     private static final long CACHE_TTL_HOURS = 24;
 
-    private final TmdbService tmdbService;
+//    private final TmdbService tmdbService;
     private final MovieRepository movieRepository;
+    private final MovieDataAssembler movieDataAssembler;
 
     @Override
     @Transactional
-    public Movie getOrSyncMovie(Long tmdbId) {
+    public Movie getOrCreatePersistedMovie(Long tmdbId) {
         Movie movie = movieRepository.findByTmdbId(tmdbId).orElseGet(Movie::new);
-        if (!isStale(movie)) {
-            return movie;
+        if (isStale(movie)) {
+            movieDataAssembler.assemble(movie, tmdbId);
+            movie = movieRepository.save(movie);
         }
-
-        tmdbService.syncMovieData(movie, tmdbId);
-        movie.setUpdatedAt(LocalDateTime.now());
-        return movieRepository.save(movie);
+        return movie;
     }
 
     @Override
     @Transactional
-    public Movie getMovieForView(Long tmdbId) {
+    public Movie getMovieForDisplay(Long tmdbId) {
         Optional<Movie> existing = movieRepository.findByTmdbId(tmdbId);
 
         if (existing.isEmpty()) {
-            // new movie - fetching preview data, not saving anything
-            Movie movie = new Movie();
-            tmdbService.syncMovieData(movie, tmdbId);
-            movie.setUpdatedAt(LocalDateTime.now());
-            return movie;
+            Movie transientMovie = new Movie();
+            return movieDataAssembler.assemble(transientMovie, tmdbId); // brak save()
         }
 
         Movie movie = existing.get();
         if (isStale(movie)) {
-            tmdbService.syncMovieData(movie, tmdbId);
-            movie.setUpdatedAt(LocalDateTime.now());
-            movieRepository.save(movie); // update an existing movie
+            movieDataAssembler.assemble(movie, tmdbId);
+            movieRepository.save(movie);
         }
         return movie;
     }

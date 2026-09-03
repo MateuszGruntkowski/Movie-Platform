@@ -40,8 +40,8 @@ public record TmdbMovieDetailsResponse(
         String originalLanguage,
 
         Boolean adult,
-        Integer budget,
-        Integer revenue,
+        Long budget,
+        Long revenue,
         String tagline
 ) {
 }

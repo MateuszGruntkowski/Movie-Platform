@@ -22,7 +22,7 @@ public record MovieDetailsResponse(
         List<TmdbGenreResponse> genres,
         String originalLanguage,
         Boolean adult,
-        Integer budget,
+        Long budget,
         Integer revenue,
         String tagline,
         String trailerUrl,

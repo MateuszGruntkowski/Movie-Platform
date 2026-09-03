@@ -259,7 +259,7 @@ class WatchlistServiceImplTest {
          */
         private void stubUserAndMovie(User user, Movie movie) {
             when(userRepository.findById(TestFixtures.USER_ID)).thenReturn(Optional.of(user));
-            when(movieService.getMovie(TMDB_ID)).thenReturn(movie);
+            when(movieService.getOrCreatePersistedMovie(TMDB_ID)).thenReturn(movie);
         }
     }
 

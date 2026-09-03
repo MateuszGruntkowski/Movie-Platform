@@ -34,7 +34,7 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public MovieDetailsResponse getMovieDetails(Long tmdbId) {
-        Movie movie = movieSyncService.getMovieForView(tmdbId);
+        Movie movie = movieSyncService.getMovieForDisplay(tmdbId);
         return movieMapper.toMovieDetailsResponse(movie);
     }
 
@@ -50,7 +50,7 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public Movie getMovie(Long tmdbId) {
-        return movieSyncService.getOrSyncMovie(tmdbId);
+    public Movie getOrCreatePersistedMovie(Long tmdbId) {
+        return movieSyncService.getOrCreatePersistedMovie(tmdbId);
     }
 }

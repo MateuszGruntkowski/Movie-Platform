@@ -51,7 +51,7 @@ public class WatchlistServiceImpl implements WatchlistService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
-        Movie movie = movieService.getMovie(tmdbId);
+        Movie movie = movieService.getOrCreatePersistedMovie(tmdbId);
 
         Set<Movie> moviesToWatch = user.getMoviesToWatch();
         Set<Movie> moviesWatched = user.getMoviesWatched();

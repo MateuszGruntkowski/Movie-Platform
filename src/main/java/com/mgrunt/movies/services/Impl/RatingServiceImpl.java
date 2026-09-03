@@ -45,7 +45,7 @@ public class RatingServiceImpl implements RatingService {
             rating = existingRatingOpt.get();
             rating.setRating(ratingValue);
         } else {
-            Movie movie = movieService.getMovie(tmdbId);
+            Movie movie = movieService.getOrCreatePersistedMovie(tmdbId);
             User author = userRepository.getReferenceById(authorId);
 
             rating = Rating.builder()
