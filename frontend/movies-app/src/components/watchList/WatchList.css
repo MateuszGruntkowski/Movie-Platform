@@ -232,6 +232,51 @@
   opacity: 0.7;
 }
 
+/* Badge ze średnią oceną na posterze */
+.wl-movie-rating {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.75);
+  color: #ffd700;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  z-index: 1;
+}
+
+/* Przycisk "Load more" pod gridem */
+.wl-section-footer {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.wl-load-more-btn {
+  background: #333;
+  color: #ffd700;
+  border: 1px solid #ffd700;
+  padding: 10px 30px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.wl-load-more-btn:hover:not(:disabled) {
+  background: #ffd700;
+  color: #000;
+}
+
+.wl-load-more-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 /* Responsywność */
 @media (max-width: 768px) {
   .wl-container {

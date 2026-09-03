@@ -62,10 +62,10 @@ public class Movie {
     private Boolean adult;
 
     @Column
-    private Integer budget;
+    private Long budget;
 
     @Column
-    private Integer revenue;
+    private Long revenue;
 
     @Column
     private String tagline;

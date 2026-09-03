@@ -2,53 +2,46 @@ package com.mgrunt.movies.domain.dtos.tmdb;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.List;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class TmdbMovieDetailsResponse {
-    private Long id;
+public record TmdbMovieDetailsResponse(
+        Long id,
 
-    @JsonProperty("imdb_id")
-    private String imdbId;
+        @JsonProperty("imdb_id")
+        String imdbId,
 
-    private String title;
-    private String overview;
+        String title,
+        String overview,
 
-    @JsonProperty("release_date")
-    private LocalDate releaseDate;
+        @JsonProperty("release_date")
+        LocalDate releaseDate,
 
-    @JsonProperty("poster_path")
-    private String posterPath;
+        @JsonProperty("poster_path")
+        String posterPath,
 
-    @JsonProperty("backdrop_path")
-    private String backdropPath;
+        @JsonProperty("backdrop_path")
+        String backdropPath,
 
-    @JsonProperty("vote_average")
-    private Double voteAverage;
+        @JsonProperty("vote_average")
+        Double voteAverage,
 
-    @JsonProperty("vote_count")
-    private Integer voteCount;
+        @JsonProperty("vote_count")
+        Integer voteCount,
 
-    private Double popularity;
-    private Integer runtime;
+        Double popularity,
+        Integer runtime,
 
-    private List<TmdbGenreResponse> genres;
+        List<TmdbGenreResponse> genres,
 
-    @JsonProperty("original_language")
-    private String originalLanguage;
+        @JsonProperty("original_language")
+        String originalLanguage,
 
-    private Boolean adult;
-    private Integer budget;
-    private Integer revenue;
-    private String tagline;
+        Boolean adult,
+        Long budget,
+        Long revenue,
+        String tagline
+) {
 }

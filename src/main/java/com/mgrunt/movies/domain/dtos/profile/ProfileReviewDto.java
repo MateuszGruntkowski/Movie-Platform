@@ -1,6 +1,6 @@
 package com.mgrunt.movies.domain.dtos.profile;
 
-import com.mgrunt.movies.domain.dtos.movie.MovieSummaryDto;
+import com.mgrunt.movies.domain.dtos.movie.UserProfileMovieDto;
 import lombok.Builder;
 
 import java.time.LocalDateTime;
@@ -11,6 +11,6 @@ public record ProfileReviewDto(
         UUID id,
         String body,
         LocalDateTime createdAt,
-        MovieSummaryDto movie
+        UserProfileMovieDto movie
 ) {
 }

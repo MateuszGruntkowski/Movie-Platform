@@ -1,6 +1,5 @@
 package com.mgrunt.movies.services.Impl;
 
-import com.mgrunt.movies.Security.CustomUserDetails;
 import com.mgrunt.movies.domain.dtos.review.ReviewDto;
 import com.mgrunt.movies.domain.dtos.review.ReviewRequest;
 import com.mgrunt.movies.domain.entities.Movie;
@@ -15,7 +14,6 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,20 +38,17 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     @Transactional
-    public ReviewDto createReview(Long tmdbId, ReviewRequest reviewRequest, Authentication authentication) {
-        String reviewBody = reviewRequest.getReviewBody();
+    public ReviewDto createReview(Long tmdbId, ReviewRequest reviewRequest, UUID authorId) {
+        String reviewBody = reviewRequest.reviewBody();
 
         if(reviewBody == null || reviewBody.trim().isEmpty()){
             throw new IllegalArgumentException("Review body cannot be null");
         }
 
-        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-        UUID userId = userDetails.getId();
-
-        User currentUser = userRepository.findById(userId)
+        User currentUser = userRepository.findById(authorId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
-        Movie movie = movieService.getMovie(tmdbId);
+        Movie movie = movieService.getOrCreatePersistedMovie(tmdbId);
 
         Review review = Review.builder()
                 .movie(movie)
@@ -62,9 +57,7 @@ public class ReviewServiceImpl implements ReviewService {
                 .build();
         reviewRepository.save(review);
 
-        movie.getReviews().add(review);
         return reviewMapper.toDto(review);
-
     }
 
     @Override

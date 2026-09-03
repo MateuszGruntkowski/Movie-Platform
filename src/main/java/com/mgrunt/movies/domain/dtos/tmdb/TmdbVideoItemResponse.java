@@ -2,25 +2,18 @@ package com.mgrunt.movies.domain.dtos.tmdb;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class TmdbVideoItemResponse {
-    private String id;
-    private String key;
-    private String name;
-    private String site;
-    private String type;
-    private Boolean official;
-    private String size;
+public record TmdbVideoItemResponse(
+        String id,
+        String key,
+        String name,
+        String site,
+        String type,
+        Boolean official,
+        String size,
 
-    @JsonProperty("published_at")
-    private String publishedAt;
+        @JsonProperty("published_at")
+        String publishedAt
+) {
 }

@@ -8,7 +8,6 @@ import com.mgrunt.movies.domain.dtos.tmdb.TmdbTrendingMovieItemResponse;
 import com.mgrunt.movies.domain.entities.Movie;
 import com.mgrunt.movies.exceptions.MovieSearchException;
 import com.mgrunt.movies.mappers.MovieMapper;
-import com.mgrunt.movies.repositories.MovieRepository;
 import com.mgrunt.movies.services.MovieService;
 import com.mgrunt.movies.services.MovieSyncService;
 import com.mgrunt.movies.services.TmdbService;
@@ -35,7 +34,7 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public MovieDetailsResponse getMovieDetails(Long tmdbId) {
-        Movie movie = movieSyncService.getMovieForView(tmdbId);
+        Movie movie = movieSyncService.getMovieForDisplay(tmdbId);
         return movieMapper.toMovieDetailsResponse(movie);
     }
 
@@ -51,7 +50,7 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public Movie getMovie(Long tmdbId) {
-        return movieSyncService.getOrSyncMovie(tmdbId);
+    public Movie getOrCreatePersistedMovie(Long tmdbId) {
+        return movieSyncService.getOrCreatePersistedMovie(tmdbId);
     }
 }

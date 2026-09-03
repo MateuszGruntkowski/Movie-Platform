@@ -61,7 +61,7 @@ public class TmdbServiceImpl implements TmdbService {
         try {
             String url = tmdbBaseUrl + "/movie/" + movieId + "/videos?language=en-US";
             TmdbVideosResponse response = fetchFromTmdb(url, TmdbVideosResponse.class);
-            return response != null ? response.getResults() : Collections.emptyList();
+            return response != null ? response.results() : Collections.emptyList();
         } catch (Exception e) {
             log.error("Error fetching movie videos for ID: {}", movieId, e);
             return Collections.emptyList();
@@ -74,18 +74,18 @@ public class TmdbServiceImpl implements TmdbService {
             List<TmdbVideoItemResponse> videos = getMovieVideos(movieId);
 
             Optional<TmdbVideoItemResponse> trailer = videos.stream()
-                    .filter(v -> "Trailer".equals(v.getType())
-                            && "YouTube".equals(v.getSite())
-                            && Boolean.TRUE.equals(v.getOfficial()))
+                    .filter(v -> "Trailer".equals(v.type())
+                            && "YouTube".equals(v.site())
+                            && Boolean.TRUE.equals(v.official()))
                     .findFirst();
 
             if (trailer.isEmpty()) {
                 trailer = videos.stream()
-                        .filter(v -> "Trailer".equals(v.getType()) && "YouTube".equals(v.getSite()))
+                        .filter(v -> "Trailer".equals(v.type()) && "YouTube".equals(v.site()))
                         .findFirst();
             }
 
-            return trailer.map(v -> "https://www.youtube.com/watch?v=" + v.getKey()).orElse(null);
+            return trailer.map(v -> "https://www.youtube.com/watch?v=" + v.key()).orElse(null);
         } catch (Exception e) {
             log.error("Error getting trailer URL for movie ID: {}", movieId, e);
             return null;
@@ -97,11 +97,11 @@ public class TmdbServiceImpl implements TmdbService {
         TmdbImagesResponse response = fetchFromTmdb(url, TmdbImagesResponse.class);
 
         return Optional.ofNullable(response)
-                .map(TmdbImagesResponse::getBackdrops)
+                .map(TmdbImagesResponse::backdrops)
                 .orElseGet(Collections::emptyList)
                 .stream()
                 .limit(limit)
-                .map(TmdbImageItemResponse::getFilePath)
+                .map(TmdbImageItemResponse::filePath)
                 .toList();
     }
 
@@ -110,7 +110,7 @@ public class TmdbServiceImpl implements TmdbService {
             String url = tmdbBaseUrl + "/trending/movie/day";
             TmdbTrendingMoviesResponse response = fetchFromTmdb(url, TmdbTrendingMoviesResponse.class);
             return Optional.ofNullable(response)
-                    .map(TmdbTrendingMoviesResponse::getResults)
+                    .map(TmdbTrendingMoviesResponse::results)
                     .orElseGet(Collections::emptyList)
                     .stream()
                     .limit(10)
@@ -133,39 +133,4 @@ public class TmdbServiceImpl implements TmdbService {
         }
     }
 
-    @Override
-    public void syncMovieData(Movie movie, Long tmdbId) {
-        TmdbMovieDetailsResponse tmdbMovie = fetchRawMovieDetails(tmdbId);
-
-        movie.setTmdbId(tmdbId);
-        movie.setImdbId(tmdbMovie.getImdbId());
-        movie.setTitle(tmdbMovie.getTitle());
-        movie.setOverview(tmdbMovie.getOverview());
-        movie.setReleaseDate(tmdbMovie.getReleaseDate());
-        movie.setPosterPath(tmdbMovie.getPosterPath());
-        movie.setBackdropPath(tmdbMovie.getBackdropPath());
-        movie.setVoteAverage(tmdbMovie.getVoteAverage());
-        movie.setVoteCount(tmdbMovie.getVoteCount());
-        movie.setPopularity(tmdbMovie.getPopularity());
-        movie.setRuntime(tmdbMovie.getRuntime());
-        movie.setOriginalLanguage(tmdbMovie.getOriginalLanguage());
-        movie.setAdult(tmdbMovie.getAdult());
-        movie.setBudget(tmdbMovie.getBudget());
-        movie.setRevenue(tmdbMovie.getRevenue());
-        movie.setTagline(tmdbMovie.getTagline());
-        movie.setTrailerUrl(getTrailerUrl(tmdbId));
-
-        movie.getBackdrops().clear();
-        movie.getBackdrops().addAll(getImages(tmdbId, DEFAULT_BACKDROPS_LIMIT));
-
-        List<String> genreNames = Optional.ofNullable(tmdbMovie.getGenres())
-                .orElse(Collections.emptyList())
-                .stream()
-                .map(TmdbGenreResponse::getName)
-                .distinct()
-                .toList();
-
-        movie.getGenres().clear();
-        movie.getGenres().addAll(genreNames);
-    }
 }
