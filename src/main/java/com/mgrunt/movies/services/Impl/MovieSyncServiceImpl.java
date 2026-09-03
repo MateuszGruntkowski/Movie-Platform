@@ -40,7 +40,7 @@ public class MovieSyncServiceImpl implements MovieSyncService {
 
         if (existing.isEmpty()) {
             Movie transientMovie = new Movie();
-            return movieDataAssembler.assemble(transientMovie, tmdbId); // brak save()
+            return movieDataAssembler.assemble(transientMovie, tmdbId);
         }
 
         Movie movie = existing.get();
