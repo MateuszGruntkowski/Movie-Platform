@@ -1,6 +1,5 @@
 import { Button } from "react-bootstrap";
 import { Link, useParams } from "react-router-dom";
-import React, { use } from "react";
 import { useAuth } from "../context/AuthContext";
 
 const ReviewForm = ({ handleSubmit, labelText, revText }) => {

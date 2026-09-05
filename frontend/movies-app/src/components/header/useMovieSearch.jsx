@@ -1,4 +1,3 @@
-// useMovieSearch.js
 import { useState, useEffect } from "react";
 import { movieSearchService } from "../../Services/movieSearchService";
 

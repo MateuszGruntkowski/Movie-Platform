@@ -1,6 +1,4 @@
 import { useParams } from "react-router-dom";
-import ReactPlayer from "react-player";
-import { useState } from "react";
 import "./Trailer.css";
 
 import React from "react";
