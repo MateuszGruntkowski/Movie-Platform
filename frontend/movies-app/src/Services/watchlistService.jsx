@@ -24,4 +24,16 @@ export const watchlistService = {
             throw error;
         }
     },
+
+    async toggleStatus(movieId, listType) {
+        try {
+            const response = await api.put(`/v1/users/watchlist/toggle/${movieId}`, null, {
+                params: { listType },
+            });
+            return response.data;
+        } catch (error) {
+            console.error("Error toggling movie status:", error);
+            throw error;
+        }
+    },
 };

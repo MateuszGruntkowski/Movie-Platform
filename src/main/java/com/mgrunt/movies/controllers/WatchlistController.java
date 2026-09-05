@@ -2,6 +2,7 @@ package com.mgrunt.movies.controllers;
 
 import com.mgrunt.movies.Security.CustomUserDetails;
 import com.mgrunt.movies.domain.dtos.movie.WatchlistMovieResponse;
+import com.mgrunt.movies.domain.dtos.watchlist.WatchlistStatusDto;
 import com.mgrunt.movies.services.WatchlistService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -39,12 +40,13 @@ public class WatchlistController {
     }
 
     @PutMapping("/toggle/{tmdbId}")
-    public ResponseEntity<Void> toggleMovie(
+    public ResponseEntity<WatchlistStatusDto> toggleMovie(
             @PathVariable Long tmdbId,
             @RequestParam String listType,
             @AuthenticationPrincipal CustomUserDetails userDetails
             ) {
-        watchlistService.toggleMovie(tmdbId, listType, userDetails.getId());
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(
+                watchlistService.toggleMovie(tmdbId, listType, userDetails.getId())
+        );
     }
 }

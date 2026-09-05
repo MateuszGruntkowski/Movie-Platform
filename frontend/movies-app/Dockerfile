@@ -1,4 +1,4 @@
-# Stage 1:  Reacta Build (Node.js)
+# Stage 1: Vite Build (Node.js)
 FROM node:20-alpine as build
 WORKDIR /app
 
@@ -8,9 +8,9 @@ RUN npm install --legacy-peer-deps
 COPY . .
 RUN npm run build
 
-# Etap 2: Serving via Nginx
+# Stage 2: Serving via Nginx
 FROM nginx:alpine
-COPY --from=build /app/build /usr/share/nginx/html
+COPY --from=build /app/dist /usr/share/nginx/html
 
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { userProfileService } from "../../Services/userProfileService";
-import { useUser } from "../context/UserContext";
+import { useAuth } from "../context/AuthContext";
 import ProfileStats from "./ProfileStats";
 import ProfileReviews from "./ProfileReviews";
 import ProfileRatings from "./ProfileRatings";
@@ -15,7 +15,7 @@ const RATINGS_PAGE_SIZE = 5;
 
 const Profile = () => {
     const { username } = useParams();
-    const { user } = useUser();
+    const { user } = useAuth();
     const isOwnProfile = user?.username === username;
 
     const [profile, setProfile] = useState(null);

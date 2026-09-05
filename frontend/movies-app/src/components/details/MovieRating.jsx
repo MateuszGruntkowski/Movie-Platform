@@ -2,13 +2,13 @@ import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { movieRatingService } from "../../Services/movieRatingService";
-import { useUser } from "../context/UserContext";
+import { useAuth } from "../context/AuthContext";
 import "./MovieRating.css";
 
 const RATING_SCALE = [...Array(10)].map((_, i) => i + 1);
 
 const MovieRating = ({ movieId, showPopup }) => {
-    const { user } = useUser();
+    const { user } = useAuth();
     const [myRating, setMyRating] = useState(null);
     const [hoverRating, setHoverRating] = useState(0);
     const [isLoading, setIsLoading] = useState(true);

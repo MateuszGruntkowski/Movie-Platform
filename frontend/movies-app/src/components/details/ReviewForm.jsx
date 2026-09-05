@@ -1,13 +1,12 @@
-import { Form, Button } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 import { Link, useParams } from "react-router-dom";
-import React, { use } from "react";
-import { useUser } from "../context/UserContext";
+import { useAuth } from "../context/AuthContext";
 
 const ReviewForm = ({ handleSubmit, labelText, revText }) => {
   const params = useParams();
   let movieId = params.movieId;
 
-  const { user } = useUser();
+  const { user } = useAuth();
 
   return (
     <div className="review-form-container">
