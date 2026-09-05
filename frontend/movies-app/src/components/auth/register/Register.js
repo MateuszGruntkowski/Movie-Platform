@@ -1,35 +1,23 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { useUser } from "../../context/UserContext"
 import { Film, Eye, MessageSquare, Star } from "lucide-react";
 import "../Auth.css";
 
 const Register = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const { register } = useUser();
   const navigate = useNavigate();
 
   const handleRegister = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await fetch(
-        "http://localhost:8080/api/v1/auth/register",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ username, password }),
-        }
-      );
-
-      if (!response.ok) throw new Error("Registration failed");
-
-      const data = await response.json();
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("expiresIn", data.expiresIn);
-
+      await register(username, password);
       navigate("/");
     } catch (error) {
-      alert(error.message);
+      alert("Registration failed: " + error.message);
     }
   };
 

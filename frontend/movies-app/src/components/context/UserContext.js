@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import api from "../../api/axiosConfig";
+import { authService } from "../../Services/authService";
+import { userService } from "../../Services/userService";
 
 const UserContext = createContext(null);
 
@@ -18,11 +19,10 @@ export const UserProvider = ({ children }) => {
 
     const fetchUser = async () => {
       try {
-        const res = await api.get("/v1/users/me");
-        console.log("Fetched user:", res.data);
-        setUser(res.data);
+        const data = await userService.getCurrentUser();
+        setUser(data);
       } catch (err) {
-        console.error("Błąd pobierania usera:", err);
+        console.error("Error fetching user:", err);
         setUser(null);
       } finally {
         setLoading(false);
@@ -33,12 +33,21 @@ export const UserProvider = ({ children }) => {
   }, []);
 
   const login = async (username, password) => {
-    const res = await api.post("/v1/auth/login", { username, password });
-    localStorage.setItem("token", res.data.token);
-    localStorage.setItem("expiresIn", res.data.expiresIn);
+    const data = await authService.login(username, password);
+    localStorage.setItem("token", data.token);
+    localStorage.setItem("expiresIn", data.expiresIn);
 
-    const me = await api.get("/v1/users/me");
-    setUser(me.data);
+    const me = await userService.getCurrentUser();
+    setUser(me);
+  };
+
+  const register = async (username, password) => {
+    const data = await authService.register(username, password);
+    localStorage.setItem("token", data.token);
+    localStorage.setItem("expiresIn", data.expiresIn);
+
+    const me = await userService.getCurrentUser();
+    setUser(me);
   };
 
   const logout = () => {
@@ -49,54 +58,42 @@ export const UserProvider = ({ children }) => {
 
   const toggleMovieStatus = async (movieId, listType, showPopup) => {
     if (!user) {
-      showPopup?.("Zaloguj się, aby dodać do listy!", "login");
+      showPopup?.("Log in to add to the watchlist!", "login");
       return;
     }
 
     try {
-      await api.put(`/v1/users/watchlist/toggle/${movieId}`, null, {
-        params: { listType },
-      });
-
-      const res = await api.get("/v1/users/me");
-      setUser(res.data);
+      await userService.toggleWatchlistStatus(movieId, listType);
+      const data = await userService.getCurrentUser();
+      setUser(data);
 
       const isNowInList =
-        listType === "watched"
-          ? res.data.moviesWatchedIds?.includes(movieId)
-          : res.data.moviesToWatchIds?.includes(movieId);
+          listType === "watched"
+              ? data.moviesWatchedIds?.includes(movieId)
+              : data.moviesToWatchIds?.includes(movieId);
 
       const action = isNowInList ? "added" : "removed";
       const listName = listType === "watched" ? "watched" : "watch list";
 
       showPopup?.(
-        `Movie ${action} ${isNowInList ? "to" : "from"} ${listName}!`,
-        listType
+          `Movie ${action} ${isNowInList ? "to" : "from"} ${listName}!`,
+          listType
       );
     } catch (error) {
-      console.error(`Error toggling movie status:`, error);
       showPopup?.("Something went wrong!", "error");
     }
   };
 
   const isWatched = (movieId) =>
-    user?.moviesWatchedIds?.includes(movieId) ?? false;
+      user?.moviesWatchedIds?.includes(movieId) ?? false;
   const isToWatch = (movieId) =>
-    user?.moviesToWatchIds?.includes(movieId) ?? false;
+      user?.moviesToWatchIds?.includes(movieId) ?? false;
 
   return (
-    <UserContext.Provider
-      value={{
-        user,
-        login,
-        logout,
-        loading,
-        isWatched,
-        isToWatch,
-        toggleMovieStatus,
-      }}
-    >
-      {children}
-    </UserContext.Provider>
+      <UserContext.Provider
+          value={{ user, login, register, logout, loading, isWatched, isToWatch, toggleMovieStatus }}
+      >
+        {children}
+      </UserContext.Provider>
   );
 };
