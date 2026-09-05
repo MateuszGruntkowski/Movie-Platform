@@ -6,12 +6,12 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import { NavLink, Link } from "react-router-dom";
-import { useUser } from "../context/UserContext";
+import {useAuth} from "../context/AuthContext";
 import MovieSearchBar from "./MovieSearchBar";
 import "./Header.css";
 
 const Header = () => {
-  const { user, logout } = useUser();
+  const { user, logout } = useAuth();
 
   return (
       <Navbar variant="dark" expand="lg" className="app-navbar">

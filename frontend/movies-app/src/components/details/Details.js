@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useUser } from "../context/UserContext";
+import { useAuth } from "../context/AuthContext";
 import ReviewForm from "./ReviewForm";
 import MovieCard from "./MovieCard";
 import ReviewList from "./ReviewList";
@@ -19,7 +19,7 @@ const Details = ({ movie, reviews, setReviews, setMovie }) => {
   const revText = useRef();
   const params = useParams();
   const movieId = params.movieId;
-  const { user } = useUser();
+  const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const { popup, showPopup } = usePopup();

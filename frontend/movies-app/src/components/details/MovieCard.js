@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCirclePlay, faStar } from "@fortawesome/free-solid-svg-icons";
 import "./MovieCard.css";
-import { useUser } from "../context/UserContext";
+import { useWatchlist } from "../context/WatchlistContext";
 import ToWatchButton from "../buttons/ToWatchButton";
 import WatchedButton from "../buttons/WatchedButton";
 
@@ -40,10 +40,25 @@ const formatLanguage = (code) => {
 const MovieCard = ({ movie, isLoading, showPopup }) => {
   if (!movie) return null;
 
-  const { toggleMovieStatus, isWatched, isToWatch } = useUser();
+  const { toggleMovieStatus, isWatched, isToWatch } = useWatchlist();
 
   const handleWatchlistClick = async (movieId, listType) => {
-    await toggleMovieStatus(movieId, listType, showPopup);
+    try {
+      const isNowInList = await toggleMovieStatus(movieId, listType);
+      const action = isNowInList ? "added" : "removed";
+      const listName = listType === "watched" ? "watched" : "watch list";
+      showPopup?.(
+          `Movie ${action} ${isNowInList ? "to" : "from"} ${listName}!`,
+          listType
+      );
+    } catch (error) {
+      if (error.message === "NOT_AUTHENTICATED") {
+        showPopup?.("Zaloguj się, aby dodać do listy!", "login");
+      } else {
+        console.error("Error toggling movie status:", error);
+        showPopup?.("Something went wrong!", "error");
+      }
+    }
   };
 
   const formatReleaseDate = (releaseDate) => {
@@ -155,13 +170,13 @@ const MovieCard = ({ movie, isLoading, showPopup }) => {
             )}
 
             {movie.imdbId && (
-                <a
+              <a
                 href={`https://www.imdb.com/title/${movie.imdbId}/`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="imdb-link"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="imdb-link"
               >
-              IMDb
+                IMDb
               </a>
               )}
           </div>

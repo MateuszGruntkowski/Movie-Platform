@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Eye, Clock } from "lucide-react";
 import "./WatchList.css";
-import { useUser } from "../context/UserContext";
+import { useAuth } from "../context/AuthContext";
+import { useWatchlist } from "../context/WatchlistContext";
 import { usePopup } from "../../hooks/usePopup";
 import { Navigate } from "react-router-dom";
 import WatchlistSection from "./WatchlistSection";
@@ -23,7 +24,8 @@ const FETCHERS = {
 };
 
 const WatchList = () => {
-    const { user, loading, toggleMovieStatus } = useUser();
+    const { user, loading } = useAuth();
+    const { toggleMovieStatus } = useWatchlist();
     const { popup, showPopup } = usePopup();
 
     const [toWatch, setToWatch] = useState(emptyListState);
@@ -96,11 +98,11 @@ const WatchList = () => {
         try {
             await toggleMovieStatus(
                 movie.tmdbId,
-                targetListType === "moviesWatched" ? "watched" : "toWatch",
-                showPopup
+                targetListType === "moviesWatched" ? "watched" : "toWatch"
             );
         } catch (error) {
             console.error("Error toggling movie status:", error);
+            showPopup?.("Something went wrong!", "error");
             // Rollback przy błędzie
             setSource((prev) => ({
                 ...prev,
@@ -128,11 +130,11 @@ const WatchList = () => {
         try {
             await toggleMovieStatus(
                 movie.tmdbId,
-                sourceListType === "moviesWatched" ? "watched" : "toWatch",
-                showPopup
+                sourceListType === "moviesWatched" ? "watched" : "toWatch"
             );
         } catch (error) {
             console.error("Error removing movie:", error);
+            showPopup?.("Something went wrong!", "error");
             setSource((prev) => ({
                 ...prev,
                 movies: [movie, ...prev.movies],

@@ -1,6 +1,7 @@
 package com.mgrunt.movies.services.Impl;
 
 import com.mgrunt.movies.domain.dtos.movie.WatchlistMovieResponse;
+import com.mgrunt.movies.domain.dtos.watchlist.WatchlistStatusDto;
 import com.mgrunt.movies.domain.entities.Movie;
 import com.mgrunt.movies.domain.entities.User;
 import com.mgrunt.movies.mappers.MovieMapper;
@@ -47,7 +48,7 @@ public class WatchlistServiceImpl implements WatchlistService {
 
     @Override
     @Transactional
-    public void toggleMovie(Long tmdbId, String listType, UUID userId) {
+    public WatchlistStatusDto toggleMovie(Long tmdbId, String listType, UUID userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
@@ -58,22 +59,24 @@ public class WatchlistServiceImpl implements WatchlistService {
 
         if (listType.equalsIgnoreCase("watched")) {
             moviesToWatch.remove(movie);
-            if (moviesWatched.remove(movie)) {
-                userRepository.save(user);
-                return;
+            if (!moviesWatched.remove(movie)) {
+                moviesWatched.add(movie);
             }
-            moviesWatched.add(movie);
         } else if (listType.equalsIgnoreCase("toWatch")) {
             moviesWatched.remove(movie);
-            if (moviesToWatch.remove(movie)) {
-                userRepository.save(user);
-                return;
+            if (!moviesToWatch.remove(movie)) {
+                moviesToWatch.add(movie);
             }
-            moviesToWatch.add(movie);
         } else {
             throw new IllegalArgumentException("Invalid listType: " + listType);
         }
 
         userRepository.save(user);
+
+        return new WatchlistStatusDto(
+                tmdbId,
+                moviesToWatch.contains(movie),
+                moviesWatched.contains(movie)
+        );
     }
 }
