@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import { watchlistService } from "../../Services/watchlistService";
+import { watchlistService } from "../services/watchlistService";
 import { useAuth } from "./AuthContext";
 
 const WatchlistContext = createContext(null);

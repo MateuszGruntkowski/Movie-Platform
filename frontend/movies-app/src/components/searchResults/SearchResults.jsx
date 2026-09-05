@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Spinner, Alert } from "react-bootstrap";
-import { movieSearchService } from "../../Services/movieSearchService";
+import { movieSearchService } from "../../services/movieSearchService";
 import SearchResultsHeader from "./SearchResultsHeader";
 import SearchResultsGrid from "./SearchResultsGrid";
 import SearchResultsPagination from "./SearchResultsPagination";

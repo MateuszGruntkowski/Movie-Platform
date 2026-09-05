@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { userProfileService } from "../../Services/userProfileService";
-import { useAuth } from "../context/AuthContext";
+import { userProfileService } from "../../services/userProfileService";
+import { useAuth } from "../../context/AuthContext";
 import ProfileStats from "./ProfileStats";
 import ProfileReviews from "./ProfileReviews";
 import ProfileRatings from "./ProfileRatings";
 import AvatarPicker from "./AvatarPicker";
 import { getAvatarUrl } from "../../utils/avatarUtils";
-import { reviewsService } from "../../Services/reviewsService";
+import { reviewsService } from "../../services/reviewsService";
 import "./Profile.css";
 
 const REVIEWS_PAGE_SIZE = 5;

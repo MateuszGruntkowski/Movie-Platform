@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCirclePlay, faStar } from "@fortawesome/free-solid-svg-icons";
 import "./MovieCard.css";
-import { useWatchlist } from "../context/WatchlistContext";
+import { useWatchlist } from "../../context/WatchlistContext";
 import ToWatchButton from "../buttons/ToWatchButton";
 import WatchedButton from "../buttons/WatchedButton";
 

@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Eye, Clock } from "lucide-react";
 import "./WatchList.css";
-import { useAuth } from "../context/AuthContext";
-import { useWatchlist } from "../context/WatchlistContext";
+import { useAuth } from "../../context/AuthContext";
+import { useWatchlist } from "../../context/WatchlistContext";
 import { usePopup } from "../../hooks/usePopup";
 import { Navigate } from "react-router-dom";
 import WatchlistSection from "./WatchlistSection";
-import { watchlistService } from "../../Services/watchlistService";
+import { watchlistService } from "../../services/watchlistService";
 
 const PAGE_SIZE = 10;
 

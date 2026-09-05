@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 import ReviewForm from "./ReviewForm";
 import MovieCard from "./MovieCard";
 import ReviewList from "./ReviewList";
@@ -10,8 +10,8 @@ import { usePopup } from "../../hooks/usePopup";
 import "./Details.css";
 
 import React from "react";
-import { movieDetailsService } from "../../Services/movieDetailsService";
-import { reviewsService } from "../../Services/reviewsService";
+import { movieDetailsService } from "../../services/movieDetailsService";
+import { reviewsService } from "../../services/reviewsService";
 
 const REVIEWS_PAGE_SIZE = 10;
 
