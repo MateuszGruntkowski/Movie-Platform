@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { reviewsService } from "../../services/reviewsService";
+import { reviewsService } from "../../../services/reviewsService.js";
 
 const REVIEWS_PAGE_SIZE = 10;
 

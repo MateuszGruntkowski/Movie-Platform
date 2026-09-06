@@ -8,8 +8,8 @@ import BackdropGallery from "./BackdropGallery";
 import MovieRating from "./MovieRating";
 import DetailsHero from "./DetailsHero.jsx";
 import { usePopup } from "../../hooks/usePopup";
-import { useMovieDetails } from "./useMovieDetails";
-import { useReviews } from "./useReviews";
+import { useMovieDetails } from "./hooks/useMovieDetails.js";
+import { useReviews } from "./hooks/useReviews.js";
 import "./Details.css";
 
 const Details = () => {

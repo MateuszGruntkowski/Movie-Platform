@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { movieDetailsService } from "../../services/movieDetailsService";
+import { movieDetailsService } from "../../../services/movieDetailsService.js";
 
 export function useMovieDetails(movieId) {
     const [movie, setMovie] = useState(null);
