@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { getAvatarUrl } from "../../utils/avatarUtils";
+import "./ReviewList.css";
 
 const ReviewList = ({
                         reviews,

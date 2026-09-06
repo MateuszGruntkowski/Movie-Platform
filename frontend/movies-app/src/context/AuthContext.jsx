@@ -43,8 +43,8 @@ export const AuthProvider = ({ children }) => {
                 const data = await userService.getCurrentUser();
                 setUser(data);
             } catch (err) {
-                console.error("Error fetching user:", err);
                 clearSession();
+                throw err;
             } finally {
                 setLoading(false);
             }
