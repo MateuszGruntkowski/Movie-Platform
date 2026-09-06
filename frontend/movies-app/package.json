@@ -14,13 +14,13 @@
     "react-dom": "^19.1.1",
     "react-router-dom": "^7.8.0",
     "react-slick": "^0.31.0",
-    "slick-carousel": "^1.8.1",
-    "web-vitals": "^2.1.4"
+    "slick-carousel": "^1.8.1"
   },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "lint": "eslint ."
   },
   "browserslist": {
     "production": [
@@ -35,7 +35,12 @@
     ]
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@vitejs/plugin-react": "^6.1.1",
+    "eslint": "^10.10.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.6",
+    "globals": "^17.12.0",
     "vite": "^8.2.2"
   }
 }
