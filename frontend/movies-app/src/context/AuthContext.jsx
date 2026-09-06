@@ -22,7 +22,9 @@ export const AuthProvider = ({ children }) => {
                 const data = await userService.getCurrentUser();
                 setUser(data);
             } catch (err) {
-                console.error("Błąd pobierania usera:", err);
+                console.error("Error fetching user:", err);
+                localStorage.removeItem("token");
+                localStorage.removeItem("expiresIn");
                 setUser(null);
             } finally {
                 setLoading(false);

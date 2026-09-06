@@ -42,43 +42,59 @@ const Details = () => {
 
   useEffect(() => {
     if (!movieId) return;
+    let cancelled = false;
 
     setIsLoading(true);
     setError(null);
+    setMovie(null);
 
     movieDetailsService
         .getMovieDetails(movieId)
         .then((data) => {
+          if (cancelled) return;
           setMovie(data);
         })
         .catch((err) => {
+          if (cancelled) return;
           console.error("Error fetching movie details:", err);
           setError("Failed to load movie details.");
         })
         .finally(() => {
-          setIsLoading(false);
+          if (!cancelled) setIsLoading(false);
         });
+
+    return () => {
+      cancelled = true;
+    };
   }, [movieId]);
 
   useEffect(() => {
     if (!movieId) return;
+    let cancelled = false;
 
     setIsLoadingReviews(true);
     setReviewsPage(0);
+    setReviews([]);
 
     fetchReviews(0)
         .then((data) => {
+          if (cancelled) return;
           setReviews(data.content);
           setTotalReviews(data.totalElements);
           setHasMoreReviews(!data.last);
         })
         .catch((err) => {
+          if (cancelled) return;
           console.error("Error fetching reviews:", err);
           showPopup?.("Failed to load review.", "error");
         })
         .finally(() => {
-          setIsLoadingReviews(false);
+          if (!cancelled) setIsLoadingReviews(false);
         });
+
+    return () => {
+      cancelled = true;
+    };
   }, [movieId]);
 
   const loadMoreReviews = async () => {

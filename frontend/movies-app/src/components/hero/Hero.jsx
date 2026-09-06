@@ -42,7 +42,7 @@ const Hero = ({ trendingMovies }) => {
       );
     } catch (error) {
       if (error.message === "NOT_AUTHENTICATED") {
-        showPopup?.("Zaloguj się, aby dodać do listy!", "login");
+        showPopup?.("Log in to add to watchlist!", "login");
       } else {
         console.error("Error toggling movie status:", error);
         showPopup?.("Something went wrong!", "error");
