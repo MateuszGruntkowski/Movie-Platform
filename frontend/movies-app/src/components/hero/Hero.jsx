@@ -1,4 +1,3 @@
-import React from "react";
 import Slider from "react-slick";
 import "./Hero.css";
 import "slick-carousel/slick/slick.css";
@@ -27,7 +26,7 @@ const NextArrow = ({ onClick }) => (
     </div>
 );
 
-const Hero = ({ movies }) => {
+const Hero = ({ trendingMovies }) => {
   const { isWatched, isToWatch, toggleMovieStatus } = useWatchlist();
   const { popup, showPopup } = usePopup();
   const navigate = useNavigate();
@@ -67,7 +66,7 @@ const Hero = ({ movies }) => {
     nextArrow: <NextArrow />,
   };
 
-  if (!movies || movies.length === 0) {
+  if (!trendingMovies || trendingMovies.length === 0) {
     return <div>Loading movies...</div>;
   }
 
@@ -80,7 +79,7 @@ const Hero = ({ movies }) => {
         )}
 
         <Slider {...settings}>
-          {movies.map((movie, index) => (
+          {trendingMovies.map((movie, index) => (
               <div key={movie.tmdbId || movie.imdbId || movie.title || index}>
                 <div
                     className="movie-card"

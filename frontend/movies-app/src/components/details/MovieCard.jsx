@@ -38,8 +38,6 @@ const formatLanguage = (code) => {
 };
 
 const MovieCard = ({ movie, isLoading, showPopup }) => {
-  if (!movie) return null;
-
   const { toggleMovieStatus, isWatched, isToWatch } = useWatchlist();
 
   const handleWatchlistClick = async (movieId, listType) => {
@@ -53,13 +51,15 @@ const MovieCard = ({ movie, isLoading, showPopup }) => {
       );
     } catch (error) {
       if (error.message === "NOT_AUTHENTICATED") {
-        showPopup?.("Zaloguj się, aby dodać do listy!", "login");
+        showPopup?.("Log in to add to watchlist!", "login");
       } else {
         console.error("Error toggling movie status:", error);
         showPopup?.("Something went wrong!", "error");
       }
     }
   };
+
+  if (!movie) return null;
 
   const formatReleaseDate = (releaseDate) => {
     if (!releaseDate) return null;

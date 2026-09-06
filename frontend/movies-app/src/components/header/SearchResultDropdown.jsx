@@ -1,4 +1,3 @@
-import React from "react";
 import SearchResultItem from "./SearchResultItem";
 
 const MAX_VISIBLE = 8;

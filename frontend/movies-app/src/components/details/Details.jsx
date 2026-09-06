@@ -9,17 +9,19 @@ import MovieRating from "./MovieRating";
 import { usePopup } from "../../hooks/usePopup";
 import "./Details.css";
 
-import React from "react";
 import { movieDetailsService } from "../../services/movieDetailsService";
 import { reviewsService } from "../../services/reviewsService";
 
 const REVIEWS_PAGE_SIZE = 10;
 
-const Details = ({ movie, reviews, setReviews, setMovie }) => {
+const Details = () => {
   const revText = useRef();
   const params = useParams();
   const movieId = params.movieId;
   const { user } = useAuth();
+
+  const [movie, setMovie] = useState(null);
+  const [reviews, setReviews] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const { popup, showPopup } = usePopup();
@@ -56,7 +58,7 @@ const Details = ({ movie, reviews, setReviews, setMovie }) => {
         .finally(() => {
           setIsLoading(false);
         });
-  }, [movieId, setMovie]);
+  }, [movieId]);
 
   useEffect(() => {
     if (!movieId) return;
@@ -107,6 +109,7 @@ const Details = ({ movie, reviews, setReviews, setMovie }) => {
       rev.value = "";
       showPopup?.("Review added!", "success");
     } catch (err) {
+      console.error("Error adding review:", err);
       showPopup?.("Could not add review.", "error");
     }
   };
@@ -118,6 +121,7 @@ const Details = ({ movie, reviews, setReviews, setMovie }) => {
       setTotalReviews((prev) => Math.max(prev - 1, 0));
       showPopup?.("Review deleted!", "success");
     } catch (err) {
+      console.error("Error deleting review:", err);
       showPopup?.("Could not delete review.", "error");
     }
   };

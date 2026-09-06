@@ -1,5 +1,3 @@
-import React from "react";
-
 const SearchResultsHeader = ({ query, resultsCount }) => {
   return (
     <div className="sr-header">

@@ -1,4 +1,3 @@
-import React from "react";
 import SearchMovieCard from "./SearchMovieCard";
 
 const SearchResultsGrid = ({ movies, onMovieClick, query }) => {

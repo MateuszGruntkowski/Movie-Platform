@@ -1,8 +1,6 @@
 import { useParams } from "react-router-dom";
 import "./Trailer.css";
 
-import React from "react";
-
 const Trailer = () => {
   const params = useParams();
   let key = params.ytTrailerId;

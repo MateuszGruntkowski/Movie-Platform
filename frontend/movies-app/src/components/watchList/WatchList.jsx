@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Eye, Clock } from "lucide-react";
 import "./WatchList.css";
 import { useAuth } from "../../context/AuthContext";
