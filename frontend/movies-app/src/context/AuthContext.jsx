@@ -10,9 +10,30 @@ export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
+    const storeSession = (data) => {
+        const expiresAt = Date.now() + data.expiresIn * 1000;
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("expiresAt", String(expiresAt));
+    };
+
+    const clearSession = () => {
+        localStorage.removeItem("token");
+        localStorage.removeItem("expiresAt");
+        setUser(null);
+    };
+
+    useEffect(() => {
+        const handleLogout = () => setUser(null);
+        window.addEventListener("auth:logout", handleLogout);
+        return () => window.removeEventListener("auth:logout", handleLogout);
+    }, []);
+
     useEffect(() => {
         const token = localStorage.getItem("token");
-        if (!token) {
+        const expiresAt = localStorage.getItem("expiresAt");
+
+        if (!token || (expiresAt && Date.now() > Number(expiresAt))) {
+            clearSession();
             setLoading(false);
             return;
         }
@@ -23,9 +44,7 @@ export const AuthProvider = ({ children }) => {
                 setUser(data);
             } catch (err) {
                 console.error("Error fetching user:", err);
-                localStorage.removeItem("token");
-                localStorage.removeItem("expiresIn");
-                setUser(null);
+                clearSession();
             } finally {
                 setLoading(false);
             }
@@ -36,26 +55,32 @@ export const AuthProvider = ({ children }) => {
 
     const login = async (username, password) => {
         const data = await authService.login(username, password);
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("expiresIn", data.expiresIn);
+        storeSession(data);
 
-        const me = await userService.getCurrentUser();
-        setUser(me);
+        try {
+            const me = await userService.getCurrentUser();
+            setUser(me);
+        } catch (err) {
+            clearSession();
+            throw err;
+        }
     };
 
     const register = async (username, password) => {
         const data = await authService.register(username, password);
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("expiresIn", data.expiresIn);
+        storeSession(data);
 
-        const me = await userService.getCurrentUser();
-        setUser(me);
+        try {
+            const me = await userService.getCurrentUser();
+            setUser(me);
+        } catch (err) {
+            clearSession();
+            throw err;
+        }
     };
 
     const logout = () => {
-        localStorage.removeItem("token");
-        localStorage.removeItem("expiresIn");
-        setUser(null);
+        clearSession();
     };
 
     return (
