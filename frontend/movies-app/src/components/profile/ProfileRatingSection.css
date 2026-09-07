@@ -2,6 +2,12 @@
     margin-bottom: 40px;
 }
 
+.profile-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
 .profile-list-rating {
     color: #f8f9fa;
     font-size: 0.95rem;
@@ -10,4 +16,13 @@
 
 .profile-rating-star {
     color: #ffd700;
+}
+
+.profile-empty {
+    background-color: #2a2a2a;
+    border: 2px dashed #343a46;
+    border-radius: 16px;
+    padding: 40px 20px;
+    text-align: center;
+    color: #8b949e;
 }

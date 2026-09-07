@@ -8,40 +8,26 @@ export function usePaginatedProfileData(fetchPage, pageSize, defaultSort = "newe
     const [isLoading, setIsLoading] = useState(true);
     const [isLoadingMore, setIsLoadingMore] = useState(false);
 
-    const loadFirstPage = async (sortValue) => {
+    const loadFirstPage = async (sortValue, isCancelled = () => false) => {
         setIsLoading(true);
         try {
             const data = await fetchPage(0, pageSize, sortValue);
+            if (isCancelled()) return;
             setItems(data.content);
             setHasMore(!data.last);
             setPage(0);
         } catch (err) {
-            console.error("Error fetching data:", err);
+            if (!isCancelled()) console.error("Error fetching data:", err);
         } finally {
-            setIsLoading(false);
+            if (!isCancelled()) setIsLoading(false);
         }
     };
 
     useEffect(() => {
-        let isCancelled = false;
-
-        (async () => {
-            setIsLoading(true);
-            try {
-                const data = await fetchPage(0, pageSize, defaultSort);
-                if (isCancelled) return;
-                setItems(data.content);
-                setHasMore(!data.last);
-                setPage(0);
-            } catch (err) {
-                if (!isCancelled) console.error("Error fetching data:", err);
-            } finally {
-                if (!isCancelled) setIsLoading(false);
-            }
-        })();
-
+        let cancelled = false;
+        loadFirstPage(defaultSort, () => cancelled);
         return () => {
-            isCancelled = true;
+            cancelled = true;
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);

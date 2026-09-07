@@ -1,11 +1,8 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { userProfileService } from "../../services/userProfileService";
 import { usePaginatedProfileData } from "./hooks/usePaginatedProfileData.js";
 import ProfileSectionHeader from "./ProfileSectionHeader";
-import ProfileEntryList from "./ProfileEntryList";
-import ProfileListItem from "./ProfileListItem";
-import { formatDate } from "./utils/dateUtils.js";
+import RatingListItem from "./RatingListItem";
+import LoadMoreButton from "./LoadMoreButton";
 import "./ProfileRatingSection.css"
 
 const RATINGS_PAGE_SIZE = 5;
@@ -32,30 +29,21 @@ const ProfileRatingsSection = ({ username, isOwnProfile }) => {
                 onSortChange={changeSort}
                 sortOptions={SORT_OPTIONS}
             />
-            <ProfileEntryList
-                items={items}
-                isLoading={isLoading}
-                loadingText="Loading ratings..."
-                emptyText="You haven't rated any movies yet."
-                hasMore={hasMore}
-                isLoadingMore={isLoadingMore}
-                onLoadMore={loadMore}
-                renderItem={(rating) => (
-                    <ProfileListItem
-                        key={rating.id}
-                        tmdbId={rating.movie.tmdbId}
-                        posterPath={rating.movie.posterPath}
-                        title={rating.movie.title}
-                    >
-                        <h4 className="profile-list-title">{rating.movie.title}</h4>
-                        <span className="profile-list-rating">
-                            <FontAwesomeIcon icon={faStar} className="profile-rating-star" />{" "}
-                            {rating.rating}/10
-                        </span>
-                        <span className="profile-list-date">{formatDate(rating.createdAt)}</span>
-                    </ProfileListItem>
-                )}
-            />
+
+            {isLoading && items.length === 0 ? (
+                <p className="profile-loading">Loading ratings...</p>
+            ) : items.length === 0 ? (
+                <div className="profile-empty">
+                    <p>You haven't rated any movies yet.</p>
+                </div>
+            ) : (
+                <div className="profile-list">
+                    {items.map((rating) => (
+                        <RatingListItem key={rating.id} rating={rating} />
+                    ))}
+                    <LoadMoreButton hasMore={hasMore} isLoadingMore={isLoadingMore} onLoadMore={loadMore} />
+                </div>
+            )}
         </div>
     );
 };

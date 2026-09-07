@@ -4,6 +4,13 @@ import { getAvatarUrl } from "../../utils/avatarUtils";
 import { userProfileService } from "../../services/userProfileService";
 import "./ProfileHeader.css"
 
+const AvatarImage = ({ avatarUrl, username }) =>
+    avatarUrl ? (
+        <img src={avatarUrl} alt="avatar" className="profile-avatar-img" />
+    ) : (
+        <div className="profile-avatar">{username?.charAt(0).toUpperCase()}</div>
+    );
+
 const ProfileHeader = ({ profile, isOwnProfile, onProfileUpdate }) => {
     const [isPickerOpen, setIsPickerOpen] = useState(false);
     const avatarUrl = getAvatarUrl(profile.avatarPath);
@@ -27,20 +34,10 @@ const ProfileHeader = ({ profile, isOwnProfile, onProfileUpdate }) => {
                         onClick={() => setIsPickerOpen(true)}
                         aria-label="Change Avatar"
                     >
-                        {avatarUrl ? (
-                            <img src={avatarUrl} alt="avatar" className="profile-avatar-img" />
-                        ) : (
-                            <div className="profile-avatar">
-                                {profile.username?.charAt(0).toUpperCase()}
-                            </div>
-                        )}
+                        <AvatarImage avatarUrl={avatarUrl} username={profile.username} />
                     </button>
-                ) : avatarUrl ? (
-                    <img src={avatarUrl} alt="avatar" className="profile-avatar-img" />
                 ) : (
-                    <div className="profile-avatar">
-                        {profile.username?.charAt(0).toUpperCase()}
-                    </div>
+                    <AvatarImage avatarUrl={avatarUrl} username={profile.username} />
                 )}
                 <h1 className="profile-username">{profile.username}</h1>
             </div>
