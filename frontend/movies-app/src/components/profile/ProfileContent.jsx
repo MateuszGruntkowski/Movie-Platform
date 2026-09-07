@@ -3,6 +3,7 @@ import ProfileHeader from "./ProfileHeader";
 import ProfileStats from "./ProfileStats";
 import ProfileReviewsSection from "./ProfileReviewsSection";
 import ProfileRatingsSection from "./ProfileRatingsSection";
+import "./ProfileContent.css"
 
 const ProfileContent = ({ username, isOwnProfile }) => {
     const { profile, setProfile, isLoading, error, isUnauthorized } = useUserProfile(username);

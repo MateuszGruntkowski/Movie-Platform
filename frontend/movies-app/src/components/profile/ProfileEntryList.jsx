@@ -1,4 +1,5 @@
 import LoadMoreButton from "./LoadMoreButton";
+import "./ProfileEntryList.css"
 
 const ProfileEntryList = ({
                               items,

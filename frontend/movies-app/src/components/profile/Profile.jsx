@@ -1,7 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import ProfileContent from "./ProfileContent";
-import "./Profile.css";
 
 const Profile = () => {
     const { username } = useParams();

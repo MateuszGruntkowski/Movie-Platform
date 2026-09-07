@@ -1,4 +1,5 @@
 import { getAvatarUrl } from "../../utils/avatarUtils";
+import "./AvatarPicker.css"
 
 const AVAILABLE_AVATARS = [
     "/avatars/avatar1.png",

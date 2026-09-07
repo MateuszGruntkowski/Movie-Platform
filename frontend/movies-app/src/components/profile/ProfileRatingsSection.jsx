@@ -6,6 +6,7 @@ import ProfileSectionHeader from "./ProfileSectionHeader";
 import ProfileEntryList from "./ProfileEntryList";
 import ProfileListItem from "./ProfileListItem";
 import { formatDate } from "./utils/dateUtils.js";
+import "./ProfileRatingSection.css"
 
 const RATINGS_PAGE_SIZE = 5;
 const SORT_OPTIONS = [

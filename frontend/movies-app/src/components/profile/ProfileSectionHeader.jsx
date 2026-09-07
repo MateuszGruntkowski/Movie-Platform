@@ -1,3 +1,5 @@
+import "./ProfileSectionHeader.css"
+
 const ProfileSectionHeader = ({ title, sortValue, onSortChange, sortOptions }) => (
     <div className="profile-section-header">
         <h2 className="profile-section-title">{title}</h2>

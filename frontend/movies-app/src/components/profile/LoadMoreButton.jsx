@@ -1,10 +1,12 @@
+import "./LoadMoreButton.css"
+
 const LoadMoreButton = ({ hasMore, isLoadingMore, onLoadMore }) => {
     if (!hasMore) return null;
 
     return (
         <button
             type="button"
-            className="submit-btn"
+            className="profile-load-more-btn"
             onClick={onLoadMore}
             disabled={isLoadingMore}
         >

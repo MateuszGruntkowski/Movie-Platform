@@ -1,0 +1,45 @@
+.profile-section {
+    margin-bottom: 40px;
+}
+
+.profile-list-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.profile-list-header .profile-list-title {
+    flex: 1;
+    min-width: 0;
+    margin: 0;
+}
+
+.profile-list-body {
+    color: #e1e7ef;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.review-delete-btn {
+    margin-left: auto;
+    background: transparent;
+    color: #e15759;
+    border: 1px solid #e15759;
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.review-delete-btn:hover {
+    background-color: #e15759;
+    color: #ffffff;
+}

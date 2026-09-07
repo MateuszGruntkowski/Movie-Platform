@@ -2,6 +2,7 @@ import { useState } from "react";
 import AvatarPicker from "./AvatarPicker";
 import { getAvatarUrl } from "../../utils/avatarUtils";
 import { userProfileService } from "../../services/userProfileService";
+import "./ProfileHeader.css"
 
 const ProfileHeader = ({ profile, isOwnProfile, onProfileUpdate }) => {
     const [isPickerOpen, setIsPickerOpen] = useState(false);

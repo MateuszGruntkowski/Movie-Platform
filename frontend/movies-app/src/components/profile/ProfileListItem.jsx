@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import "./ProfileListItem.css"
 
 const DEFAULT_POSTER = "https://via.placeholder.com/80x120/2A2D3A/FFD700?text=No+Poster";
 
