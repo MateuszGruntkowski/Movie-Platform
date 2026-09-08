@@ -20,7 +20,7 @@ export function useMovieSearch(query, { debounceMs = 300, minLength = 2 } = {}) 
                 setResults(data?.results ?? []);
                 setShowResults(true);
             } catch (error) {
-                console.error("Błąd wyszukiwania:", error);
+                console.error("Error searching for movies:", error);
                 setResults([]);
                 setShowResults(false);
             } finally {

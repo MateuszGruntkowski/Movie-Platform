@@ -9,7 +9,7 @@ const SearchResultItem = ({ movie, onClick }) => (
                     src={movie.posterPath}
                     alt={movie.title}
                     onError={(e) => {
-                        e.target.src = "https://via.placeholder.com/92x138/cccccc/666666?text=No+Image";
+                        e.target.src = "https://via.placeholder.com/92x138/cccccc/666666?text=No+Poster";
                     }}
                 />
             ) : (
