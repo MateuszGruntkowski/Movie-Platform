@@ -1,4 +1,5 @@
 import SearchResultItem from "./SearchResultItem";
+import "./SearchResultDropdown.css";
 
 const MAX_VISIBLE = 8;
 

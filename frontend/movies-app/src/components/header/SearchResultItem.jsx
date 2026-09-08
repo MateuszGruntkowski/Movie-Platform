@@ -1,5 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faVideoSlash, faStar } from "@fortawesome/free-solid-svg-icons";
+import "./SearchResultItem.css";
 
 const SearchResultItem = ({ movie, onClick }) => (
     <div className="search-result-item" onClick={() => onClick(movie)}>
