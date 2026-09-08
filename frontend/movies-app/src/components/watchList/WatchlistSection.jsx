@@ -1,4 +1,5 @@
 import MovieCard from "./MovieCard";
+import "./WatchlistSection.css";
 
 const WatchlistSection = ({
                               title,
