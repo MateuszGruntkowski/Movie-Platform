@@ -1,5 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faVideoSlash } from "@fortawesome/free-solid-svg-icons";
+import "./SearchMovieCard.css"
 
 const SearchMovieCard = ({ movie, onMovieClick }) => {
     const handleClick = () => {

@@ -1,3 +1,5 @@
+import "./SearchResultsPagination.css";
+
 const SearchResultsPagination = ({ currentPage, totalPages, onPageChange }) => {
   if (totalPages <= 1) return null;
 

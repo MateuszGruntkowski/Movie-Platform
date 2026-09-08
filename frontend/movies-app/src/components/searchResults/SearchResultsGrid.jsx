@@ -1,4 +1,5 @@
 import SearchMovieCard from "./SearchMovieCard";
+import "./SearchResultsGrid.css";
 
 const SearchResultsGrid = ({ movies, onMovieClick, query }) => {
   if (movies.length === 0) {

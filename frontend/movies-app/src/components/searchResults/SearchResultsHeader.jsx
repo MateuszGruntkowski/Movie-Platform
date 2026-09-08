@@ -1,3 +1,5 @@
+import "./SearchResultsHeader.css";
+
 const SearchResultsHeader = ({ query, resultsCount }) => {
   return (
     <div className="sr-header">
