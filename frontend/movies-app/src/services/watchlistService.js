@@ -36,4 +36,14 @@ export const watchlistService = {
             throw error;
         }
     },
+
+    async getWatchlistIds() {
+        try {
+            const response = await api.get("/v1/users/watchlist/watchlist-ids");
+            return response.data;
+        } catch (error) {
+            console.error("Error fetching watchlist ids:", error);
+            throw error;
+        }
+    }
 };

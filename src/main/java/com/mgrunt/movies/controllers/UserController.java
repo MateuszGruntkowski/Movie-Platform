@@ -4,7 +4,7 @@ import com.mgrunt.movies.Security.CustomUserDetails;
 import com.mgrunt.movies.domain.dtos.profile.ProfileRatingDto;
 import com.mgrunt.movies.domain.dtos.profile.ProfileReviewDto;
 import com.mgrunt.movies.domain.dtos.profile.UpdateAvatarRequest;
-import com.mgrunt.movies.domain.dtos.user.UserDto;
+import com.mgrunt.movies.domain.dtos.user.CurrentUserResponse;
 import com.mgrunt.movies.domain.dtos.profile.UserProfileResponse;
 import com.mgrunt.movies.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -25,11 +25,11 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/me")
-    public ResponseEntity<UserDto> getUser(
+    public ResponseEntity<CurrentUserResponse> getCurrentUser(
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
         return new ResponseEntity<>(
-                userService.getUser(userDetails.getId()),
+                userService.getCurrentUser(userDetails.getId()),
                 HttpStatus.OK
         );
     }

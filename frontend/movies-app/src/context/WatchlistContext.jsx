@@ -12,9 +12,28 @@ export const WatchlistProvider = ({ children }) => {
     const [watchedIds, setWatchedIds] = useState([]);
 
     useEffect(() => {
-        setToWatchIds(user?.moviesToWatchIds ?? []);
-        setWatchedIds(user?.moviesWatchedIds ?? []);
-    }, [user]);
+        if (!user) {
+            setToWatchIds([]);
+            setWatchedIds([]);
+            return;
+        }
+
+        let cancelled = false;
+
+        watchlistService.getWatchlistIds()
+            .then((data) => {
+                if (cancelled) return;
+                setToWatchIds(data.moviesToWatchIds);
+                setWatchedIds(data.moviesWatchedIds);
+            })
+            .catch((error) => {
+                console.error("Error loading watchlist ids:", error);
+            });
+
+        return () => {
+            cancelled = true;
+        };
+    }, [user?.username]);
 
     const toggleMovieStatus = async (movieId, listType) => {
         if (!user) {

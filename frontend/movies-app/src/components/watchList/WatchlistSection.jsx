@@ -52,7 +52,7 @@ const WatchlistSection = ({
                         onClick={onLoadMore}
                         disabled={isLoading}
                     >
-                        {isLoading ? "Loading..." : "Load more"}
+                        {isLoading ? "Loading..." : "Show more"}
                     </button>
                 </div>
             )}

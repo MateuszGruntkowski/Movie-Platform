@@ -38,10 +38,10 @@ export const AuthProvider = ({ children }) => {
             return;
         }
 
-        const fetchUser = async () => {
+        const restoreSession = async () => {
             try {
-                const data = await userService.getCurrentUser();
-                setUser(data);
+                const currentUser = await userService.getCurrentUser();
+                setUser(currentUser);
             } catch (err) {
                 clearSession();
                 throw err;
@@ -50,33 +50,19 @@ export const AuthProvider = ({ children }) => {
             }
         };
 
-        fetchUser();
+        restoreSession();
     }, []);
 
     const login = async (username, password) => {
         const data = await authService.login(username, password);
         storeSession(data);
-
-        try {
-            const me = await userService.getCurrentUser();
-            setUser(me);
-        } catch (err) {
-            clearSession();
-            throw err;
-        }
+        setUser({ username: data.username, avatarPath: data.avatarPath });
     };
 
     const register = async (username, password) => {
         const data = await authService.register(username, password);
         storeSession(data);
-
-        try {
-            const me = await userService.getCurrentUser();
-            setUser(me);
-        } catch (err) {
-            clearSession();
-            throw err;
-        }
+        setUser({ username: data.username, avatarPath: data.avatarPath });
     };
 
     const logout = () => {
