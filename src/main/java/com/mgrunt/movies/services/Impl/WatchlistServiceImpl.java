@@ -50,11 +50,12 @@ public class WatchlistServiceImpl implements WatchlistService {
 
     @Override
     public WatchlistIdsResponse getWatchlistIds(UUID userId){
-        User user = userRepository.findById(userId).orElseThrow(EntityNotFoundException::new);
+        Set<Long> moviesToWatch = userRepository.findMoviesToWatchIds(userId);
+        Set<Long> moviesWatched = userRepository.findMoviesWatchedIds(userId);
 
         return new WatchlistIdsResponse(
-                user.getMoviesToWatch().stream().map(Movie::getTmdbId).collect(Collectors.toSet()),
-                user.getMoviesWatched().stream().map(Movie::getTmdbId).collect(Collectors.toSet())
+                moviesToWatch,
+                moviesWatched
         );
     }
 

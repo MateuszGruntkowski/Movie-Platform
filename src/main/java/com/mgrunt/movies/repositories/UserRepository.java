@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 @Repository
@@ -26,4 +27,10 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 
     @Query("SELECT COUNT(m) FROM User u JOIN u.moviesToWatch m WHERE u.id = :userId")
     int countMoviesToWatch(@Param("userId") UUID userId);
+
+    @Query("select m.tmdbId from User u join u.moviesToWatch m where u.id = :userId")
+    Set<Long> findMoviesToWatchIds(@Param("userId") UUID userId);
+
+    @Query("select m.tmdbId from User u join u.moviesWatched m where u.id = :userId")
+    Set<Long> findMoviesWatchedIds(@Param("userId") UUID userId);
 }
