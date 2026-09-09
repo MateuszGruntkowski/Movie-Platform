@@ -7,7 +7,7 @@ import { useWatchlistList } from "./hooks/useWatchlistList";
 import { Navigate } from "react-router-dom";
 import WatchlistSection from "./WatchlistSection";
 import WatchlistHeader from "./WatchlistHeader";
-import WatchlistPopup from "./WatchlistPopup";
+import Popup from "../common/Popup.jsx";
 import { watchlistService } from "../../services/watchlistService";
 import "./WatchList.css";
 
@@ -58,7 +58,7 @@ const WatchList = () => {
 
     return (
         <div className="wl-container">
-            <WatchlistPopup popup={popup} />
+            <Popup popup={popup} />
 
             <WatchlistHeader
                 toWatchCount={toWatch.state.total}

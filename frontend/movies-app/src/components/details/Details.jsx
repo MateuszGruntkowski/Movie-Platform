@@ -7,6 +7,7 @@ import ReviewList from "./ReviewList";
 import BackdropGallery from "./BackdropGallery";
 import MovieRating from "./MovieRating";
 import DetailsHero from "./DetailsHero.jsx";
+import Popup from "../common/Popup.jsx";
 import { usePopup } from "../../hooks/usePopup";
 import { useMovieDetails } from "./hooks/useMovieDetails.js";
 import { useReviews } from "./hooks/useReviews.js";
@@ -46,11 +47,7 @@ const Details = () => {
 
   return (
       <div className="reviews-container">
-        {popup.show && (
-            <div className={`popup-notification ${popup.type}`}>
-              {popup.message}
-            </div>
-        )}
+        <Popup popup={popup} />
 
         <DetailsHero movie={movie} />
 

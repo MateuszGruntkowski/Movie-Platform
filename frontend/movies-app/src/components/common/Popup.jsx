@@ -1,4 +1,6 @@
-const WatchlistPopup = ({ popup }) => {
+import "./Popup.css";
+
+const Popup = ({ popup }) => {
     if (!popup.show) return null;
 
     return (
@@ -8,4 +10,4 @@ const WatchlistPopup = ({ popup }) => {
     );
 };
 
-export default WatchlistPopup;
+export default Popup;

@@ -13,6 +13,7 @@ import { useWatchlist } from "../../context/WatchlistContext";
 import { usePopup } from "../../hooks/usePopup";
 import ToWatchButton from "../buttons/ToWatchButton";
 import WatchedButton from "../buttons/WatchedButton";
+import Popup from "../common/Popup.jsx";
 
 const PrevArrow = ({ onClick }) => (
     <div className="custom-arrow custom-prev-arrow" onClick={onClick}>
@@ -72,11 +73,7 @@ const Hero = ({ trendingMovies }) => {
 
   return (
       <div className="movie-carousel-container">
-        {popup.show && (
-            <div className={`popup-notification ${popup.type}`}>
-              {popup.message}
-            </div>
-        )}
+        <Popup popup={popup} />
 
         <Slider {...settings}>
           {trendingMovies.map((movie, index) => (
