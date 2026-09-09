@@ -1,0 +1,24 @@
+.profile-load-more-btn {
+    background: linear-gradient(135deg, #e0b32b, #d0980a);
+    color: #ffffff;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    align-self: center;
+    margin-top: 6px;
+}
+
+.profile-load-more-btn:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(255, 228, 23, 0.4);
+    background: linear-gradient(135deg, #c69f2a, #d0a012);
+}
+
+.profile-load-more-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}

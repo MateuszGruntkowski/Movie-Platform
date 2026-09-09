@@ -1,8 +1,7 @@
-import React from "react";
 import Hero from "../hero/Hero";
 
-const Home = ({ movies }) => {
-  return <Hero movies={movies} />;
+const Home = ({ trendingMovies }) => {
+  return <Hero trendingMovies={trendingMovies} />;
 };
 
 export default Home;

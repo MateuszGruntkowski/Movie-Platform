@@ -4,13 +4,13 @@ import com.mgrunt.movies.constants.AvatarConstants;
 import com.mgrunt.movies.domain.dtos.profile.ProfileRatingDto;
 import com.mgrunt.movies.domain.dtos.profile.ProfileReviewDto;
 import com.mgrunt.movies.domain.dtos.profile.UserProfileResponse;
-import com.mgrunt.movies.domain.dtos.user.UserDto;
+import com.mgrunt.movies.domain.dtos.user.CurrentUserResponse;
 import com.mgrunt.movies.domain.entities.Rating;
 import com.mgrunt.movies.domain.entities.Review;
 import com.mgrunt.movies.domain.entities.User;
 import com.mgrunt.movies.mappers.RatingMapper;
 import com.mgrunt.movies.mappers.ReviewMapper;
-import com.mgrunt.movies.mappers.UserMapper;
+import com.mgrunt.movies.mappers.CurrentUserMapper;
 import com.mgrunt.movies.repositories.RatingRepository;
 import com.mgrunt.movies.repositories.ReviewRepository;
 import com.mgrunt.movies.repositories.UserRepository;
@@ -52,7 +52,7 @@ class UserServiceImplTest {
     private UserRepository userRepository;
 
     @Mock
-    private UserMapper userMapper;
+    private CurrentUserMapper userMapper;
 
     @Mock
     private ReviewRepository reviewRepository;
@@ -83,21 +83,21 @@ class UserServiceImplTest {
         @Test
         void returnsMappedUserDto_whenUserExists() {
             User user = TestFixtures.aUser();
-            UserDto userDto = mock(UserDto.class);
+            CurrentUserResponse currentUserResponse = mock(CurrentUserResponse.class);
 
             when(userRepository.findById(TestFixtures.USER_ID)).thenReturn(Optional.of(user));
-            when(userMapper.toDto(user)).thenReturn(userDto);
+            when(userMapper.toDto(user)).thenReturn(currentUserResponse);
 
-            UserDto result = userService.getUser(TestFixtures.USER_ID);
+            CurrentUserResponse result = userService.getCurrentUser(TestFixtures.USER_ID);
 
-            assertThat(result).isSameAs(userDto);
+            assertThat(result).isSameAs(currentUserResponse);
         }
 
         @Test
         void throwsEntityNotFoundException_whenUserDoesNotExist() {
             when(userRepository.findById(TestFixtures.USER_ID)).thenReturn(Optional.empty());
 
-            assertThatThrownBy(() -> userService.getUser(TestFixtures.USER_ID))
+            assertThatThrownBy(() -> userService.getCurrentUser(TestFixtures.USER_ID))
                     .isInstanceOf(EntityNotFoundException.class)
                     .hasMessageContaining("User not found");
 

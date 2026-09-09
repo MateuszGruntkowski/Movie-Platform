@@ -2,6 +2,7 @@ package com.mgrunt.movies.controllers;
 
 import com.mgrunt.movies.Security.CustomUserDetails;
 import com.mgrunt.movies.domain.dtos.movie.WatchlistMovieResponse;
+import com.mgrunt.movies.domain.dtos.watchlist.WatchlistIdsResponse;
 import com.mgrunt.movies.domain.dtos.watchlist.WatchlistStatusDto;
 import com.mgrunt.movies.services.WatchlistService;
 import lombok.RequiredArgsConstructor;
@@ -47,6 +48,15 @@ public class WatchlistController {
             ) {
         return ResponseEntity.ok(
                 watchlistService.toggleMovie(tmdbId, listType, userDetails.getId())
+        );
+    }
+
+    @GetMapping("/watchlist-ids")
+    public ResponseEntity<WatchlistIdsResponse> getWatchlistIds(
+            @AuthenticationPrincipal CustomUserDetails userDetails
+    ){
+        return ResponseEntity.ok(
+                watchlistService.getWatchlistIds(userDetails.getId())
         );
     }
 }

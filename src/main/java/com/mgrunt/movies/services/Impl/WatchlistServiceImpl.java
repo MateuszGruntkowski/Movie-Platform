@@ -1,6 +1,7 @@
 package com.mgrunt.movies.services.Impl;
 
 import com.mgrunt.movies.domain.dtos.movie.WatchlistMovieResponse;
+import com.mgrunt.movies.domain.dtos.watchlist.WatchlistIdsResponse;
 import com.mgrunt.movies.domain.dtos.watchlist.WatchlistStatusDto;
 import com.mgrunt.movies.domain.entities.Movie;
 import com.mgrunt.movies.domain.entities.User;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -44,6 +46,17 @@ public class WatchlistServiceImpl implements WatchlistService {
         }
         return movieRepository.findMoviesWatchedByUserId(userId, pageable)
                 .map(movieMapper::toWatchlistMovieResponse);
+    }
+
+    @Override
+    public WatchlistIdsResponse getWatchlistIds(UUID userId){
+        Set<Long> moviesToWatch = userRepository.findMoviesToWatchIds(userId);
+        Set<Long> moviesWatched = userRepository.findMoviesWatchedIds(userId);
+
+        return new WatchlistIdsResponse(
+                moviesToWatch,
+                moviesWatched
+        );
     }
 
     @Override

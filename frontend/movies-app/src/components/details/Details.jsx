@@ -1,125 +1,40 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import { useParams } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 import ReviewForm from "./ReviewForm";
 import MovieCard from "./MovieCard";
 import ReviewList from "./ReviewList";
 import BackdropGallery from "./BackdropGallery";
 import MovieRating from "./MovieRating";
+import DetailsHero from "./DetailsHero.jsx";
+import Popup from "../common/Popup.jsx";
 import { usePopup } from "../../hooks/usePopup";
+import { useMovieDetails } from "./hooks/useMovieDetails.js";
+import { useReviews } from "./hooks/useReviews.js";
 import "./Details.css";
 
-import React from "react";
-import { movieDetailsService } from "../../Services/movieDetailsService";
-import { reviewsService } from "../../Services/reviewsService";
-
-const REVIEWS_PAGE_SIZE = 10;
-
-const Details = ({ movie, reviews, setReviews, setMovie }) => {
+const Details = () => {
   const revText = useRef();
-  const params = useParams();
-  const movieId = params.movieId;
+  const { movieId } = useParams();
   const { user } = useAuth();
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
   const { popup, showPopup } = usePopup();
 
-  const [reviewsPage, setReviewsPage] = useState(0);
-  const [totalReviews, setTotalReviews] = useState(0);
-  const [hasMoreReviews, setHasMoreReviews] = useState(false);
-  const [isLoadingReviews, setIsLoadingReviews] = useState(false);
-  const [isLoadingMoreReviews, setIsLoadingMoreReviews] = useState(false);
+  const { movie, isLoading, error } = useMovieDetails(movieId);
+  const {
+    reviews,
+    totalReviews,
+    hasMore,
+    isLoading: isLoadingReviews,
+    isLoadingMore,
+    loadMore,
+    addReview,
+    deleteReview,
+  } = useReviews(movieId, showPopup);
 
-  const fetchReviews = async (page) => {
-    return reviewsService.getReviewsForMovie(movieId, {
-      page,
-      size: REVIEWS_PAGE_SIZE,
-      sort: "createdAt,desc",
-    });
-  };
-
-  useEffect(() => {
-    if (!movieId) return;
-
-    setIsLoading(true);
-    setError(null);
-
-    movieDetailsService
-        .getMovieDetails(movieId)
-        .then((data) => {
-          setMovie(data);
-        })
-        .catch((err) => {
-          console.error("Error fetching movie details:", err);
-          setError("Failed to load movie details.");
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
-  }, [movieId, setMovie]);
-
-  useEffect(() => {
-    if (!movieId) return;
-
-    setIsLoadingReviews(true);
-    setReviewsPage(0);
-
-    fetchReviews(0)
-        .then((data) => {
-          setReviews(data.content);
-          setTotalReviews(data.totalElements);
-          setHasMoreReviews(!data.last);
-        })
-        .catch((err) => {
-          console.error("Error fetching reviews:", err);
-          showPopup?.("Failed to load review.", "error");
-        })
-        .finally(() => {
-          setIsLoadingReviews(false);
-        });
-  }, [movieId]);
-
-  const loadMoreReviews = async () => {
-    const nextPage = reviewsPage + 1;
-    setIsLoadingMoreReviews(true);
-    try {
-      const data = await fetchReviews(nextPage);
-      setReviews((prev) => [...prev, ...data.content]);
-      setReviewsPage(nextPage);
-      setHasMoreReviews(!data.last);
-    } catch (err) {
-      console.error("Error loading more reviews:", err);
-      showPopup?.("Could not load more reviews.", "error");
-    } finally {
-      setIsLoadingMoreReviews(false);
-    }
-  };
-
-  const addReview = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    const rev = revText.current;
-    if (!rev.value.trim()) return;
-
-    try {
-      const newReview = await reviewsService.createReview(movieId, rev.value);
-      setReviews((prev) => [newReview, ...prev]);
-      setTotalReviews((prev) => prev + 1);
-      rev.value = "";
-      showPopup?.("Review added!", "success");
-    } catch (err) {
-      showPopup?.("Could not add review.", "error");
-    }
-  };
-
-  const deleteReview = async (reviewId) => {
-    try {
-      await reviewsService.deleteReview(reviewId);
-      setReviews((prev) => prev.filter((r) => r.id !== reviewId));
-      setTotalReviews((prev) => Math.max(prev - 1, 0));
-      showPopup?.("Review deleted!", "success");
-    } catch (err) {
-      showPopup?.("Could not delete review.", "error");
-    }
+    addReview(revText.current.value);
+    revText.current.value = "";
   };
 
   if (error) {
@@ -132,28 +47,9 @@ const Details = ({ movie, reviews, setReviews, setMovie }) => {
 
   return (
       <div className="reviews-container">
-        {popup.show && (
-            <div className={`popup-notification ${popup.type}`}>
-              {popup.message}
-            </div>
-        )}
+        <Popup popup={popup} />
 
-        {movie?.backdropPath && (
-            <div
-                className="details-hero"
-                style={{ backgroundImage: `url(${movie.backdropPath})` }}
-            >
-              <div className="details-hero-overlay">
-                <h1 className="reviews-title">{movie.title || "Szczegóły filmu"}</h1>
-              </div>
-            </div>
-        )}
-
-        {!movie?.backdropPath && (
-            <div className="reviews-header">
-              <h1 className="reviews-title">Reviews of the film</h1>
-            </div>
-        )}
+        <DetailsHero movie={movie} />
 
         <div className="reviews-content">
           <div className="movie-section">
@@ -174,7 +70,7 @@ const Details = ({ movie, reviews, setReviews, setMovie }) => {
             )}
 
             <ReviewForm
-                handleSubmit={addReview}
+                handleSubmit={handleSubmit}
                 revText={revText}
                 labelText="Write your review:"
             />
@@ -183,9 +79,9 @@ const Details = ({ movie, reviews, setReviews, setMovie }) => {
                 reviews={reviews}
                 totalReviews={totalReviews}
                 isLoading={isLoadingReviews}
-                hasMore={hasMoreReviews}
-                isLoadingMore={isLoadingMoreReviews}
-                onLoadMore={loadMoreReviews}
+                hasMore={hasMore}
+                isLoadingMore={isLoadingMore}
+                onLoadMore={loadMore}
                 currentUsername={user?.username}
                 onDelete={deleteReview}
             />

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
-import { movieRatingService } from "../../Services/movieRatingService";
-import { useAuth } from "../context/AuthContext";
+import { movieRatingService } from "../../services/movieRatingService";
+import { useAuth } from "../../context/AuthContext";
 import "./MovieRating.css";
 
 const RATING_SCALE = [...Array(10)].map((_, i) => i + 1);

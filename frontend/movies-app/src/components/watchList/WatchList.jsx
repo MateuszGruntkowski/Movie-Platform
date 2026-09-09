@@ -1,145 +1,50 @@
-import React, { useState, useEffect, useCallback } from "react";
 import { Eye, Clock } from "lucide-react";
 import "./WatchList.css";
-import { useAuth } from "../context/AuthContext";
-import { useWatchlist } from "../context/WatchlistContext";
+import { useAuth } from "../../context/AuthContext";
+import { useWatchlist } from "../../context/WatchlistContext";
 import { usePopup } from "../../hooks/usePopup";
+import { useWatchlistList } from "./hooks/useWatchlistList";
 import { Navigate } from "react-router-dom";
 import WatchlistSection from "./WatchlistSection";
-import { watchlistService } from "../../Services/watchlistService";
-
-const PAGE_SIZE = 10;
-
-const emptyListState = {
-    movies: [],
-    total: 0,
-    page: 0,
-    isLast: true,
-    isLoading: false,
-};
-
-const FETCHERS = {
-    moviesToWatch: watchlistService.getMoviesToWatch,
-    moviesWatched: watchlistService.getMoviesWatched,
-};
+import WatchlistHeader from "./WatchlistHeader";
+import Popup from "../common/Popup.jsx";
+import { watchlistService } from "../../services/watchlistService";
+import "./WatchList.css";
 
 const WatchList = () => {
     const { user, loading } = useAuth();
     const { toggleMovieStatus } = useWatchlist();
     const { popup, showPopup } = usePopup();
 
-    const [toWatch, setToWatch] = useState(emptyListState);
-    const [watched, setWatched] = useState(emptyListState);
+    const toWatch = useWatchlistList(watchlistService.getMoviesToWatch, !!user);
+    const watched = useWatchlistList(watchlistService.getMoviesWatched, !!user);
 
-    const getState = (listType) =>
-        listType === "moviesToWatch" ? [toWatch, setToWatch] : [watched, setWatched];
-
-    const loadInitialPage = useCallback(async (listType) => {
-        const [, setState] = getState(listType);
-        setState((prev) => ({ ...prev, isLoading: true }));
-        try {
-            const data = await FETCHERS[listType]({ page: 0, size: PAGE_SIZE });
-            setState({
-                movies: data.content,
-                total: data.totalElements,
-                page: 0,
-                isLast: data.last,
-                isLoading: false,
-            });
-        } catch (error) {
-            console.error(`Error loading ${listType}:`, error);
-            setState((prev) => ({ ...prev, isLoading: false }));
-        }
-    }, []);
-
-    useEffect(() => {
-        if (user) {
-            loadInitialPage("moviesToWatch");
-            loadInitialPage("moviesWatched");
-        }
-    }, [user, loadInitialPage]);
-
-    const handleLoadMore = async (listType) => {
-        const [state, setState] = getState(listType);
-        const nextPage = state.page + 1;
-        setState((prev) => ({ ...prev, isLoading: true }));
-        try {
-            const data = await FETCHERS[listType]({ page: nextPage, size: PAGE_SIZE });
-            setState((prev) => ({
-                movies: [...prev.movies, ...data.content],
-                total: data.totalElements,
-                page: nextPage,
-                isLast: data.last,
-                isLoading: false,
-            }));
-        } catch (error) {
-            console.error(`Error loading more ${listType}:`, error);
-            setState((prev) => ({ ...prev, isLoading: false }));
-        }
-    };
-
-    // Optimistyczne przeniesienie karty między listami - UI reaguje natychmiast,
-    // request do API leci w tle. W razie błędu cofamy zmianę.
-    const handleToggle = async (movie, sourceListType, targetListType) => {
-        const [, setSource] = getState(sourceListType);
-        const [, setTarget] = getState(targetListType);
-
-        setSource((prev) => ({
-            ...prev,
-            movies: prev.movies.filter((m) => m.tmdbId !== movie.tmdbId),
-            total: Math.max(0, prev.total - 1),
-        }));
-        setTarget((prev) => ({
-            ...prev,
-            movies: [movie, ...prev.movies],
-            total: prev.total + 1,
-        }));
+    // Optimistic card move between lists – the UI updates immediately,
+    // while the API request runs in the background. We revert the change in case of an error.
+    const handleToggle = async (movie, source, target, targetStatus) => {
+        source.removeMovie(movie.tmdbId);
+        target.addMovie(movie);
 
         try {
-            await toggleMovieStatus(
-                movie.tmdbId,
-                targetListType === "moviesWatched" ? "watched" : "toWatch"
-            );
+            await toggleMovieStatus(movie.tmdbId, targetStatus);
         } catch (error) {
             console.error("Error toggling movie status:", error);
             showPopup?.("Something went wrong!", "error");
-            // Rollback przy błędzie
-            setSource((prev) => ({
-                ...prev,
-                movies: [movie, ...prev.movies],
-                total: prev.total + 1,
-            }));
-            setTarget((prev) => ({
-                ...prev,
-                movies: prev.movies.filter((m) => m.tmdbId !== movie.tmdbId),
-                total: Math.max(0, prev.total - 1),
-            }));
+            source.addMovie(movie);
+            target.removeMovie(movie.tmdbId);
         }
     };
 
-    // Usunięcie z listy bez przenoszenia (np. przycisk X)
-    const handleRemove = async (movie, sourceListType) => {
-        const [, setSource] = getState(sourceListType);
-
-        setSource((prev) => ({
-            ...prev,
-            movies: prev.movies.filter((m) => m.tmdbId !== movie.tmdbId),
-            total: Math.max(0, prev.total - 1),
-        }));
+    // removal from the list without transfer (e.g., X button)
+    const handleRemove = async (movie, source, sourceStatus) => {
+        source.removeMovie(movie.tmdbId);
 
         try {
-            await toggleMovieStatus(
-                movie.tmdbId,
-                sourceListType === "moviesWatched" ? "watched" : "toWatch"
-            );
+            await toggleMovieStatus(movie.tmdbId, sourceStatus);
         } catch (error) {
             console.error("Error removing movie:", error);
             showPopup?.("Something went wrong!", "error");
-            setSource((prev) => ({
-                ...prev,
-                movies: [movie, ...prev.movies],
-                total: prev.total + 1,
-            }));
+            source.addMovie(movie);
         }
     };
 
@@ -153,37 +58,22 @@ const WatchList = () => {
 
     return (
         <div className="wl-container">
-            {popup.show && (
-                <div className={`popup-notification ${popup.type}`}>
-                    {popup.message}
-                </div>
-            )}
+            <Popup popup={popup} />
 
-            <header className="wl-header">
-                <h1>My Movie List</h1>
-                <div className="wl-stats">
-                    <span className="wl-stat">
-                        <Clock size={16} />
-                        To watch: {toWatch.total}
-                    </span>
-                    <span className="wl-stat">
-                        <Eye size={16} />
-                        Already watched: {watched.total}
-                    </span>
-                </div>
-            </header>
+            <WatchlistHeader
+                toWatchCount={toWatch.state.total}
+                watchedCount={watched.state.total}
+            />
 
             <div className="wl-content">
                 <WatchlistSection
                     title="To Watch"
                     icon={<Clock size={24} />}
                     listType="moviesToWatch"
-                    state={toWatch}
-                    onLoadMore={() => handleLoadMore("moviesToWatch")}
-                    onMarkAsWatched={(movie) =>
-                        handleToggle(movie, "moviesToWatch", "moviesWatched")
-                    }
-                    onRemove={(movie) => handleRemove(movie, "moviesToWatch")}
+                    state={toWatch.state}
+                    onLoadMore={toWatch.loadMore}
+                    onMarkAsWatched={(movie) => handleToggle(movie, toWatch, watched, "watched")}
+                    onRemove={(movie) => handleRemove(movie, toWatch, "toWatch")}
                     emptyMessage="No movies to watch"
                     emptySubMessage="Add movies to your list!"
                 />
@@ -192,12 +82,10 @@ const WatchList = () => {
                     title="Already Watched"
                     icon={<Eye size={24} />}
                     listType="moviesWatched"
-                    state={watched}
-                    onLoadMore={() => handleLoadMore("moviesWatched")}
-                    onMarkAsToWatch={(movie) =>
-                        handleToggle(movie, "moviesWatched", "moviesToWatch")
-                    }
-                    onRemove={(movie) => handleRemove(movie, "moviesWatched")}
+                    state={watched.state}
+                    onLoadMore={watched.loadMore}
+                    onMarkAsToWatch={(movie) => handleToggle(movie, watched, toWatch, "toWatch")}
+                    onRemove={(movie) => handleRemove(movie, watched, "watched")}
                     emptyMessage="You haven't watched any movies yet"
                     emptySubMessage="Mark movies as watched!"
                 />

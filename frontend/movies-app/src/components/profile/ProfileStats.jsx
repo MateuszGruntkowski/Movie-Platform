@@ -1,3 +1,5 @@
+import "./ProfileStats.css"
+
 const ProfileStats = ({ profile }) => {
     const stats = [
         {

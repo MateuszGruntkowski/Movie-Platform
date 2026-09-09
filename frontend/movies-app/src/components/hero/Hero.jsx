@@ -1,4 +1,3 @@
-import React from "react";
 import Slider from "react-slick";
 import "./Hero.css";
 import "slick-carousel/slick/slick.css";
@@ -10,10 +9,11 @@ import {
   faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
 import { Link, useNavigate } from "react-router-dom";
-import { useWatchlist } from "../context/WatchlistContext";
+import { useWatchlist } from "../../context/WatchlistContext";
 import { usePopup } from "../../hooks/usePopup";
 import ToWatchButton from "../buttons/ToWatchButton";
 import WatchedButton from "../buttons/WatchedButton";
+import Popup from "../common/Popup.jsx";
 
 const PrevArrow = ({ onClick }) => (
     <div className="custom-arrow custom-prev-arrow" onClick={onClick}>
@@ -27,7 +27,7 @@ const NextArrow = ({ onClick }) => (
     </div>
 );
 
-const Hero = ({ movies }) => {
+const Hero = ({ trendingMovies }) => {
   const { isWatched, isToWatch, toggleMovieStatus } = useWatchlist();
   const { popup, showPopup } = usePopup();
   const navigate = useNavigate();
@@ -43,7 +43,7 @@ const Hero = ({ movies }) => {
       );
     } catch (error) {
       if (error.message === "NOT_AUTHENTICATED") {
-        showPopup?.("Zaloguj się, aby dodać do listy!", "login");
+        showPopup?.("Log in to add to watchlist!", "login");
       } else {
         console.error("Error toggling movie status:", error);
         showPopup?.("Something went wrong!", "error");
@@ -67,20 +67,16 @@ const Hero = ({ movies }) => {
     nextArrow: <NextArrow />,
   };
 
-  if (!movies || movies.length === 0) {
+  if (!trendingMovies || trendingMovies.length === 0) {
     return <div>Loading movies...</div>;
   }
 
   return (
       <div className="movie-carousel-container">
-        {popup.show && (
-            <div className={`popup-notification ${popup.type}`}>
-              {popup.message}
-            </div>
-        )}
+        <Popup popup={popup} />
 
         <Slider {...settings}>
-          {movies.map((movie, index) => (
+          {trendingMovies.map((movie, index) => (
               <div key={movie.tmdbId || movie.imdbId || movie.title || index}>
                 <div
                     className="movie-card"

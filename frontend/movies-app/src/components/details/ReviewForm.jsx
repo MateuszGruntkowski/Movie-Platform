@@ -1,6 +1,7 @@
 import { Button } from "react-bootstrap";
 import { Link, useParams } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
+import "./ReviewForm.css";
 
 const ReviewForm = ({ handleSubmit, labelText, revText }) => {
   const params = useParams();

@@ -1,5 +1,5 @@
-import React from "react";
 import MovieCard from "./MovieCard";
+import "./WatchlistSection.css";
 
 const WatchlistSection = ({
                               title,
@@ -53,7 +53,7 @@ const WatchlistSection = ({
                         onClick={onLoadMore}
                         disabled={isLoading}
                     >
-                        {isLoading ? "Loading..." : "Load more"}
+                        {isLoading ? "Loading..." : "Show more"}
                     </button>
                 </div>
             )}

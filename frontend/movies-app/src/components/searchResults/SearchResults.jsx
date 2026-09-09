@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Spinner, Alert } from "react-bootstrap";
-import { movieSearchService } from "../../Services/movieSearchService";
+import { movieSearchService } from "../../services/movieSearchService";
 import SearchResultsHeader from "./SearchResultsHeader";
 import SearchResultsGrid from "./SearchResultsGrid";
 import SearchResultsPagination from "./SearchResultsPagination";
@@ -20,20 +20,13 @@ const SearchResults = () => {
   const searchParams = new URLSearchParams(location.search);
   const query = searchParams.get("q");
 
-  useEffect(() => {
-    if (query) {
-      searchMovies(query, currentPage);
-    }
-  }, [query, currentPage]);
-
-  const searchMovies = async (searchQuery, page = 1) => {
+  const searchMovies = useCallback(async (searchQuery, page = 1) => {
     setLoading(true);
     setError(null);
 
     try {
       const data = await movieSearchService.searchMovies(searchQuery, page);
       setMovies(data.results);
-      console.log("Search results:", data.results);
       setTotalPages(data.totalPages);
       setTotalResults(data.totalResults);
     } catch (error) {
@@ -42,7 +35,13 @@ const SearchResults = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    if (query) {
+      searchMovies(query, currentPage);
+    }
+  }, [query, currentPage, searchMovies]);
 
   const handleMovieClick = (movie) => {
     navigate(`/Details/${movie.id}`);
@@ -85,7 +84,7 @@ const SearchResults = () => {
   return (
       <div className="sr-container">
         <div className="sr-content">
-          <SearchResultsHeader query={query} resultsCount={movies.length} />
+          <SearchResultsHeader query={query} resultsCount={totalResults} />
           <SearchResultsGrid
               movies={movies}
               onMovieClick={handleMovieClick}

@@ -1,6 +1,6 @@
-import React from "react";
 import { CheckCircle, Clock, X, Info, Star } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import "./MovieCard.css";
 
 const MovieCard = ({
                      movie,
