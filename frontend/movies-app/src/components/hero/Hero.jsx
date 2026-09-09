@@ -107,22 +107,8 @@ const Hero = ({ trendingMovies }) => {
                           className="movie-buttons-container"
                           style={{ gap: "1rem" }}
                       >
-                        {movie.trailerUrl && (
-                            <Link
-                                to={`/Trailer/${movie.trailerUrl.substring(
-                                    movie.trailerUrl.length - 11
-                                )}`}
-                            >
-                              <div className="play-button-icon-container">
-                                <FontAwesomeIcon
-                                    className="play-button-icon"
-                                    icon={faCirclePlay}
-                                />
-                              </div>
-                            </Link>
-                        )}
                         <button
-                            className="review-button"
+                            className="see-more-button"
                             onClick={() => navigate(`/Details/${movie.tmdbId}`)}
                         >
                           See more

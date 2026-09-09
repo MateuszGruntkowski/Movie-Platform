@@ -45,23 +45,21 @@ const Header = () => {
 
             <div className="d-flex ms-auto">
               {user ? (
-                  <Button variant="outline-warning" onClick={logout}>
+                  <button className="nav-link app-nav-link nav-link-btn" onClick={logout}>
                     Logout
-                  </Button>
+                  </button>
               ) : (
                   <>
-                    <Button
-                        as={Link}
+                    <NavLink
                         to="/login"
-                        variant="outline-warning"
-                        className="me-2"
                         state={{ from: "/" }}
+                        className="nav-link app-nav-link me-2"
                     >
                       Login
-                    </Button>
-                    <Button as={Link} to="/register" variant="outline-warning">
+                    </NavLink>
+                    <NavLink to="/register" className="nav-link app-nav-link">
                       Register
-                    </Button>
+                    </NavLink>
                   </>
               )}
             </div>

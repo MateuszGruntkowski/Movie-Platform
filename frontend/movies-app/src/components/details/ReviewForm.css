@@ -51,26 +51,25 @@
     margin-top: 10px;
 }
 
-.submit-btn {
-    background: linear-gradient(135deg, #e0b32b, #d0980a);
-    color: #ffffff;
-    border: none;
-    padding: 14px 28px;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-weight: 600;
+.review-submit-btn {
+    background: #333;
+    color: #ffd700;
+    border: 1px solid #ffd700;
+    padding: 10px 30px;
+    border-radius: 20px;
     cursor: pointer;
+    font-weight: bold;
     transition: all 0.3s ease;
 }
 
-.submit-btn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 3px 8px rgba(255, 228, 23, 0.4);
-    background: linear-gradient(135deg, #c69f2a, #d0a012);
+.review-submit-btn:hover:not(:disabled) {
+    background: #ffd700;
+    color: #000;
 }
 
-.submit-btn:active {
-    transform: translateY(0);
+.review-submit-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 @media (max-width: 480px) {
