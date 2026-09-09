@@ -55,7 +55,7 @@
 .movie-poster {
   height: 450px;
   width: 300px;
-  border: 3px solid gold;
+  border: 3px solid #ffd700;
   border-radius: 15px;
   overflow: hidden;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
@@ -92,39 +92,9 @@
   align-items: center;
 }
 
-.play-button-icon-container {
-  padding: 15px;
-  background: rgba(255, 215, 0, 0.1);
-  border: 2px solid gold;
-  border-radius: 50%;
-  width: 80px;
-  height: 80px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transition: all 0.3s ease;
-  cursor: pointer;
-}
-
-.play-button-icon-container:hover {
-  background: rgba(255, 215, 0, 0.3);
-  transform: scale(1.1);
-}
-
-.play-button-icon {
-  color: gold;
-  font-size: 2.5rem;
-  transition: all 0.3s ease;
-}
-
-.play-button-icon:hover {
-  color: white;
-  transform: scale(1.1);
-}
-
-.review-button {
+.see-more-button {
   padding: 10px 20px;
-  background-color: gold;
+  background-color: #ffd700;
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -133,10 +103,11 @@
   transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
-.review-button:hover {
+.see-more-button:hover {
   background-color: rgba(255, 215, 0, 0.8);
   transform: scale(1.05);
 }
+
 .custom-arrow {
   position: absolute;
   top: 50%;
@@ -159,7 +130,7 @@
 .custom-arrow:hover {
   background: rgba(0, 0, 0, 0.8);
   color: white;
-  border-color: gold;
+  border-color: #ffd700;
   transform: translateY(-50%) scale(1.1);
 }
 

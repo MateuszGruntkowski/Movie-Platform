@@ -22,7 +22,7 @@ const ReviewForm = ({ handleSubmit, labelText, revText }) => {
               className="review-textarea"
             />
           </div>
-          <button onClick={handleSubmit} className="submit-btn">
+          <button onClick={handleSubmit} className="review-submit-btn">
             Add review
           </button>
         </>
