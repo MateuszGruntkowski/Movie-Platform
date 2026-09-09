@@ -1,0 +1,91 @@
+.review-form-container {
+    background-color: #2a2a2a;
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-label {
+    display: block;
+    color: #f8f9fa;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.review-textarea {
+    width: 100%;
+    padding: 16px;
+    border: 2px solid #494949;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    color: #ffffff;
+    background-color: #1f1f1f;
+    resize: vertical;
+    font-family: inherit;
+    outline: none;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+    line-height: 1.5;
+    min-height: 120px;
+}
+
+.review-textarea::placeholder {
+    color: #8b949e;
+}
+
+.review-textarea:focus {
+    border-color: gold;
+    box-shadow: 0 0 0 3px rgba(79, 131, 204, 0.1);
+    background-color: #323232;
+}
+
+.login-prompt {
+    text-align: center;
+    font-size: 0.9rem;
+    margin-top: 10px;
+}
+
+.submit-btn {
+    background: linear-gradient(135deg, #e0b32b, #d0980a);
+    color: #ffffff;
+    border: none;
+    padding: 14px 28px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.submit-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(255, 228, 23, 0.4);
+    background: linear-gradient(135deg, #c69f2a, #d0a012);
+}
+
+.submit-btn:active {
+    transform: translateY(0);
+}
+
+@media (max-width: 480px) {
+    .review-form-container {
+        padding: 16px;
+    }
+
+    .review-textarea {
+        font-size: 0.9rem;
+        padding: 14px;
+    }
+
+    .submit-btn {
+        width: 100%;
+        padding: 16px;
+        font-size: 1rem;
+    }
+}
