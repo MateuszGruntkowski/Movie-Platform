@@ -1,6 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faVideoSlash } from "@fortawesome/free-solid-svg-icons";
-import "./SearchMovieCard.css"
+import { Star, Info } from "lucide-react";
+import "./SearchMovieCard.css";
 
 const SearchMovieCard = ({ movie, onMovieClick }) => {
     const handleClick = () => {
@@ -24,19 +25,40 @@ const SearchMovieCard = ({ movie, onMovieClick }) => {
                         <FontAwesomeIcon icon={faVideoSlash} size="3x" />
                     </div>
                 )}
+
+                {movie.voteAverage != null && (
+                    <div className="sr-movie-rating">
+                        <Star size={14} fill="currentColor" />
+                        <span>{movie.voteAverage.toFixed(1)}</span>
+                    </div>
+                )}
+
+                <div className="sr-movie-overlay">
+                    <div className="sr-movie-actions">
+                        <button
+                            className="sr-action-btn sr-details-btn"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                onMovieClick(movie);
+                            }}
+                            title="Zobacz więcej"
+                        >
+                            <Info size={20} />
+                            <span>See more</span>
+                        </button>
+                    </div>
+                </div>
             </div>
+
             <div className="sr-movie-info">
                 <h3 className="sr-movie-title" title={movie.title}>
                     {movie.title}
                 </h3>
-                <div className="sr-movie-year">
+                <p className="sr-movie-year">
                     {movie.releaseDate
                         ? new Date(movie.releaseDate).getFullYear()
                         : "N/A"}
-                </div>
-                <div className="sr-movie-rating">
-                    ⭐ {movie.voteAverage ? movie.voteAverage.toFixed(1) : "N/A"}
-                </div>
+                </p>
             </div>
         </div>
     );
