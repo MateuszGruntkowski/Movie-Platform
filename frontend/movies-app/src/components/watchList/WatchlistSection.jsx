@@ -1,4 +1,4 @@
-import MovieCard from "./MovieCard";
+import WatchlistMovieCard from "./WatchlistMovieCard.jsx";
 import "./WatchlistSection.css";
 
 const WatchlistSection = ({
@@ -28,7 +28,7 @@ const WatchlistSection = ({
             <div className="wl-movies-grid">
                 {movies.length > 0 ? (
                     movies.map((movie) => (
-                        <MovieCard
+                        <WatchlistMovieCard
                             key={movie.tmdbId}
                             movie={movie}
                             listType={listType}

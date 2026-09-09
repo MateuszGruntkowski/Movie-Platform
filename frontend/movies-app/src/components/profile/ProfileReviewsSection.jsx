@@ -4,7 +4,7 @@ import { usePaginatedProfileData } from "./hooks/usePaginatedProfileData.js";
 import ProfileSectionHeader from "./ProfileSectionHeader";
 import ReviewListItem from "./ReviewListItem";
 import LoadMoreButton from "./LoadMoreButton";
-import "./ProfileReviewSection.css"
+import "./ProfileReviewsSection.css"
 
 const REVIEWS_PAGE_SIZE = 5;
 const SORT_OPTIONS = [

@@ -1,8 +1,8 @@
 import { CheckCircle, Clock, X, Info, Star } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import "./MovieCard.css";
+import "./WatchlistMovieCard.css";
 
-const MovieCard = ({
+const WatchlistMovieCard = ({
                      movie,
                      listType,
                      onMarkAsWatched,
@@ -86,4 +86,4 @@ const MovieCard = ({
   );
 };
 
-export default MovieCard;
+export default WatchlistMovieCard;
