@@ -3,7 +3,7 @@ import { usePaginatedProfileData } from "./hooks/usePaginatedProfileData.js";
 import ProfileSectionHeader from "./ProfileSectionHeader";
 import RatingListItem from "./RatingListItem";
 import LoadMoreButton from "./LoadMoreButton";
-import "./ProfileRatingSection.css"
+import "./ProfileRatingsSection.css"
 
 const RATINGS_PAGE_SIZE = 5;
 const SORT_OPTIONS = [
