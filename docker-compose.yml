@@ -49,7 +49,7 @@ services:
       dockerfile: Dockerfile
     container_name: movies_frontend
     ports:
-      - "3000:80"
+      - "5173:80"
     depends_on:
       - backend
     restart: "no"
