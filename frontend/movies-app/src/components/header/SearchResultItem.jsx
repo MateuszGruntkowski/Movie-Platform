@@ -1,6 +1,6 @@
-import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faVideoSlash, faStar } from "@fortawesome/free-solid-svg-icons";
+import "./SearchResultItem.css";
 
 const SearchResultItem = ({ movie, onClick }) => (
     <div className="search-result-item" onClick={() => onClick(movie)}>
@@ -10,7 +10,7 @@ const SearchResultItem = ({ movie, onClick }) => (
                     src={movie.posterPath}
                     alt={movie.title}
                     onError={(e) => {
-                        e.target.src = "https://via.placeholder.com/92x138/cccccc/666666?text=No+Image";
+                        e.target.src = "https://via.placeholder.com/92x138/cccccc/666666?text=No+Poster";
                     }}
                 />
             ) : (

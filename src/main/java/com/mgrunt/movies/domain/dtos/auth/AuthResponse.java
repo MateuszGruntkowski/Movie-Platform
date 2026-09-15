@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class AuthResponse {
     private String username;
+    private String avatarPath;
     private String token;
 
     @Builder.Default

@@ -1,4 +1,3 @@
-import React from "react";
 import "./buttons.css";
 import { CheckCircle } from "lucide-react";
 

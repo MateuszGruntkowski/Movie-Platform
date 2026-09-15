@@ -1,4 +1,4 @@
-import React from "react";
+import "./SearchResultsHeader.css";
 
 const SearchResultsHeader = ({ query, resultsCount }) => {
   return (

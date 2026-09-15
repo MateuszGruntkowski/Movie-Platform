@@ -3,12 +3,12 @@ package com.mgrunt.movies.services.Impl;
 import com.mgrunt.movies.constants.AvatarConstants;
 import com.mgrunt.movies.domain.dtos.profile.ProfileRatingDto;
 import com.mgrunt.movies.domain.dtos.profile.ProfileReviewDto;
-import com.mgrunt.movies.domain.dtos.user.UserDto;
+import com.mgrunt.movies.domain.dtos.user.CurrentUserResponse;
 import com.mgrunt.movies.domain.dtos.profile.UserProfileResponse;
 import com.mgrunt.movies.domain.entities.User;
 import com.mgrunt.movies.mappers.RatingMapper;
 import com.mgrunt.movies.mappers.ReviewMapper;
-import com.mgrunt.movies.mappers.UserMapper;
+import com.mgrunt.movies.mappers.CurrentUserMapper;
 import com.mgrunt.movies.repositories.RatingRepository;
 import com.mgrunt.movies.repositories.ReviewRepository;
 import com.mgrunt.movies.repositories.UserRepository;
@@ -30,7 +30,7 @@ import java.util.UUID;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final UserMapper userMapper;
+    private final CurrentUserMapper currentUserMapper;
     private final ReviewRepository reviewRepository;
     private final ReviewMapper reviewMapper;
     private final RatingRepository ratingRepository;
@@ -38,11 +38,11 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public UserDto getUser(UUID userId) {
+    public CurrentUserResponse getCurrentUser(UUID userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
-        return userMapper.toDto(user);
+        return currentUserMapper.toDto(user);
     }
 
     @Override

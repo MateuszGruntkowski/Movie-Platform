@@ -1,0 +1,46 @@
+.sr-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.sr-header h1 {
+    color: #ffd700;
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+}
+
+.sr-search-info {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.sr-query {
+    color: #fff;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.sr-count {
+    background: #333;
+    color: #ffd700;
+    padding: 5px 15px;
+    border-radius: 15px;
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+@media (max-width: 768px) {
+    .sr-header h1 {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .sr-search-info {
+        flex-direction: column;
+        gap: 8px;
+    }
+}

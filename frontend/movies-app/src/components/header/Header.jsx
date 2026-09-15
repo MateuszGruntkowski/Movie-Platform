@@ -1,4 +1,3 @@
-import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faVideoSlash } from "@fortawesome/free-solid-svg-icons";
 import Button from "react-bootstrap/Button";
@@ -6,7 +5,7 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import { NavLink, Link } from "react-router-dom";
-import {useAuth} from "../context/AuthContext";
+import {useAuth} from "../../context/AuthContext";
 import MovieSearchBar from "./MovieSearchBar";
 import "./Header.css";
 
@@ -46,23 +45,21 @@ const Header = () => {
 
             <div className="d-flex ms-auto">
               {user ? (
-                  <Button variant="outline-warning" onClick={logout}>
+                  <button className="nav-link app-nav-link nav-link-btn" onClick={logout}>
                     Logout
-                  </Button>
+                  </button>
               ) : (
                   <>
-                    <Button
-                        as={Link}
+                    <NavLink
                         to="/login"
-                        variant="outline-warning"
-                        className="me-2"
                         state={{ from: "/" }}
+                        className="nav-link app-nav-link me-2"
                     >
                       Login
-                    </Button>
-                    <Button as={Link} to="/register" variant="outline-warning">
+                    </NavLink>
+                    <NavLink to="/register" className="nav-link app-nav-link">
                       Register
-                    </Button>
+                    </NavLink>
                   </>
               )}
             </div>

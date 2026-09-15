@@ -1,0 +1,27 @@
+.popup-notification {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #333;
+    color: #fff;
+    padding: 12px 24px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+    z-index: 9999;
+    font-weight: bold;
+    /*animation: fadeInOut 3s forwards;*/
+}
+
+.popup-notification.watched {
+    background-color: #22c55e;
+}
+
+.popup-notification.toWatch {
+    background-color: #3b82f6;
+}
+
+.popup-notification.login {
+    background-color: rgb(241, 170, 4);
+    color: white;
+}

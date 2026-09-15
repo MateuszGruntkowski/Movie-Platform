@@ -1,5 +1,5 @@
-import React from "react";
-import MovieCard from "./MovieCard";
+import WatchlistMovieCard from "./WatchlistMovieCard.jsx";
+import "./WatchlistSection.css";
 
 const WatchlistSection = ({
                               title,
@@ -28,7 +28,7 @@ const WatchlistSection = ({
             <div className="wl-movies-grid">
                 {movies.length > 0 ? (
                     movies.map((movie) => (
-                        <MovieCard
+                        <WatchlistMovieCard
                             key={movie.tmdbId}
                             movie={movie}
                             listType={listType}
@@ -53,7 +53,7 @@ const WatchlistSection = ({
                         onClick={onLoadMore}
                         disabled={isLoading}
                     >
-                        {isLoading ? "Loading..." : "Load more"}
+                        {isLoading ? "Loading..." : "Show more"}
                     </button>
                 </div>
             )}

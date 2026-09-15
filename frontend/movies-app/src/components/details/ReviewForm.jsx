@@ -1,6 +1,7 @@
 import { Button } from "react-bootstrap";
 import { Link, useParams } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
+import "./ReviewForm.css";
 
 const ReviewForm = ({ handleSubmit, labelText, revText }) => {
   const params = useParams();
@@ -21,7 +22,7 @@ const ReviewForm = ({ handleSubmit, labelText, revText }) => {
               className="review-textarea"
             />
           </div>
-          <button onClick={handleSubmit} className="submit-btn">
+          <button onClick={handleSubmit} className="review-submit-btn">
             Add review
           </button>
         </>

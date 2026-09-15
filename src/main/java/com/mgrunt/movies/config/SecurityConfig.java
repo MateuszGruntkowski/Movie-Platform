@@ -34,6 +34,7 @@ public class SecurityConfig {
                                 "/v3/api-docs/**")
                         .permitAll()
                         .requestMatchers("/avatars/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/reviews/**").permitAll()
                         .requestMatchers("/api/v1/reviews/**").authenticated()
                         .requestMatchers("/api/v1/users/**").authenticated()
                         .anyRequest().authenticated())

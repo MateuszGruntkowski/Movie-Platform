@@ -1,5 +1,5 @@
-import React from "react";
 import SearchResultItem from "./SearchResultItem";
+import "./SearchResultDropdown.css";
 
 const MAX_VISIBLE = 8;
 
@@ -8,6 +8,7 @@ const SearchResultsDropdown = ({ results, query, onMovieClick, onViewAll }) => {
         return query.length >= 2 ? (
             <div className="no-results">
                 <p>No movies found for "{query}"</p>
+                <p>Try different keywords.</p>
             </div>
         ) : null;
     }
