@@ -4,7 +4,7 @@ Movie Platform is a web application for exploring and managing movies. It integr
 
 ## Demo
 
-https://github.com/user-attachments/assets/your-video-id-here
+[https://github.com/user-attachments/assets/your-video-id-here](https://github.com/user-attachments/assets/3eb9426e-c039-4705-8370-d00197030065)
 
 > Demo video showcasing search, movie details, watchlist, reviews, and trailers.
 
