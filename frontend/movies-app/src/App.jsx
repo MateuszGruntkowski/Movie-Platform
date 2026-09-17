@@ -16,7 +16,6 @@ import { trendingMoviesService } from "./services/trendingMoviesService";
 
 function App() {
   const [trendingMovies, setTrendingMovies] = useState([]);
-  console.log("Test if ci works")
 
   useEffect(() => {
     const fetchTrendingMovies = async () => {
