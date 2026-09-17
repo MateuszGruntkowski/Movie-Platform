@@ -2,18 +2,11 @@
 
 Movie Platform is a web application for exploring and managing movies. It integrates with TMDB API to provide up-to-date movie data and allows users to review, save, and organize films.
 
-## Demo (YT video)
+## Demo
 
-[![Watch the demo](https://img.shields.io/badge/▶_Watch_Demo-YouTube-red?style=for-the-badge&logo=youtube)](https://www.youtube.com/watch?v=qI3TioYV1BM)
+[https://github.com/user-attachments/assets/your-video-id-here](https://github.com/user-attachments/assets/3eb9426e-c039-4705-8370-d00197030065)
 
-## Screenshots
-
-![Home Page](Screenshots/Home.png)
-![Movie Details](Screenshots/MovieDetails.png)
-![Search](Screenshots/Search.png)
-![Watch List](Screenshots/WatchList.png)
-![Trailer](Screenshots/Trailer.png)
-![Register](Screenshots/Register.png)
+> Demo video showcasing search, movie details, watchlist, reviews, and trailers.
 
 ## Installation & Setup (Quick Start)
 
@@ -59,29 +52,31 @@ Please wait a few minutes for the initial build (Maven dependencies & Node modul
 
 Once the logs settle, the application is available at:
 
-| Service | URL | Default Credentials |
-|:---|:---|:---|
-| Frontend | http://localhost:3000 | Register with username & password to access all features |
+| Service | URL                                         | Default Credentials |
+|:---|:--------------------------------------------|:---|
+| Frontend | http://localhost:5173                       | Register with username & password to access all features |
 | Swagger UI | http://localhost:8080/swagger-ui/index.html | — |
-| Adminer (DB) | http://localhost:8088 | System: `PostgreSQL`, Server: `moviesdb`, User: `username`, Pass: `password` |
+| Adminer (DB) | http://localhost:8088                       | System: `PostgreSQL`, Server: `moviesdb`, User: `username`, Pass: `password` |
 
 ---
 
 ## Main Features
 - **Search movies** – powered by TMDB API.
 - **Movie details** – view description, rating, runtime, and release date.
+- **Ratings** – rate movies you've watched.
 - **Reviews** – write and share movie reviews. A movie is stored in the database only when a review is added or the user saves it to a list.
-- **Watch list** – save movies to your “To Watch” or “Already Watched” lists.
+- **Watch list** – save movies to your "To Watch" or "Already Watched" lists.
 - **Trailers** – watch official trailers directly on the platform.
+- **User profile** – view your stats (average rating, number of ratings, number of reviews, movies watched, movies to watch), browse your full rating/review history with sorting, and change your avatar.
 - **User authentication** – sign up and log in to access personalized features.
 
 ## Technologies
-- Spring Boot 3.x  
-- Spring Security + JWT  
-- PostgreSQL 
+- Spring Boot 3.x
+- Spring Security + JWT
+- PostgreSQL
 - Spring Data JPA
 - React 19
-- OpenAPI/Swagger  
+- OpenAPI/Swagger
 
 ## API Documentation
 
@@ -89,18 +84,17 @@ Full API documentation is available in Swagger UI once the application is runnin
 
 **URL:** `http://localhost:8080/swagger-ui/index.html`
 
-The documentation includes:  
+The documentation includes:
 - All endpoints
-- Request/response schemas  
-- Ability to test endpoints directly in the browser  
-- JWT Bearer Token support  
+- Request/response schemas
+- Ability to test endpoints directly in the browser
+- JWT Bearer Token support
 
 ### Authorization in Swagger
 
-For endpoints requiring authorization:  
-1. Log in using the `/api/v1/auth/login` endpoint  
-2. Copy the returned token  
-3. Click the **"Authorize"** button in Swagger UI  
-4. Paste the token (without the `Bearer` prefix)  
-5. Click **"Authorize"**  
-
+For endpoints requiring authorization:
+1. Log in using the `/api/v1/auth/login` endpoint
+2. Copy the returned token
+3. Click the **"Authorize"** button in Swagger UI
+4. Paste the token (without the `Bearer` prefix)
+5. Click **"Authorize"**
