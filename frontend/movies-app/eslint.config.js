@@ -20,6 +20,7 @@ export default [
             ...js.configs.recommended.rules,
             ...reactHooks.configs.recommended.rules,
             'react-refresh/only-export-components': 'warn',
+            'react-hooks/set-state-in-effect': 'warn'
         },
     },
 ]
