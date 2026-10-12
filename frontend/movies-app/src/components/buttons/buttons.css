@@ -13,7 +13,6 @@
   backdrop-filter: blur(10px);
 }
 
-/* Watched button specific styles */
 .watched-button {
   color: #22c55e;
   border-color: #22c55e;
@@ -29,7 +28,6 @@
   color: white;
 }
 
-/* To watch button specific styles */
 .to-watch-button {
   color: #3b82f6;
   border-color: #3b82f6;
@@ -45,7 +43,6 @@
   color: white;
 }
 
-/* Mobile responsiveness for watchlist buttons */
 @media only screen and (max-width: 768px) {
   .watchlist-buttons-container {
     flex-direction: row;
@@ -68,4 +65,42 @@
     min-width: 40px;
     justify-content: center;
   }
+}
+
+.util-button {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  border: 0;
+  border-radius: 2px;
+  background: none;
+  color: rgba(255, 255, 255, 0.78);
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.util-button:hover {
+  color: #fff;
+}
+
+.util-button.is-active {
+  color: #ffd700;
+}
+
+.util-button.is-active::after {
+  content: "";
+  position: absolute;
+  left: 0.8rem;
+  right: 0.8rem;
+  bottom: 0.4rem;
+  height: 2px;
+  background: currentColor;
+}
+
+.util-button:focus-visible {
+  outline: 1px solid #ffd700;
+  outline-offset: 2px;
 }
