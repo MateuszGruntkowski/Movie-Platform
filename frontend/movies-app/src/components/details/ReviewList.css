@@ -4,14 +4,20 @@
 
 .reviews-list-title {
     color: #f8f9fa;
-    font-size: 1.8rem;
-    margin-bottom: 24px;
-    padding-bottom: 12px;
+    font-size: 1.4rem;
+    margin-bottom: 18px;
+    padding-bottom: 10px;
     font-weight: 600;
     border-bottom: 2px solid #494949;
 }
 
-.reviews-loading,
+.reviews-loading {
+    margin: 0;
+    padding: 2.5rem 1rem;
+    text-align: center;
+    color: #8b949e;
+}
+
 .reviews-note {
     color: #8b949e;
     margin: 1.5rem 0;
@@ -136,7 +142,6 @@
     color: #ffffff;
 }
 
-/* Empty state: plain muted text, no box and no bluish gradient. */
 .no-reviews {
     text-align: center;
     padding: 2.5rem 1rem;
@@ -149,7 +154,6 @@
     font-style: italic;
 }
 
-/* Pagination (new) */
 .reviews-pagination {
     display: flex;
     align-items: center;
@@ -195,10 +199,6 @@
 }
 
 @media (max-width: 768px) {
-    .reviews-list-title {
-        font-size: 1.5rem;
-    }
-
     .review-item {
         padding: 20px;
     }

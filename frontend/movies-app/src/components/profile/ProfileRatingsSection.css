@@ -18,6 +18,11 @@
     color: #ffd700;
 }
 
+.profile-section .profile-loading {
+    padding: 2.5rem 1rem;
+    color: #8b949e;
+}
+
 .profile-empty {
     padding: 2.5rem 1rem;
     text-align: center;

@@ -1,4 +1,3 @@
-/* One centred column shared by the hero, rating, gallery and reviews. */
 .details-page {
   max-width: 1200px;
   margin: 0 auto;
@@ -13,9 +12,11 @@
 
 .details-section-title {
   color: #f8f9fa;
-  font-size: 1.3rem;
+  font-size: 1.4rem;
   font-weight: 600;
-  margin: 0 0 1rem;
+  margin: 0 0 18px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #494949;
 }
 
 .details-reviews {
