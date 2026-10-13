@@ -4,6 +4,7 @@ import { useWatchlist } from "../../context/WatchlistContext";
 import ToWatchButton from "../buttons/ToWatchButton";
 import WatchedButton from "../buttons/WatchedButton";
 import TrailerModal from "./TrailerModal";
+import MovieFacts from "./MovieFacts";
 import {
     formatRating,
     formatRuntime,
@@ -189,6 +190,8 @@ const MovieHero = ({ movie, isLoading, showPopup }) => {
                             </a>
                         )}
                     </div>
+
+                    <MovieFacts movie={movie} />
                 </div>
             </div>
 

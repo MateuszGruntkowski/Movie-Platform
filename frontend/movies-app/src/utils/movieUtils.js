@@ -103,3 +103,36 @@ export const getTrailerSource = (url) => {
 
     return { kind: "external", src: u.href, href: u.href };
 };
+
+// Two TMDB-specific values are not valid ISO codes: "cn" (Cantonese) and "xx" (no language).
+const LANGUAGE_OVERRIDES = { cn: "Cantonese" };
+
+/** "en" -> "English". Returns null for missing, "no language" or unrecognized values. */
+export const formatLanguage = (code) => {
+    if (!code || typeof code !== "string") return null;
+    const key = code.trim().toLowerCase();
+    if (!key || key === "xx") return null;
+    if (LANGUAGE_OVERRIDES[key]) return LANGUAGE_OVERRIDES[key];
+    try {
+        const name = new Intl.DisplayNames(["en"], { type: "language" }).of(key);
+        // DisplayNames echoes the input back when it doesn't know the code.
+        return name && name.toLowerCase() !== key ? name : null;
+    } catch {
+        return null;
+    }
+};
+
+// TMDB budget and revenue are always in US dollars, and 0 means "not available".
+const usd = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    maximumFractionDigits: 0,
+});
+
+/** 160000000 -> "$160,000,000". Returns null for 0, null, negative or non-numeric values. */
+export const formatCurrency = (amount) => {
+    if (amount == null || amount === "") return null;
+    const n = Number(amount);
+    if (!Number.isFinite(n) || n <= 0) return null;
+    return usd.format(n);
+};
