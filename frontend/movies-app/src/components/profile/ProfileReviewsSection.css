@@ -21,12 +21,15 @@
 }
 
 .profile-empty {
-    background-color: #2a2a2a;
-    border: 2px dashed #343a46;
-    border-radius: 16px;
-    padding: 40px 20px;
+    padding: 2.5rem 1rem;
     text-align: center;
     color: #8b949e;
+}
+
+.profile-empty p {
+    margin: 0;
+    font-size: 1.05rem;
+    font-style: italic;
 }
 
 .profile-list-body {
