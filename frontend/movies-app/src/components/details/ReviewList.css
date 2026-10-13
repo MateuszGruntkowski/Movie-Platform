@@ -42,18 +42,12 @@
 }
 
 .review-item {
-    background-color: #2a2a2a;
-    border-radius: 12px;
-    padding: 24px;
-    margin-bottom: 20px;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    padding: 20px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.review-item:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-    border-color: #4a5568;
+.review-item:last-child {
+    border-bottom: 0;
 }
 
 .review-header {
@@ -112,13 +106,13 @@
 
 .review-date {
     color: #8b949e;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
 }
 
 .review-body {
     color: #e1e7ef;
-    line-height: 1.6;
-    font-size: 1rem;
+    font-size: 0.95rem;
+    line-height: 1.55;
     margin-left: 58px;
     white-space: pre-wrap;
     overflow-wrap: anywhere;
@@ -126,20 +120,26 @@
 
 .review-delete-btn {
     margin-left: auto;
-    background: transparent;
-    color: #e15759;
-    border: 1px solid #e15759;
+    flex-shrink: 0;
+    padding: 4px 8px;
+    background: none;
+    border: 0;
     border-radius: 6px;
-    padding: 6px 12px;
+    color: #e15759;
+    font: inherit;
     font-size: 0.85rem;
     cursor: pointer;
-    transition: all 0.2s ease;
-    flex-shrink: 0;
+    transition: color 0.2s ease, background-color 0.2s ease;
 }
 
 .review-delete-btn:hover {
-    background-color: #e15759;
-    color: #ffffff;
+    background-color: rgba(225, 87, 89, 0.12);
+    color: #ff6b6d;
+}
+
+.review-delete-btn:focus-visible {
+    outline: 1px solid #ffd700;
+    outline-offset: 2px;
 }
 
 .no-reviews {
@@ -199,10 +199,6 @@
 }
 
 @media (max-width: 768px) {
-    .review-item {
-        padding: 20px;
-    }
-
     .review-body {
         margin-left: 0;
         margin-top: 12px;
@@ -214,10 +210,6 @@
 }
 
 @media (max-width: 480px) {
-    .review-item {
-        padding: 16px;
-    }
-
     .review-avatar,
     .review-avatar-img {
         width: 40px;

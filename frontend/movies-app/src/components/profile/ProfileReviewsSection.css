@@ -17,7 +17,7 @@
 .profile-list {
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 0;
 }
 
 .profile-section .profile-loading {
@@ -37,32 +37,39 @@
     font-style: italic;
 }
 
+/* Three-line preview. */
 .profile-list-body {
     color: #e1e7ef;
-    font-size: 0.9rem;
-    line-height: 1.4;
+    font-size: 0.95rem;
+    line-height: 1.55;
     margin: 0;
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
 }
 
 .review-delete-btn {
     margin-left: auto;
-    background: transparent;
-    color: #e15759;
-    border: 1px solid #e15759;
+    flex-shrink: 0;
+    padding: 4px 8px;
+    background: none;
+    border: 0;
     border-radius: 6px;
-    padding: 6px 12px;
+    color: #e15759;
+    font: inherit;
     font-size: 0.85rem;
     cursor: pointer;
-    transition: all 0.2s ease;
-    flex-shrink: 0;
+    transition: color 0.2s ease, background-color 0.2s ease;
 }
 
 .review-delete-btn:hover {
-    background-color: #e15759;
-    color: #ffffff;
+    background-color: rgba(225, 87, 89, 0.12);
+    color: #ff6b6d;
+}
+
+.review-delete-btn:focus-visible {
+    outline: 1px solid #ffd700;
+    outline-offset: 2px;
 }

@@ -5,7 +5,7 @@
 .profile-list {
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 0;
 }
 
 .profile-list-rating {
