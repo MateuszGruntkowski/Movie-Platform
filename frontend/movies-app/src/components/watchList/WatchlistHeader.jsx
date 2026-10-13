@@ -1,4 +1,4 @@
-import { Eye, Clock } from "lucide-react";
+import { Eye, Bookmark } from "lucide-react";
 import "./WatchlistHeader.css";
 
 const WatchlistHeader = ({ toWatchCount, watchedCount }) => (
@@ -6,12 +6,12 @@ const WatchlistHeader = ({ toWatchCount, watchedCount }) => (
         <h1>My Movie List</h1>
         <div className="wl-stats">
             <span className="wl-stat">
-                <Clock size={16} />
-                To watch: {toWatchCount}
+                <Bookmark size={16} strokeWidth={1.5} />
+                To watch <strong>{toWatchCount}</strong>
             </span>
             <span className="wl-stat">
-                <Eye size={16} />
-                Already watched: {watchedCount}
+                <Eye size={16} strokeWidth={1.5} />
+                Already watched <strong>{watchedCount}</strong>
             </span>
         </div>
     </header>

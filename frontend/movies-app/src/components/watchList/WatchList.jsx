@@ -1,5 +1,4 @@
-import { Eye, Clock } from "lucide-react";
-import "./WatchList.css";
+import { Eye, Bookmark } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 import { useWatchlist } from "../../context/WatchlistContext";
 import { usePopup } from "../../hooks/usePopup";
@@ -68,7 +67,7 @@ const WatchList = () => {
             <div className="wl-content">
                 <WatchlistSection
                     title="To Watch"
-                    icon={<Clock size={24} />}
+                    icon={<Bookmark size={24} strokeWidth={1.5} />}
                     listType="moviesToWatch"
                     state={toWatch.state}
                     onLoadMore={toWatch.loadMore}
@@ -80,7 +79,7 @@ const WatchList = () => {
 
                 <WatchlistSection
                     title="Already Watched"
-                    icon={<Eye size={24} />}
+                    icon={<Eye size={24} strokeWidth={1.5} />}
                     listType="moviesWatched"
                     state={watched.state}
                     onLoadMore={watched.loadMore}
