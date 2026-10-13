@@ -6,30 +6,28 @@
 .sr-header h1 {
     color: #ffd700;
     font-size: 2.5rem;
-    margin-bottom: 15px;
+    margin: 0 0 12px;
 }
 
 .sr-search-info {
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: baseline;
     gap: 10px;
     flex-wrap: wrap;
 }
 
 .sr-query {
-    color: #fff;
+    color: #f8f9fa;
     font-size: 1.2rem;
     font-weight: 600;
+    overflow-wrap: anywhere;
 }
 
 .sr-count {
-    background: #333;
-    color: #ffd700;
-    padding: 5px 15px;
-    border-radius: 15px;
+    color: #999;
     font-size: 0.9rem;
-    font-weight: bold;
+    font-variant-numeric: tabular-nums;
 }
 
 @media (max-width: 768px) {
@@ -41,6 +39,7 @@
 @media (max-width: 480px) {
     .sr-search-info {
         flex-direction: column;
-        gap: 8px;
+        align-items: center;
+        gap: 4px;
     }
 }

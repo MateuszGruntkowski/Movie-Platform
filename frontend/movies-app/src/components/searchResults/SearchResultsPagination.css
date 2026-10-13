@@ -2,47 +2,43 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 20px;
+    gap: 1rem;
     margin-top: 40px;
     padding: 20px 0;
 }
 
 .sr-page-btn {
-    background: #333;
-    color: #ffd700;
-    border: 1px solid #ffd700;
-    padding: 10px 30px;
-    border-radius: 20px;
+    display: grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: 0;
+    border: 1px solid #494949;
+    border-radius: 10px;
+    background: none;
+    color: #e1e7ef;
     cursor: pointer;
-    font-weight: bold;
-    transition: all 0.3s ease;
+    transition: border-color 0.2s ease, color 0.2s ease;
 }
 
 .sr-page-btn:hover:not(:disabled) {
-    background: #ffd700;
-    color: #000;
+    border-color: #ffd700;
+    color: #ffd700;
+}
+
+.sr-page-btn:focus-visible {
+    outline: 1px solid #ffd700;
+    outline-offset: 2px;
 }
 
 .sr-page-btn:disabled {
-    opacity: 0.5;
+    opacity: 0.35;
     cursor: not-allowed;
 }
 
 .sr-page-info {
-    color: #ffd700;
-    font-size: 1.1rem;
-    font-weight: 600;
-    padding: 0 15px;
-}
-
-@media (max-width: 768px) {
-    .sr-pagination {
-        flex-direction: column;
-        gap: 15px;
-    }
-
-    .sr-page-btn {
-        padding: 12px 24px;
-        width: 120px;
-    }
+    min-width: 7.5rem;
+    color: #8b949e;
+    font-size: 0.9rem;
+    text-align: center;
 }
