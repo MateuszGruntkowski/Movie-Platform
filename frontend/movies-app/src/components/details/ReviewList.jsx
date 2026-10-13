@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { getAvatarUrl } from "../../utils/avatarUtils";
+import LoadingSpinner from "../common/LoadingSpinner";
 import ReviewsPagination from "./ReviewsPagination";
 import "./ReviewList.css";
 
@@ -24,7 +25,7 @@ const ReviewList = ({
             </h2>
 
             {isLoading && !hasReviews && (
-                <p className="reviews-loading">Loading reviews...</p>
+                <LoadingSpinner message="Loading reviews..." />
             )}
 
             {error && !isLoading && !hasReviews && (

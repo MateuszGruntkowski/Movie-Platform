@@ -3,6 +3,7 @@ import ProfileHeader from "./ProfileHeader";
 import ProfileStats from "./ProfileStats";
 import ProfileReviewsSection from "./ProfileReviewsSection";
 import ProfileRatingsSection from "./ProfileRatingsSection";
+import LoadingSpinner from "../common/LoadingSpinner";
 import "./ProfileContent.css"
 
 const ProfileContent = ({ username, isOwnProfile }) => {
@@ -19,7 +20,7 @@ const ProfileContent = ({ username, isOwnProfile }) => {
     if (isLoading) {
         return (
             <div className="profile-container">
-                <p className="profile-loading">Loading profile...</p>
+                <LoadingSpinner page message="Loading profile..." />
             </div>
         );
     }

@@ -7,6 +7,7 @@ import { Navigate } from "react-router-dom";
 import WatchlistSection from "./WatchlistSection";
 import WatchlistHeader from "./WatchlistHeader";
 import Popup from "../common/Popup.jsx";
+import LoadingSpinner from "../common/LoadingSpinner";
 import { watchlistService } from "../../services/watchlistService";
 import "./WatchList.css";
 
@@ -48,7 +49,7 @@ const WatchList = () => {
     };
 
     if (loading) {
-        return <div>Loading...</div>;
+        return <LoadingSpinner page message="Loading watchlist..." />;
     }
 
     if (!user) {

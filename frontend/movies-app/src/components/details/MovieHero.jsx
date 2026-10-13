@@ -1,3 +1,4 @@
+import LoadingSpinner from "../common/LoadingSpinner";
 import { useRef, useState } from "react";
 import { ExternalLink, Play, Star } from "lucide-react";
 import { useWatchlist } from "../../context/WatchlistContext";
@@ -35,7 +36,7 @@ const MovieHero = ({ movie, isLoading, showPopup }) => {
     if (!movie) {
         return (
             <section className="movie-hero movie-hero--empty" aria-busy={isLoading}>
-                {isLoading && <p className="movie-hero-status">Loading…</p>}
+                {isLoading && <LoadingSpinner page message="Loading movie..." />}
             </section>
         );
     }
