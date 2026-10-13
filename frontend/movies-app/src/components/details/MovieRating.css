@@ -1,16 +1,11 @@
 .movie-rating-widget {
-    background-color: #2a2a2a;
-    border-radius: 16px;
-    padding: 14px 20px;
-    margin-top: 20px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-}
-
-.rating-header-row {
     display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    margin-bottom: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.25rem;
+    padding: 0.75rem 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .movie-rating-title {
@@ -20,33 +15,24 @@
     margin: 0;
 }
 
-.rating-loading {
+.rating-note {
     color: #8b949e;
     font-size: 0.9rem;
     margin: 0;
 }
 
-.rating-value-label {
-    color: #f8f9fa;
-    font-size: 0.8rem;
-    font-weight: 600;
-    min-width: 34px;
-    text-align: right;
-}
-
 .rating-stars-picker {
     display: flex;
     align-items: center;
-    justify-content: center;
     flex-wrap: wrap;
-    gap: 4px;
+    gap: 2px;
 }
 
 .rating-star-button {
     background: none;
     border: none;
     cursor: pointer;
-    padding: 2px;
+    padding: 6px 3px;
     font-size: 1.4rem;
     line-height: 1;
     transition: transform 0.15s ease;
@@ -56,9 +42,21 @@
     transform: scale(1.15);
 }
 
+.rating-star-button:focus-visible {
+    outline: 1px solid #ffd700;
+    outline-offset: 1px;
+}
+
 .rating-star-button:disabled {
     cursor: not-allowed;
     opacity: 0.6;
+}
+
+.rating-value-label {
+    min-width: 3.2ch;
+    color: #f8f9fa;
+    font-size: 0.85rem;
+    font-weight: 600;
 }
 
 .star-filled {
@@ -70,11 +68,8 @@
 }
 
 @media (max-width: 480px) {
-    .movie-rating-widget {
-        padding: 16px;
-    }
-
     .rating-star-button {
+        padding: 8px 2px;
         font-size: 1.2rem;
     }
 }

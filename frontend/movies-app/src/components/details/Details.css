@@ -1,51 +1,25 @@
-.movie-synopsis {
-  background-color: #2a2a2a;
-  border-radius: 16px;
-  padding: 24px;
-  margin-bottom: 24px;
-}
-
-.movie-synopsis-title {
-  color: #f8f9fa;
-  font-size: 1.3rem;
-  font-weight: 600;
-  margin: 0 0 12px 0;
-}
-
-.movie-synopsis-text {
-  color: #e1e7ef;
-  line-height: 1.6;
-  font-size: 0.95rem;
-  margin: 0;
-  padding: 4px 16px;
-  border-left: 3px solid #ffd700;
-  border-right: 3px solid #ffd700;
-}
-
-@media (max-width: 480px) {
-  .movie-synopsis {
-    padding: 16px;
-  }
-}
-
-.reviews-container {
-  max-width: 1500px;
+/* One centred column shared by the hero, rating, gallery and reviews. */
+.details-page {
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 20px 20px 60px;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   color: #ffffff;
 }
 
-.reviews-content {
-  display: grid;
-  grid-template-columns: 400px 1fr;
-  gap: 40px;
-  align-items: start;
+.details-section {
+  margin-top: 3rem;
 }
 
-.movie-section {
-  position: sticky;
-  top: 20px;
+.details-section-title {
+  color: #f8f9fa;
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin: 0 0 1rem;
+}
+
+.details-reviews {
+  max-width: 900px;
 }
 
 .details-error {
@@ -54,38 +28,18 @@
   padding: 60px 20px;
 }
 
-@media (max-width: 1024px) {
-  .reviews-content {
-    grid-template-columns: 340px 1fr;
-    gap: 30px;
-  }
-}
-
-@media (max-width: 900px) {
-  .reviews-content {
-    grid-template-columns: 280px 1fr;
-    gap: 22px;
-  }
-}
-
 @media (max-width: 768px) {
-  .reviews-container {
-    padding: 15px;
+  .details-page {
+    padding: 15px 15px 48px;
   }
 
-  .reviews-content {
-    grid-template-columns: 1fr;
-    gap: 25px;
+  .details-section {
+    margin-top: 2.25rem;
   }
-
-  .movie-section {
-    position: static;
-  }
-
 }
 
 @media (max-width: 480px) {
-  .reviews-container {
-    padding: 10px;
+  .details-page {
+    padding: 10px 12px 40px;
   }
 }
