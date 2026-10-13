@@ -11,7 +11,7 @@
     cursor: pointer;
     transition: border-color 0.2s ease, color 0.2s ease;
     align-self: center;
-    margin-top: 6px;
+    margin-top: 10px;
 }
 
 .profile-load-more-btn:hover:not(:disabled) {

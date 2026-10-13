@@ -3,25 +3,19 @@
     top: 20px;
     left: 50%;
     transform: translateX(-50%);
-    background-color: #333;
-    color: #fff;
-    padding: 12px 24px;
-    border-radius: 8px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+    max-width: min(90vw, 420px);
+    background-color: #2a2a2a;
+    color: #f8f9fa;
+    border: 1px solid #494949;
+    border-left: 3px solid #ffd700;
+    border-radius: 10px;
+    padding: 12px 20px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
     z-index: 9999;
-    font-weight: bold;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    line-height: 1.4;
+    text-align: center;
     /*animation: fadeInOut 3s forwards;*/
-}
-
-.popup-notification.watched {
-    background-color: #22c55e;
-}
-
-.popup-notification.toWatch {
-    background-color: #3b82f6;
-}
-
-.popup-notification.login {
-    background-color: rgb(241, 170, 4);
-    color: white;
 }
