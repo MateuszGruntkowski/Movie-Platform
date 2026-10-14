@@ -9,6 +9,7 @@ import { usePopup } from "../../hooks/usePopup";
 import ToWatchButton from "../buttons/ToWatchButton";
 import WatchedButton from "../buttons/WatchedButton";
 import Popup from "../common/Popup.jsx";
+import LoadingSpinner from "../common/LoadingSpinner";
 import TrailerModal from "./TrailerModal.jsx";
 import {
   formatRating,
@@ -105,7 +106,11 @@ const Hero = ({ trendingMovies }) => {
   };
 
   if (!trendingMovies || trendingMovies.length === 0) {
-    return <div className="hero-loading">Loading movies…</div>;
+    return (
+        <div className="hero-loading">
+          <LoadingSpinner message="Loading movies..." />
+        </div>
+    );
   }
 
   const total = trendingMovies.length;

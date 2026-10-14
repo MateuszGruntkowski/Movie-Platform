@@ -11,17 +11,6 @@
   margin: 0 auto;
 }
 
-.sr-loading {
-  text-align: center;
-  padding: 60px 20px;
-}
-
-.sr-loading p {
-  margin-top: 15px;
-  color: #ffd700;
-  font-size: 1.1rem;
-}
-
 @media (max-width: 768px) {
   .sr-container {
     padding: 15px;
