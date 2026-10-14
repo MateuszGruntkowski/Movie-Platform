@@ -1,18 +1,24 @@
-import { useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+
+const POPUP_DURATION_MS = 3000;
+const HIDDEN = { show: false, message: "", type: "" };
 
 export const usePopup = () => {
-  const [popup, setPopup] = useState({ show: false, message: "", type: "" });
+  const [popup, setPopup] = useState(HIDDEN);
+  const timerRef = useRef(null);
 
-  const showPopup = (message, type) => {
+  const hidePopup = useCallback(() => {
+    clearTimeout(timerRef.current);
+    setPopup(HIDDEN);
+  }, []);
+
+  const showPopup = useCallback((message, type) => {
+    clearTimeout(timerRef.current);
     setPopup({ show: true, message, type });
-    setTimeout(() => {
-      setPopup({ show: false, message: "", type: "" });
-    }, 3000);
-  };
+    timerRef.current = setTimeout(() => setPopup(HIDDEN), POPUP_DURATION_MS);
+  }, []);
 
-  const hidePopup = () => {
-    setPopup({ show: false, message: "", type: "" });
-  };
+  useEffect(() => () => clearTimeout(timerRef.current), []);
 
   return {
     popup,

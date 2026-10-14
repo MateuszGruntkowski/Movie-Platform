@@ -4,18 +4,17 @@
     left: 50%;
     transform: translateX(-50%);
     max-width: min(90vw, 420px);
-    background-color: #2a2a2a;
+    padding: 10px 18px;
+    background-color: rgba(0, 0, 0, 0.58);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
     color: #f8f9fa;
-    border: 1px solid #494949;
-    border-left: 3px solid #ffd700;
+    border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: 10px;
-    padding: 12px 20px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
     z-index: 9999;
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 0.95rem;
-    font-weight: 600;
+    font-size: 0.9rem;
+    font-weight: 500;
     line-height: 1.4;
     text-align: center;
-    /*animation: fadeInOut 3s forwards;*/
 }
