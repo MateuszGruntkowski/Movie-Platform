@@ -1,287 +1,602 @@
-.movie-carousel-container {
-  width: 100%;
-  background-color: black;
-  height: 100vh;
+.hero {
+  --ink: #000;
+  --paper: #fff;
+  --paper-dim: rgba(255, 255, 255, 0.78);
+  --paper-faint: rgba(255, 255, 255, 0.25);
+  --accent: #ffd700;
+  --gutter: clamp(1.25rem, 5vw, 5rem);
+
   position: relative;
+  width: 100%;
+  height: 100vh;
+  height: 100svh;
+  min-height: 34rem;
   overflow: hidden;
-  margin: 0;
-  padding: 0;
+  background: var(--ink);
+  color: var(--paper);
 }
 
-.slick-slider {
+.hero-loading {
+  min-height: 60vh;
+  display: grid;
+  place-items: center;
+}
+
+/* react-slick plumbing: keep every layer full height */
+.hero .slick-slider,
+.hero .slick-list,
+.hero .slick-track,
+.hero .slick-slide,
+.hero .slick-slide > div,
+.hero .hero-slide-wrap {
   height: 100%;
 }
 
-.slick-list {
-  height: 100%;
-}
+/* ---------- Slide ---------- */
 
-.slick-track {
-  height: 100%;
-}
-
-.slick-slide {
-  height: 100vh;
-}
-
-.slick-slide > div {
-  height: 100%;
-}
-
-.movie-card {
-  background-repeat: no-repeat;
-  width: 100%;
-  height: 100vh;
-  background-size: cover;
-  background-position: center;
+.hero-slide {
   position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  height: 100%;
+  overflow: hidden;
 }
 
-.movie-detail {
+.hero-slide__backdrop {
   position: absolute;
-  bottom: 25%;
-  left: 50%;
-  transform: translateX(-50%);
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 22%;
+  transform: scale(1.045);
+  transition: transform 9s cubic-bezier(0.2, 0.6, 0.2, 1);
+}
+
+.hero-slide.is-active .hero-slide__backdrop {
+  transform: scale(1);
+}
+
+/* Localised shading: darker where text sits (left + bottom), open elsewhere. */
+.hero-slide__shade {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+          linear-gradient(90deg, rgba(0, 0, 0, 0.86) 0%, rgba(0, 0, 0, 0.5) 34%, rgba(0, 0, 0, 0) 62%),
+          linear-gradient(0deg, rgba(0, 0, 0, 0.92) 0%, rgba(0, 0, 0, 0.35) 28%, rgba(0, 0, 0, 0) 52%),
+          linear-gradient(180deg, rgba(0, 0, 0, 0.45) 0%, rgba(0, 0, 0, 0) 18%);
+}
+
+.hero-slide__content {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 3rem;
+  padding: 0 var(--gutter) 6.5rem;
+}
+
+/* ---------- Copy ---------- */
+
+.hero-copy {
+  max-width: 36rem;
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.8s ease 0.3s, transform 0.8s ease 0.3s;
+}
+
+.hero-slide.is-active .hero-copy {
+  opacity: 1;
+  transform: none;
+}
+
+.hero-eyebrow {
+  margin: 0 0 1rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.hero-title {
+  margin: 0;
+  font-weight: 700;
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  line-height: 1.1;
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  /* keep descenders from being clipped by line-clamp */
+  padding-bottom: 0.08em;
+  color: var(--paper);
+  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.6);
+}
+
+.hero-title.is-long {
+  font-size: clamp(1.75rem, 3.1vw, 2.75rem);
+}
+
+.hero-tagline {
+  margin: 0.7rem 0 0;
+  font-weight: 500;
+  font-size: clamp(1rem, 1.4vw, 1.15rem);
+  line-height: 1.35;
+  color: var(--paper-dim);
+}
+
+/* ---------- Metadata: one quiet line, no badges ---------- */
+
+.hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.9rem;
+  margin-top: 1.4rem;
+  font-size: 0.86rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--paper-dim);
+}
+
+.hero-meta > * {
+  display: inline-flex;
+  align-items: center;
+}
+
+.hero-meta > * + *::before {
+  content: "";
+  width: 3px;
+  height: 3px;
+  margin-right: 0.9rem;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.55;
+}
+
+.hero-meta__rating {
+  gap: 0.35rem;
+  color: var(--paper);
+}
+
+.hero-meta__rating svg {
+  color: #ffd700;
+  transform: translateY(-0.5px);
+}
+
+.hero-meta__rating b {
+  font-weight: 600;
+}
+
+.hero-meta__of {
+  margin-left: -0.15rem;
+  color: var(--paper-dim);
+  font-size: 0.78rem;
+}
+
+.hero-meta__votes {
+  margin-left: 0.35rem;
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.hero-meta__votes::before {
+  display: none;
+}
+
+.hero-overview {
+  margin: 1.1rem 0 0;
+  max-width: 34rem;
+  font-size: 0.95rem;
+  line-height: 1.62;
+  color: var(--paper-dim);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ---------- Actions ---------- */
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.4rem;
+  margin-top: 1.8rem;
+}
+
+.hero-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 2.75rem;
+  padding: 0 1.3rem;
+  border: 0;
+  border-radius: 11px;
+  background: var(--accent);
+  color: var(--ink);
+  font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color 0.25s ease;
+}
+
+.hero-cta svg {
+  transition: transform 0.25s ease;
+}
+
+.hero-cta:hover {
+  background: #ffe566;
+}
+
+.hero-cta:hover svg {
+  transform: translateX(3px);
+}
+
+.hero-trailer {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-height: 2.75rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--paper);
+  font-size: 0.88rem;
+  font-weight: 700;
+  line-height: 1;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.25s ease;
+}
+
+.hero-trailer:hover {
+  color: var(--accent);
+}
+
+.hero-actions__rule {
+  width: 1px;
+  height: 1.4rem;
+  background: var(--paper-faint);
+}
+
+.hero-utilities {
   display: flex;
   align-items: center;
-  gap: 2rem;
-  z-index: 3;
-  max-width: 90%;
+  gap: 0.25rem;
 }
 
-.movie-poster {
-  height: 450px;
-  width: 300px;
-  border: 3px solid #ffd700;
-  border-radius: 15px;
+/* ---------- Poster: sits on the backdrop, no frame ---------- */
+
+.hero-poster {
+  flex: none;
+  width: clamp(9rem, 15vw, 15.5rem);
+  aspect-ratio: 2 / 3;
+  margin-bottom: 0.25rem;
   overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+  border-radius: 6px;
+  background: #1a1a1a;
+  box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.06);
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.9s ease 0.45s, transform 0.9s ease 0.45s;
 }
 
-.movie-poster > img {
+.hero-slide.is-active .hero-poster {
+  opacity: 1;
+  transform: none;
+}
+
+.hero-poster img {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.movie-info {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  align-items: center;
-}
+/* ---------- Carousel controls ---------- */
 
-.movie-title {
-  color: white;
-  text-align: center;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
-}
-
-.movie-title h4 {
-  font-size: 2.5rem;
-  margin: 0;
-  font-weight: bold;
-}
-
-.movie-buttons-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.see-more-button {
-  padding: 10px 20px;
-  border:2px solid #ffd700;
-  border-radius: 20px;
-  cursor: pointer;
-  font-weight: bold;
-  color: white;
-  background: rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(10px);
-  transition: background-color 0.3s ease, transform 0.3s ease;
-}
-
-.see-more-button:hover {
-  background-color: #ffd700;
-  color: black;
-}
-
-.custom-arrow {
+.hero-controls {
   position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 10;
-  background: rgba(0, 0, 0, 0.5);
-  color: #ffd700;
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  display: flex !important;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  font-size: 1.5rem;
-  transition: all 0.3s ease;
-  border: 2px solid transparent;
-}
-
-.custom-arrow:hover {
-  background: rgba(0, 0, 0, 0.8);
-  color: white;
-  border-color: #ffd700;
-  transform: translateY(-50%) scale(1.1);
-}
-
-.custom-prev-arrow {
-  left: 30px;
-}
-
-.custom-next-arrow {
-  right: 30px;
-}
-
-.slick-dots {
-  bottom: 50px;
-  z-index: 10;
-}
-
-.slick-dots li {
-  margin: 0 8px;
-}
-
-.slick-dots li button {
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.3);
-  border: 2px solid gold;
-}
-
-.slick-dots li button:before {
-  display: none;
-}
-
-.slick-dots li.slick-active button {
-  background: gold;
-  transform: scale(1.2);
-}
-
-.slick-dots li button:hover {
-  background: rgba(255, 215, 0, 0.7);
-  transform: scale(1.1);
-}
-
-.slick-prev,
-.slick-next {
-  display: none !important;
-}
-
-.watchlist-buttons-container {
+  left: var(--gutter);
+  right: var(--gutter);
+  bottom: 2rem;
+  z-index: 5;
   display: flex;
-  gap: 0.75rem;
-  justify-content: center;
   align-items: center;
-  margin-top: 0.5rem;
+  justify-content: space-between;
+  gap: 2rem;
 }
 
-@media only screen and (max-width: 768px) {
-  .movie-detail {
-    flex-direction: column;
-    bottom: 15%;
-    gap: 1.5rem;
-  }
-
-  .movie-poster {
-    height: 250px;
-    width: 170px;
-  }
-
-  .movie-title h4 {
-    font-size: 2rem;
-  }
-
-  .play-button-icon-container {
-    width: 70px;
-    height: 70px;
-    padding: 12px;
-  }
-
-  .play-button-icon {
-    font-size: 2rem;
-  }
-
-  .custom-arrow {
-    width: 50px;
-    height: 50px;
-    font-size: 1.2rem;
-  }
-
-  .custom-prev-arrow {
-    left: 15px;
-  }
-
-  .custom-next-arrow {
-    right: 15px;
-  }
-
-  .slick-dots {
-    bottom: 30px;
-  }
+.hero-progress {
+  display: flex;
+  flex: 1 1 auto;
+  max-width: 24rem;
+  gap: 0.25rem;
 }
 
-@media only screen and (max-width: 480px) {
-  .movie-poster {
-    height: 200px;
-    width: 140px;
-  }
+.hero-progress__seg {
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
+  height: 1.75rem; /* generous hit area */
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
 
-  .movie-title h4 {
-    font-size: 1.5rem;
-  }
+.hero-progress__seg::before,
+.hero-progress__seg::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 2px;
+  margin-top: -1px;
+}
 
-  .play-button-icon-container {
-    width: 60px;
-    height: 60px;
-  }
+.hero-progress__seg::before {
+  background: var(--paper-faint);
+  transition: background-color 0.2s ease;
+}
 
-  .play-button-icon {
-    font-size: 1.8rem;
+.hero-progress__seg:hover::before {
+  background: rgba(255, 255, 255, 0.45);
+}
+
+.hero-progress__seg::after {
+  background: var(--paper);
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+
+.hero-progress__seg.is-current::after {
+  animation: hero-progress 7s linear forwards;
+}
+
+/* While paused (hover/focus/trailer) autoplay restarts on resume, so the bar
+   rests full and re-runs from zero together with the timer. */
+.hero.is-paused .hero-progress__seg.is-current::after {
+  animation: none;
+  transform: scaleX(1);
+}
+
+@keyframes hero-progress {
+  to {
+    transform: scaleX(1);
   }
 }
 
-@media only screen and (min-width: 2000px) {
-  .movie-detail {
-    bottom: 40%;
+.hero-controls__nav {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.hero-counter {
+  margin-right: 0.75rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  font-variant-numeric: tabular-nums;
+  color: var(--paper);
+}
+
+.hero-counter i {
+  font-style: normal;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.hero-arrow {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--paper);
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.2s ease, color 0.2s ease;
+}
+
+.hero-arrow:hover {
+  opacity: 1;
+  color: var(--accent);
+}
+
+/* ---------- Focus ---------- */
+
+.hero button:focus-visible,
+.hero a:focus-visible,
+.trailer-modal button:focus-visible {
+  outline: 1px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.hero .hero-cta:focus-visible {
+  outline-offset: 2px;
+}
+
+/* ---------- Trailer modal ---------- */
+
+.trailer-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  padding: 1.25rem;
+  background: rgba(0, 0, 0, 0.93);
+  animation: trailer-in 0.25s ease;
+}
+
+.trailer-modal__frame {
+  width: min(94vw, 1100px);
+  max-height: 86vh;
+  aspect-ratio: 16 / 9;
+  background: #000;
+  box-shadow: 0 40px 80px -30px rgba(0, 0, 0, 0.9);
+}
+
+.trailer-modal__frame iframe,
+.trailer-modal__frame video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.trailer-modal__close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #fff;
+  cursor: pointer;
+  opacity: 0.8;
+  transition: opacity 0.2s ease, color 0.2s ease;
+}
+
+.trailer-modal__close:hover {
+  opacity: 1;
+  color: #ffd700;
+}
+
+@keyframes trailer-in {
+  from {
+    opacity: 0;
   }
-  .movie-card {
-    height: 120vh;
+}
+
+/* ---------- Tablet ---------- */
+
+@media (max-width: 1024px) {
+  .hero-slide__content {
+    gap: 2rem;
   }
 
-  .movie-poster {
-    height: 600px;
-    width: 400px;
+  .hero-poster {
+    width: clamp(8rem, 18vw, 11rem);
+  }
+}
+
+/* ---------- Mobile: backdrop leads, poster and secondary data step aside ---------- */
+
+@media (max-width: 768px) {
+  .hero {
+    min-height: 32rem;
   }
 
-  .movie-title h4 {
-    font-size: 3rem;
+  .hero-slide__backdrop {
+    object-position: 60% 20%;
   }
 
-  .play-button-icon-container {
-    width: 100px;
-    height: 100px;
-    padding: 20px;
+  .hero-slide__shade {
+    background:
+            linear-gradient(0deg, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.78) 34%, rgba(0, 0, 0, 0.1) 66%),
+            linear-gradient(180deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0) 20%);
   }
 
-  .play-button-icon {
-    font-size: 3rem;
+  .hero-slide__content {
+    padding-bottom: 5.5rem;
   }
 
-  .custom-arrow {
-    width: 80px;
-    height: 80px;
-    font-size: 2rem;
+  .hero-poster,
+  .hero-tagline,
+  .hero-meta__votes {
+    display: none;
+  }
+
+  .hero-title,
+  .hero-title.is-long {
+    font-size: clamp(2rem, 9vw, 2.6rem);
+    -webkit-line-clamp: 2;
+  }
+
+  .hero-overview {
+    -webkit-line-clamp: 2;
+    font-size: 0.9rem;
+  }
+
+  .hero-meta {
+    margin-top: 1rem;
+  }
+
+  .hero-controls {
+    bottom: 1rem;
+  }
+
+  .hero-progress {
+    max-width: none;
+  }
+
+  .hero-counter {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-actions {
+    gap: 0.25rem 1.2rem;
+    margin-top: 1.4rem;
+  }
+
+  .hero-cta {
+    flex: 1 1 100%;
+    justify-content: center;
+    min-height: 3rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .hero-actions__rule {
+    display: none;
+  }
+
+  .hero-utilities {
+    margin-left: auto;
+  }
+}
+
+/* Short landscape screens (phones on their side, small laptops) */
+@media (max-height: 560px) and (min-width: 769px) {
+  .hero-overview,
+  .hero-tagline {
+    display: none;
+  }
+
+  .hero-slide__content {
+    padding-bottom: 5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-slide__backdrop,
+  .hero-copy,
+  .hero-poster {
+    transition: none;
+    transform: none;
+  }
+
+  .hero-progress__seg.is-current::after {
+    animation: none;
+    transform: scaleX(1);
+  }
+
+  .trailer-modal {
+    animation: none;
   }
 }

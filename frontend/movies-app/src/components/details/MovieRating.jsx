@@ -45,7 +45,7 @@ const MovieRating = ({ movieId, showPopup }) => {
     if (!user) {
         return (
             <div className="movie-rating-widget">
-                <p className="login-prompt">Log in to rate this movie</p>
+                <p className="rating-note">Log in to rate this movie</p>
             </div>
         );
     }
@@ -53,7 +53,7 @@ const MovieRating = ({ movieId, showPopup }) => {
     if (isLoading) {
         return (
             <div className="movie-rating-widget">
-                <p className="rating-loading">Loading rating...</p>
+                <p className="rating-note">Loading rating…</p>
             </div>
         );
     }
@@ -62,12 +62,7 @@ const MovieRating = ({ movieId, showPopup }) => {
 
     return (
         <div className="movie-rating-widget">
-            <div className="rating-header-row">
-                <h3 className="movie-rating-title">Your Rating</h3>
-                <span className="rating-value-label">
-          {displayedValue > 0 ? `${displayedValue}/10` : "\u00A0"}
-        </span>
-            </div>
+            <h2 className="movie-rating-title">Your rating</h2>
 
             <div className="rating-stars-picker">
                 {RATING_SCALE.map((value) => {
@@ -82,6 +77,7 @@ const MovieRating = ({ movieId, showPopup }) => {
                             onMouseLeave={() => setHoverRating(0)}
                             onClick={() => submitRating(value)}
                             aria-label={`Rate ${value} out of 10`}
+                            aria-pressed={value === myRating}
                         >
                             <FontAwesomeIcon
                                 icon={faStar}
@@ -91,6 +87,10 @@ const MovieRating = ({ movieId, showPopup }) => {
                     );
                 })}
             </div>
+
+            <span className="rating-value-label" aria-live="polite">
+                {displayedValue > 0 ? `${displayedValue}/10` : ""}
+            </span>
         </div>
     );
 };

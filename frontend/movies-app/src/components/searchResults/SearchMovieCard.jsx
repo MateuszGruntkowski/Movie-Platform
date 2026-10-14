@@ -41,9 +41,9 @@ const SearchMovieCard = ({ movie, onMovieClick }) => {
                                 e.stopPropagation();
                                 onMovieClick(movie);
                             }}
-                            title="Zobacz więcej"
+                            title="See more"
                         >
-                            <Info size={20} />
+                            <Info size={19} strokeWidth={1.5} />
                             <span>See more</span>
                         </button>
                     </div>

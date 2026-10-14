@@ -2,41 +2,39 @@ import { useEffect, useState } from "react";
 import { reviewsService } from "../../../services/reviewsService.js";
 
 const REVIEWS_PAGE_SIZE = 10;
+const EMPTY_PAGE = { content: [], totalElements: 0, totalPages: 0 };
 
 export function useReviews(movieId, showPopup) {
-    const [reviews, setReviews] = useState([]);
     const [page, setPage] = useState(0);
-    const [totalReviews, setTotalReviews] = useState(0);
-    const [hasMore, setHasMore] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
-    const [isLoadingMore, setIsLoadingMore] = useState(false);
-
-    const fetchPage = (p) =>
-        reviewsService.getReviewsForMovie(movieId, {
-            page: p,
-            size: REVIEWS_PAGE_SIZE,
-            sort: "createdAt,desc",
-        });
+    const [data, setData] = useState(EMPTY_PAGE);
+    const [isLoading, setIsLoading] = useState(true);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [error, setError] = useState(null);
+    const [reloadKey, setReloadKey] = useState(0);
 
     useEffect(() => {
         if (!movieId) return;
         let cancelled = false;
 
-        setIsLoading(true);
-        setPage(0);
-        setReviews([]);
-
-        fetchPage(0)
-            .then((data) => {
+        reviewsService
+            .getReviewsForMovie(movieId, {
+                page,
+                size: REVIEWS_PAGE_SIZE,
+                sort: "createdAt,desc",
+            })
+            .then((res) => {
                 if (cancelled) return;
-                setReviews(data.content);
-                setTotalReviews(data.totalElements);
-                setHasMore(!data.last);
+                setData({
+                    content: res.content ?? [],
+                    totalElements: res.totalElements ?? 0,
+                    totalPages: res.totalPages ?? 0,
+                });
+                setError(null);
             })
             .catch((err) => {
                 if (cancelled) return;
                 console.error("Error fetching reviews:", err);
-                showPopup?.("Failed to load review.", "error");
+                setError("Could not load reviews.");
             })
             .finally(() => {
                 if (!cancelled) setIsLoading(false);
@@ -45,43 +43,48 @@ export function useReviews(movieId, showPopup) {
         return () => {
             cancelled = true;
         };
-    }, [movieId]);
+    }, [movieId, page, reloadKey]);
 
-    const loadMore = async () => {
-        const nextPage = page + 1;
-        setIsLoadingMore(true);
-        try {
-            const data = await fetchPage(nextPage);
-            setReviews((prev) => [...prev, ...data.content]);
-            setPage(nextPage);
-            setHasMore(!data.last);
-        } catch (err) {
-            console.error("Error loading more reviews:", err);
-            showPopup?.("Could not load more reviews.", "error");
-        } finally {
-            setIsLoadingMore(false);
-        }
+    const goToPage = (nextPage) => {
+        if (nextPage === page || nextPage < 0) return;
+        setIsLoading(true);
+        setPage(nextPage);
+    };
+
+    const reload = () => {
+        setIsLoading(true);
+        setError(null);
+        setReloadKey((k) => k + 1);
     };
 
     const addReview = async (text) => {
-        if (!text.trim()) return;
+        if (!text.trim() || isSubmitting) return false;
+        setIsSubmitting(true);
         try {
-            const newReview = await reviewsService.createReview(movieId, text);
-            setReviews((prev) => [newReview, ...prev]);
-            setTotalReviews((prev) => prev + 1);
+            await reviewsService.createReview(movieId, text);
             showPopup?.("Review added!", "success");
+            setIsLoading(true);
+            setError(null);
+            setPage(0);
+            setReloadKey((k) => k + 1);
+            return true;
         } catch (err) {
             console.error("Error adding review:", err);
             showPopup?.("Could not add review.", "error");
+            return false;
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
     const deleteReview = async (reviewId) => {
         try {
             await reviewsService.deleteReview(reviewId);
-            setReviews((prev) => prev.filter((r) => r.id !== reviewId));
-            setTotalReviews((prev) => Math.max(prev - 1, 0));
             showPopup?.("Review deleted!", "success");
+            setIsLoading(true);
+            // If that was the last review on this page, step back one page.
+            if (data.content.length === 1 && page > 0) setPage(page - 1);
+            setReloadKey((k) => k + 1);
         } catch (err) {
             console.error("Error deleting review:", err);
             showPopup?.("Could not delete review.", "error");
@@ -89,12 +92,15 @@ export function useReviews(movieId, showPopup) {
     };
 
     return {
-        reviews,
-        totalReviews,
-        hasMore,
+        reviews: data.content,
+        totalReviews: data.totalElements,
+        totalPages: data.totalPages,
+        page,
         isLoading,
-        isLoadingMore,
-        loadMore,
+        isSubmitting,
+        error,
+        goToPage,
+        reload,
         addReview,
         deleteReview,
     };

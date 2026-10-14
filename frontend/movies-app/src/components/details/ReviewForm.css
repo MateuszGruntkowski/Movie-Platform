@@ -1,38 +1,46 @@
-.review-form-container {
-    background-color: #2a2a2a;
-    border-radius: 16px;
-    padding: 24px;
-    margin-bottom: 30px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+.review-form {
+    margin-bottom: 2.5rem;
 }
 
-.form-group {
-    margin-bottom: 20px;
+.review-form--guest p {
+    color: #8b949e;
+    font-size: 0.95rem;
+    margin: 0;
 }
 
-.form-label {
+.review-login-link {
+    color: #ffd700;
+    text-decoration: none;
+}
+
+.review-login-link:hover {
+    text-decoration: underline;
+}
+
+.review-form-label {
     display: block;
     color: #f8f9fa;
-    font-size: 1.1rem;
+    font-size: 1rem;
     font-weight: 600;
-    margin-bottom: 12px;
+    margin-bottom: 0.6rem;
 }
 
 .review-textarea {
+    display: block;
     width: 100%;
-    padding: 16px;
-    border: 2px solid #494949;
-    border-radius: 8px;
-    font-size: 0.95rem;
-    color: #ffffff;
+    min-height: 110px;
+    padding: 14px 16px;
+    border: 1px solid #494949;
+    border-radius: 10px;
     background-color: #1f1f1f;
-    resize: vertical;
+    color: #ffffff;
     font-family: inherit;
-    outline: none;
-    transition: all 0.3s ease;
-    box-sizing: border-box;
+    font-size: 0.95rem;
     line-height: 1.5;
-    min-height: 120px;
+    resize: vertical;
+    outline: none;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
 }
 
 .review-textarea::placeholder {
@@ -40,31 +48,34 @@
 }
 
 .review-textarea:focus {
-    border-color: gold;
-    box-shadow: 0 0 0 3px rgba(79, 131, 204, 0.1);
-    background-color: #323232;
+    border-color: #ffd700;
+    background-color: #262626;
 }
 
-.login-prompt {
-    text-align: center;
-    font-size: 0.9rem;
-    margin-top: 10px;
-}
-
+/* Same primary-button look as the Home hero CTA: solid gold, 11px radius. */
 .review-submit-btn {
-    background: #333;
-    color: #ffd700;
-    border: 1px solid #ffd700;
-    padding: 10px 30px;
-    border-radius: 20px;
+    margin-top: 0.75rem;
+    min-height: 2.75rem;
+    padding: 0 1.3rem;
+    border: 0;
+    border-radius: 11px;
+    background: #ffd700;
+    color: #000;
+    font: inherit;
+    font-size: 0.9rem;
+    font-weight: 700;
+    line-height: 1;
     cursor: pointer;
-    font-weight: bold;
-    transition: all 0.3s ease;
+    transition: background-color 0.25s ease;
 }
 
 .review-submit-btn:hover:not(:disabled) {
-    background: #ffd700;
-    color: #000;
+    background: #ffe566;
+}
+
+.review-submit-btn:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 2px;
 }
 
 .review-submit-btn:disabled {
@@ -73,18 +84,8 @@
 }
 
 @media (max-width: 480px) {
-    .review-form-container {
-        padding: 16px;
-    }
-
-    .review-textarea {
-        font-size: 0.9rem;
-        padding: 14px;
-    }
-
-    .submit-btn {
+    .review-submit-btn {
         width: 100%;
-        padding: 16px;
-        font-size: 1rem;
+        height: 2.75rem;
     }
 }

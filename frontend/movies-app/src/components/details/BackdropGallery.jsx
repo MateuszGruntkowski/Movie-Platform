@@ -2,30 +2,44 @@ import { useState } from "react";
 import "./BackdropGallery.css";
 
 const BackdropGallery = ({ backdrops, title }) => {
-    const [active, setActive] = useState(1);
+    const [active, setActive] = useState(0);
+    const [failed, setFailed] = useState(() => new Set());
 
-    if (!backdrops?.length) return null;
+    const images = (backdrops ?? []).filter((src) => src && !failed.has(src));
+    if (images.length === 0) return null;
+
+    const current = images[Math.min(active, images.length - 1)];
+    const currentIndex = images.indexOf(current);
+
+    const markFailed = (src) =>
+        setFailed((prev) => new Set(prev).add(src));
 
     return (
         <div className="backdrop-gallery">
             <img
-                src={backdrops[active]}
-                alt={`${title || "Film"} — kadr ${active + 1}`}
+                key={current}
+                src={current}
+                alt={`${title || "Film"} — still ${currentIndex + 1} of ${images.length}`}
                 className="backdrop-gallery-main"
+                onError={() => markFailed(current)}
             />
-            <div className="backdrop-gallery-thumbs">
-                {backdrops.map((src, i) => (
-                    <button
-                        key={src}
-                        type="button"
-                        className={`backdrop-thumb ${i === active ? "active" : ""}`}
-                        onClick={() => setActive(i)}
-                        aria-label={`Pokaż kadr ${i + 1}`}
-                    >
-                        <img src={src} alt="" />
-                    </button>
-                ))}
-            </div>
+
+            {images.length > 1 && (
+                <div className="backdrop-gallery-thumbs">
+                    {images.map((src, i) => (
+                        <button
+                            key={src}
+                            type="button"
+                            className={`backdrop-thumb ${i === currentIndex ? "active" : ""}`}
+                            onClick={() => setActive(i)}
+                            aria-label={`Show still ${i + 1}`}
+                            aria-current={i === currentIndex}
+                        >
+                            <img src={src} alt="" loading="lazy" onError={() => markFailed(src)} />
+                        </button>
+                    ))}
+                </div>
+            )}
         </div>
     );
 };

@@ -1,5 +1,4 @@
-import { Eye, Clock } from "lucide-react";
-import "./WatchList.css";
+import { Eye, Bookmark } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 import { useWatchlist } from "../../context/WatchlistContext";
 import { usePopup } from "../../hooks/usePopup";
@@ -8,6 +7,7 @@ import { Navigate } from "react-router-dom";
 import WatchlistSection from "./WatchlistSection";
 import WatchlistHeader from "./WatchlistHeader";
 import Popup from "../common/Popup.jsx";
+import LoadingSpinner from "../common/LoadingSpinner";
 import { watchlistService } from "../../services/watchlistService";
 import "./WatchList.css";
 
@@ -49,7 +49,7 @@ const WatchList = () => {
     };
 
     if (loading) {
-        return <div>Loading...</div>;
+        return <LoadingSpinner page message="Loading watchlist..." />;
     }
 
     if (!user) {
@@ -68,7 +68,7 @@ const WatchList = () => {
             <div className="wl-content">
                 <WatchlistSection
                     title="To Watch"
-                    icon={<Clock size={24} />}
+                    icon={<Bookmark size={24} strokeWidth={1.5} />}
                     listType="moviesToWatch"
                     state={toWatch.state}
                     onLoadMore={toWatch.loadMore}
@@ -80,7 +80,7 @@ const WatchList = () => {
 
                 <WatchlistSection
                     title="Already Watched"
-                    icon={<Eye size={24} />}
+                    icon={<Eye size={24} strokeWidth={1.5} />}
                     listType="moviesWatched"
                     state={watched.state}
                     onLoadMore={watched.loadMore}

@@ -27,7 +27,7 @@
     background-color: #1f1f1f;
     color: #ffffff;
     border: 1px solid #494949;
-    border-radius: 8px;
+    border-radius: 10px;
     padding: 8px 12px;
     font-size: 0.85rem;
     cursor: pointer;
@@ -38,7 +38,7 @@
 
 .profile-sort-select:hover,
 .profile-sort-select:focus {
-    border-color: #e0b32b;
+    border-color: #ffd700;
 }
 
 @media (max-width: 480px) {

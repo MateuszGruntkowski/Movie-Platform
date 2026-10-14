@@ -29,6 +29,16 @@
     cursor: pointer;
     flex-shrink: 0;
     background: transparent;
+    transition: opacity 0.2s ease;
+}
+
+.profile-avatar-button:hover {
+    opacity: 0.85;
+}
+
+.profile-avatar-button:focus-visible {
+    outline: 1px solid #ffd700;
+    outline-offset: 3px;
 }
 
 .profile-avatar-img {

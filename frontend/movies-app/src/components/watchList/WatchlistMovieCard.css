@@ -42,41 +42,32 @@
 
 .wl-movie-actions {
     display: flex;
-    gap: 10px;
+    gap: 2px;
 }
 
+/* Same look as the icon buttons on the Details page (.util-button):
+   bare icon, soft white, full white on hover, thin gold focus ring. */
 .wl-action-btn {
-    background: #333;
-    border: none;
-    color: #fff;
-    padding: 10px;
-    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: 0;
+    border: 0;
+    border-radius: 2px;
+    background: none;
+    color: rgba(255, 255, 255, 0.78);
     cursor: pointer;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    transition: color 0.2s ease;
 }
 
 .wl-action-btn:hover {
-    transform: scale(1.1);
+    color: #fff;
 }
 
-.wl-watch-btn:hover {
-    background: #22c55e;
-}
-
-.wl-unwatch-btn:hover {
-    background: #0472f8;
-    color: #000;
-}
-
-.wl-remove-btn:hover {
-    background: #ef4444;
-}
-
-.wl-details-btn:hover {
-    background: #ffd700;
+.wl-action-btn:focus-visible {
+    outline: 1px solid #ffd700;
+    outline-offset: 2px;
 }
 
 .wl-movie-info {
