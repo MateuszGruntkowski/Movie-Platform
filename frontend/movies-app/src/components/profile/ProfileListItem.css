@@ -1,20 +1,24 @@
 .profile-list-item {
     display: flex;
     gap: 16px;
-    background-color: #2a2a2a;
-    border-radius: 12px;
-    padding: 14px;
+    padding: 16px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     text-decoration: none;
     color: inherit;
     cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.profile-list-item:last-child {
+    border-bottom: 0;
 }
 
 .profile-list-item:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
     color: inherit;
+}
+
+.profile-list-item:focus-visible {
+    outline: 1px solid #ffd700;
+    outline-offset: 2px;
 }
 
 .profile-list-poster {
@@ -39,6 +43,11 @@
     font-size: 1rem;
     font-weight: 600;
     margin: 0;
+    transition: color 0.2s ease;
+}
+
+.profile-list-item:hover .profile-list-title {
+    color: #ffd700;
 }
 
 .profile-list-date {
@@ -47,10 +56,6 @@
 }
 
 @media (max-width: 480px) {
-    .profile-list-item {
-        padding: 10px;
-    }
-
     .profile-list-poster {
         width: 50px;
         height: 75px;

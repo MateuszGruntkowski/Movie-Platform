@@ -10,19 +10,20 @@
   align-items: center;
 }
 
+/* Input: same as the review textarea / auth inputs (1px border, 10px radius, plain gold focus border). */
 .movie-search-input {
   background-color: #1f1f1f;
-  border: 2px solid #494949;
-  border-radius: 8px;
+  border: 1px solid #494949;
+  border-radius: 10px;
   color: white;
   padding-right: 70px;
-  transition: all 0.3s ease;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
 }
 
 .movie-search-input:focus {
-  background-color: #232323;
+  background-color: #262626;
   border-color: #ffd700;
-  box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.15);
+  box-shadow: none;
   color: white;
 }
 
@@ -39,7 +40,7 @@
   cursor: pointer;
   padding: 4px;
   border-radius: 50%;
-  transition: all 0.3s ease;
+  transition: color 0.2s ease, background-color 0.2s ease;
   z-index: 10;
   display: flex;
   align-items: center;
@@ -51,6 +52,11 @@
 .clear-search-button:hover {
   color: white;
   background-color: rgba(255, 255, 255, 0.1);
+}
+
+.clear-search-button:focus-visible {
+  outline: 1px solid #ffd700;
+  outline-offset: 1px;
 }
 
 .search-spinner {

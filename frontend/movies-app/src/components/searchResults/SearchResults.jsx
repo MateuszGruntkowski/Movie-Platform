@@ -1,10 +1,11 @@
 import { useState, useEffect, useCallback } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Spinner, Alert } from "react-bootstrap";
+import { Alert } from "react-bootstrap";
 import { movieSearchService } from "../../services/movieSearchService";
 import SearchResultsHeader from "./SearchResultsHeader";
 import SearchResultsGrid from "./SearchResultsGrid";
 import SearchResultsPagination from "./SearchResultsPagination";
+import LoadingSpinner from "../common/LoadingSpinner";
 import "./SearchResults.css";
 
 const SearchResults = () => {
@@ -65,10 +66,7 @@ const SearchResults = () => {
   if (loading) {
     return (
         <div className="sr-container">
-          <div className="sr-loading">
-            <Spinner animation="border" variant="warning" />
-            <p>Searching for movies...</p>
-          </div>
+          <LoadingSpinner page message="Searching for movies..." />
         </div>
     );
   }

@@ -4,7 +4,7 @@ const Popup = ({ popup }) => {
     if (!popup.show) return null;
 
     return (
-        <div className={`popup-notification ${popup.type}`}>
+        <div className={`popup-notification ${popup.type}`} role="status" aria-live="polite">
             {popup.message}
         </div>
     );

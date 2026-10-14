@@ -1,45 +1,44 @@
-import { Button } from "react-bootstrap";
 import { Link, useParams } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import "./ReviewForm.css";
 
-const ReviewForm = ({ handleSubmit, labelText, revText }) => {
-  const params = useParams();
-  let movieId = params.movieId;
-
+const ReviewForm = ({ handleSubmit, labelText, revText, isSubmitting = false }) => {
+  const { movieId } = useParams();
   const { user } = useAuth();
 
-  return (
-    <div className="review-form-container">
-      {user ? (
-        <>
-          <div className="form-group">
-            <label className="form-label">{labelText}</label>
-            <textarea
-              ref={revText}
-              rows={4}
-              placeholder="Share your opinion about this movie..."
-              className="review-textarea"
-            />
-          </div>
-          <button onClick={handleSubmit} className="review-submit-btn">
-            Add review
-          </button>
-        </>
-      ) : (
-        <div className="login-prompt">
-          <p>Please log in to write a review.</p>
-          <Button
-            variant="outline-info"
-            as={Link}
-            to="/login"
-            state={{ from: `/Reviews/${movieId}` }}
-          >
-            Login
-          </Button>
+  if (!user) {
+    return (
+        <div className="review-form review-form--guest">
+          <p>
+            <Link
+                to="/login"
+                state={{ from: `/Details/${movieId}` }}
+                className="review-login-link"
+            >
+              Log in
+            </Link>{" "}
+            to write a review.
+          </p>
         </div>
-      )}
-    </div>
+    );
+  }
+
+  return (
+      <form className="review-form" onSubmit={handleSubmit}>
+        <label className="review-form-label" htmlFor="review-text">
+          {labelText}
+        </label>
+        <textarea
+            id="review-text"
+            ref={revText}
+            rows={4}
+            placeholder="Share your opinion about this movie..."
+            className="review-textarea"
+        />
+        <button type="submit" className="review-submit-btn" disabled={isSubmitting}>
+          {isSubmitting ? "Posting…" : "Post review"}
+        </button>
+      </form>
   );
 };
 

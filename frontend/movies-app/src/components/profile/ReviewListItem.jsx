@@ -14,6 +14,7 @@ const ReviewListItem = ({ review, isOwnProfile, onDelete }) => (
                     type="button"
                     className="review-delete-btn"
                     onClick={(e) => {
+                        e.preventDefault();
                         e.stopPropagation();
                         onDelete(review.id);
                     }}
