@@ -5,11 +5,11 @@
   --paper-faint: rgba(255, 255, 255, 0.25);
   --accent: #ffd700;
   --gutter: clamp(1.25rem, 5vw, 5rem);
+  --header-height: 65px;
 
   position: relative;
   width: 100%;
-  height: 100vh;
-  height: 100svh;
+  height: calc(100svh - var(--header-height));
   min-height: 34rem;
   overflow: hidden;
   background: var(--ink);
