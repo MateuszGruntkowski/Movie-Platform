@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Slider from "react-slick";
 import "./Hero.css";
 import "slick-carousel/slick/slick.css";
-import { ArrowRight, ChevronLeft, ChevronRight, Play, Star } from "lucide-react";
+import { ChevronLeft, ChevronRight, Play, Star } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useWatchlist } from "../../context/WatchlistContext";
 import { usePopup } from "../../hooks/usePopup";
@@ -218,7 +218,7 @@ const Hero = ({ trendingMovies }) => {
                               onClick={() => navigate(`/Details/${movie.tmdbId}`)}
                           >
                             View details
-                            <ArrowRight size={16} strokeWidth={1.75} />
+                            <ChevronRight size={16} strokeWidth={2} />
                           </button>
 
                           {trailerSource &&

@@ -1,5 +1,4 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faVideoSlash } from "@fortawesome/free-solid-svg-icons";
+import {Clapperboard} from "lucide-react";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
@@ -15,7 +14,7 @@ const Header = () => {
       <Navbar variant="dark" expand="lg" className="app-navbar">
         <Container fluid>
           <Navbar.Brand href="/" className="app-brand">
-            <FontAwesomeIcon icon={faVideoSlash} />
+            <Clapperboard size={24} strokeWidth={1.75} />
             <span>Movies App</span>
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="navbarScroll" />
